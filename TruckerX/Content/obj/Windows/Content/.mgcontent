@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_12.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_15.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_18.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_21.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_24.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_27.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_30.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_33.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_36.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_39.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_42.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_45.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_48.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Fonts/main_font_9.spritefont</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/background-ambience.wav</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/pop1.wav</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/pop2.wav</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/rope-pull.wav</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/black.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/detailbutton.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/detailview.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/leaf.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/loading-background.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/loading-bg.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/menu-button.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/portrait.jpg</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/rope.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/sign.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/sloth-drawing.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/star.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/trees.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/white.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
