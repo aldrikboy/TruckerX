@@ -20,7 +20,7 @@ namespace TruckerX.Scenes
         private LeafParticleEffect leafParticleEffectTree2;
 
         private TimeSpan minimumDisplayDuration = TimeSpan.FromSeconds(0);
-        private MenuScene nextScene;
+        private BaseScene nextScene;
 
         public LoadingScene()
         {
@@ -35,7 +35,8 @@ namespace TruckerX.Scenes
             leafParticleEffectTree1 = new LeafParticleEffect(this);
             leafParticleEffectTree2 = new LeafParticleEffect(this);
 
-            nextScene = new MenuScene();
+            //nextScene = new MenuScene();
+            nextScene = new WorldMapScene();
         }
 
         private void LoadingBgMoveIn_OnFinished(object sender, EventArgs e)

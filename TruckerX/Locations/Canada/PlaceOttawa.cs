@@ -12,12 +12,9 @@ namespace TruckerX.Locations
         public override double Lattitude { get { return 45.249814; } }
         public override double Longtitude { get { return -76.0804321; } }
 
-        public override double MapX { get { return 0.12; } }
-        public override double MapY { get { return 0.1; } }
+        public override double MapX { get { return 0.275; } }
+        public override double MapY { get { return 0.415; } }
 
-        public override List<BasePlace> GetConnections()
-        {
-            return new List<BasePlace>() { WorldData.GetPlaceByName("Winnipeg") };
-        }
+        public override PlaceSize Size => PlaceSize.Medium;
     }
 }

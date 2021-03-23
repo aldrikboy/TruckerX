@@ -15,7 +15,7 @@ namespace TruckerX.Locations
 
             foreach(var country in Countries)
             {
-                country.GetConnections();
+                country.MakeConnections();
             }
         }
 
@@ -39,12 +39,14 @@ namespace TruckerX.Locations
         public abstract float TrafficMultiplier { get; }
         public abstract float DetourMultiplier { get; }
 
-        public void GetConnections()
+        public abstract void MakeConnections();
+
+        protected void Connect(string p1, string p2)
         {
-            foreach (var item in Places)
-            {
-                item.Connections = item.GetConnections();
-            }
+            var pp1 = WorldData.GetPlaceByName(p1);
+            var pp2 = WorldData.GetPlaceByName(p2);
+            pp1.Connections.Add(pp2);
+            pp2.Connections.Add(pp1);
         }
 
         public BaseCountry(List<BasePlace> places)
@@ -57,8 +59,17 @@ namespace TruckerX.Locations
         }
     }
 
+    public enum PlaceSize
+    {
+        Small = 3,
+        Medium = 2,
+        Large = 1,
+    }
+
     public abstract class BasePlace
     {
+        public abstract PlaceSize Size { get; }
+
         public abstract string Name { get; }
         public abstract double Longtitude { get; }
         public abstract double Lattitude { get; }
@@ -74,7 +85,5 @@ namespace TruckerX.Locations
         {
             Connections = new List<BasePlace>();
         }
-
-        public abstract List<BasePlace> GetConnections();
     }
 }

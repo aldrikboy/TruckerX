@@ -55,7 +55,7 @@ namespace TruckerX.Scenes
         private void Banner_OnClick(object sender, EventArgs e)
         {
             var banner = sender as JobBannerWidget;
-            this.SwitchSceneTo(new OfferDetailScene(banner.Job));
+            this.SwitchSceneTo(new OfferDetailScene(banner.Job, state));
         }
 
         private void createEmployeeBanners()

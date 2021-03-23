@@ -21,7 +21,16 @@ namespace TruckerX.State
             for (int i = 0; i < 7; i++) employees.Add(EmployeeState.GenerateNew());
 
             var jobs = winnipeg.AvailableJobs;
-            jobs.Add(new JobOffer(1, winnipeg.Place, WorldData.GetPlaceByName("Ottawa"), TransportableItem.Bananas, 400, new List<Weekday>() { Weekday.Monday, Weekday.Wednesday }));
+            jobs.Add(new JobOffer(1, 
+                winnipeg.Place, 
+                new List<BasePlace>() { 
+                    WorldData.GetPlaceByName("Thunder Bay"),
+                    WorldData.GetPlaceByName("Nipigon"),
+                },
+                WorldData.GetPlaceByName("Ottawa"), 
+                TransportableItem.Bananas, 
+                400, 
+                new List<Weekday>() { Weekday.Monday, Weekday.Wednesday }));
         }
 
         public static bool PlaceOwned(BasePlace place)
@@ -49,16 +58,29 @@ namespace TruckerX.State
         }
     }
 
+    public class DockState
+    {
+        public PlaceSchedule Schedule { get; set; }
+
+        public DockState()
+        {
+            Schedule = new PlaceSchedule();
+        }
+    }
+
     public class PlaceState
     {
         public BasePlace Place { get; set; }
         public List<EmployeeState> Employees { get; set; }
         public List<JobOffer> AvailableJobs { get; set; }
+        public List<DockState> Docks { get; set; } // 1 Or More.
 
         public PlaceState(BasePlace place)
         {
             Employees = new List<EmployeeState>();
-            AvailableJobs = new List<JobOffer>();
+            AvailableJobs = new List<JobOffer>();          
+            Docks = new List<DockState>();
+            Docks.Add(new DockState());
             Place = place;
         }
 

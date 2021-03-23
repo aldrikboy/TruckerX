@@ -15,5 +15,7 @@ namespace TruckerX.State
     public class PlaceSchedule
     {
         public List<ScheduledJob> Jobs { get; set; }
+        public int StartHour { get; } = 6;
+        public int EndHour { get; } = 18;
     }
 }
