@@ -14,7 +14,7 @@ namespace TruckerX.Widgets
         private string text;
         private SpriteFont font;
 
-        public MenuButtonWidget(BaseScene scene, string text, Vector2 position, Vector2 size) : base(position, size)
+        public MenuButtonWidget(BaseScene scene, string text, Vector2 position, Vector2 size) : base()
         {
             bg = scene.GetTexture("menu-button");
             this.text = text;

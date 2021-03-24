@@ -32,6 +32,7 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/padlock.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/portrait.jpg</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/rope.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/search.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/sign.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/sloth-drawing.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/star.png</File>
@@ -41,6 +42,7 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

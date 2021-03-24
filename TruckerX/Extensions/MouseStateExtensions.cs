@@ -10,7 +10,7 @@ namespace TruckerX.Extensions
     {
         private static bool wasDown = false;
 
-        private static bool Hovering(this MouseState state, IWidget widget)
+        public static bool Hovering(this MouseState state, IWidget widget)
         {
             var scissor = TruckerX.Game.GraphicsDevice.ScissorRectangle;
             var result = (state.X >= widget.Position.X && state.X <= widget.Position.X + widget.Size.X) &&

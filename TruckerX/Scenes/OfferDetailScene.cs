@@ -42,17 +42,38 @@ namespace TruckerX.Scenes
                 var tab = new TabControlItemWidget(this, "Dock " + (i + 1), item);
                 tab.OnClick += Tab_OnClick;
                 tabs.Add(tab);
-                schedules.Add(new ScheduleWidget(this, item.Schedule, offer, item.Unlocked));
+                var newSchedule = new ScheduleWidget(this, item.Schedule, offer, item.Unlocked);
+                newSchedule.OnNewShipTimeSelected += NewSchedule_OnNewShipTimeSelected;
+                schedules.Add(newSchedule);
             }
             tabcontrol = new TabControlWidget(this, tabs);
             employeeFinderWidget = new EmployeeFinderWidget(this);
+            employeeFinderWidget.OnEmployeeSelected += EmployeeFinderWidget_OnEmployeeSelected;
 
-            buttonAccept = new DetailButtonWidget(this, Vector2.Zero, Vector2.Zero, true);
+            buttonAccept = new DetailButtonWidget(this, true);
             buttonAccept.OnClick += ButtonAccept_OnClick;
+        }
+
+        private void NewSchedule_OnNewShipTimeSelected(object sender, EventArgs e)
+        {
+            // timeslot on schedule selected for new job.
+            var assignment = sender as ShipTimeAssignment;
+            employeeFinderWidget.SetSelectedEmployee(assignment.AssignedEmployee);
+        }
+
+        private void EmployeeFinderWidget_OnEmployeeSelected(object sender, EventArgs e)
+        {
+            // Assign selected employee to timeslot.
+            if (!schedules[selectedDockIndex].Disabled)
+            {
+                var employee = sender as EmployeeState;
+                schedules[selectedDockIndex].AssignEmployeeToNewTimeslot(employee);
+            }
         }
 
         private void ButtonAccept_OnClick(object sender, EventArgs e)
         {
+            //schedules[selectedDockIndex].newScheduledJob.AssignedEmployee = employeeFinderWidget.selectedEmployee;
             place.PlanJob(place.Docks[selectedDockIndex], schedules[selectedDockIndex].newScheduledJob);
             this.SwitchSceneTo(new PlaceDetailScene(place.Place));
         }
@@ -77,6 +98,7 @@ namespace TruckerX.Scenes
                 // Images
                 { "tab-background", new AssetDefinition<Texture2D>("Textures/tab-background") },
                 { "padlock", new AssetDefinition<Texture2D>("Textures/padlock") },
+                { "search", new AssetDefinition<Texture2D>("Textures/search") },
                 { "detail-button", new AssetDefinition<Texture2D>("Textures/detailbutton") },
             });
             base.DeclareAssets();
@@ -123,26 +145,25 @@ namespace TruckerX.Scenes
 
             var rec = TruckerX.TargetRetangle;
             var startLeft = (Padding * 2  * rec.Width);
-            var height = 200 * GetRDMultiplier();
+            var height = 300 * GetRDMultiplier();
             var startTop = rec.Height - height - (Padding * rec.Height) - (Padding * rec.Width);
 
-            tabcontrol.Size = new Vector2(132 * place.Docks.Count, 26) * GetRDMultiplier();
+            tabcontrol.Size = new Vector2(schedules[selectedDockIndex].Size.X, 26 * GetRDMultiplier());
             tabcontrol.Position = schedules[selectedDockIndex].Position - new Vector2(0, tabcontrol.Size.Y - 1);
-            tabcontrol.Update(gameTime);
+            tabcontrol.Update(this, gameTime);
 
             schedules[selectedDockIndex].Position = new Vector2(rec.X + startLeft, rec.Y + startTop);
-            schedules[selectedDockIndex].Size = new Vector2(rec.Width - (rec.Width * Padding * 4), height);
-            schedules[selectedDockIndex].Update(gameTime);
+            schedules[selectedDockIndex].Size = new Vector2(rec.Width - (rec.Width * Padding * 4) - employeeFinderWidget.Size.X - 50, height);
+            schedules[selectedDockIndex].Update(this, gameTime);
 
             int buttonStartY = (int)(80.0f * GetRDMultiplier());
             buttonAccept.Text = "Accept";
-            buttonAccept.Size = new Vector2(300, 70) * GetRDMultiplier();
             buttonAccept.Position = buttonAccept.Position.FromPercentageWithOffset(0.95f, 0.05f) + new Vector2(-buttonAccept.Size.X, buttonStartY);
-            buttonAccept.Update(gameTime);
+            buttonAccept.Update(this, gameTime);
             buttonAccept.Disabled = !schedules[selectedDockIndex].DoneSchedulingJob();
 
-            employeeFinderWidget.Size = buttonAccept.Size;
-            employeeFinderWidget.Position = employeeFinderWidget.Position.FromPercentageWithOffset(0.4f, 0.2f);
+            employeeFinderWidget.Position = new Vector2(rec.X + (rec.Width * 0.9f) - employeeFinderWidget.Size.X, schedules[selectedDockIndex].Position.Y);
+            employeeFinderWidget.Update(this, gameTime);
         }
     }
 }

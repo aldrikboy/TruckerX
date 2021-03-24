@@ -38,7 +38,7 @@ namespace TruckerX.State
             var rand = new Random();
             string[] names = { "John Johnson", "Jan Jansen", "Pete Peterson", "Joe Mama", "Hans Klok", "Mo Lester", "Mike Ockitch" };
             return new EmployeeState() {
-                Id = place.Place.Name.Substring(0, 2) + "#" + String.Format("{0:0000}", place.FreeId),
+                Id = "#" + String.Format("{0:000000}", WorldState.FreeId),
                 Job = JobTitle.Driver,
                 Name = names[rand.Next(0, names.Length)], 
                 Age = rand.Next(18, 66), 

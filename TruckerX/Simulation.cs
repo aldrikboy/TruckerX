@@ -44,7 +44,7 @@ namespace TruckerX
         public List<ActiveJob> ActiveJobs { get; set; } = new List<ActiveJob>();
 
         public DateTime Time { get; set; }
-        private const float minutesPerSecond = 15;
+        private const float minutesPerSecond = 50;
         private bool quarterHalfReached = false;
 
         public Simulation()
@@ -53,14 +53,10 @@ namespace TruckerX
             simulation = this;
         }
 
-        private EmployeeState GetEmployeeForNewJob(PlaceState place)
+        public DateTime GetNextLeavingTimeslot()
         {
-            foreach(var employee in place.Employees)
-            {
-                if (employee.Job == JobTitle.Driver)
-                    return employee; // We can add filters like rest time here later.
-            }
-            return null;
+            var minutesLeft = 15 - (Time.Minute % 15);
+            return Time + TimeSpan.FromMinutes(minutesLeft);
         }
 
         private void StopCompletedJobs()
@@ -70,26 +66,48 @@ namespace TruckerX
                 var job = ActiveJobs[i];
                 if (job.GetCompletionPercentage() >= 1.0f)
                 {
-                    job.Employee.CurrentJob = null;
-                    // TODO: If the final stop place is not owned, make driver go back to original location.
+                    var finalDestination = job.Job.Job.To;
+                    if (WorldState.PlaceOwned(finalDestination))
+                    {
+                        // Employee is now in the employee list of the destination place.
+                        var finalPlace = WorldState.GetStateForPlace(job.Job.Job.To);
+                        finalPlace.Employees.Add(job.Employee);
+                        job.Employee.CurrentJob = null;
+                    }
+                    else
+                    {
+                        // If the final stop place is not owned, make driver go back to original location.
+                        var scheduledJob = new ScheduledJob(job.Job.Job.Reverse(), job.Job.ShipTimes);
+                        ActiveJob returnJob = new ActiveJob(scheduledJob, GetNextLeavingTimeslot(), job.Employee);
+                        job.Employee.CurrentJob = returnJob;
+                        ActiveJobs.Add(returnJob);
+                    }
+
                     ActiveJobs.RemoveAt(i);
                     i--;
                 }
             }
         }
 
-        private void StartJob(PlaceState place, ScheduledJob job)
+        private void StartJob(PlaceState place, ShipTimeAssignment assignee, ScheduledJob job)
         {
-            var employee = GetEmployeeForNewJob(place);
-            if (employee != null)
+            if (!place.Employees.Contains(assignee.AssignedEmployee))
             {
+                // TODO: give error to player, employee is not at the correct location!
+                //throw new Exception("Employee is not at correct location.");
+                return;
+            }
+            var employee = assignee.AssignedEmployee;
+            if (employee.CurrentJob == null)
+            {
+                place.Employees.Remove(assignee.AssignedEmployee);
                 var activeJob = new ActiveJob(job, Time, employee);
                 employee.CurrentJob = activeJob;
                 ActiveJobs.Add(activeJob);
             }
             else
             {
-                // TODO: give error to player, a planned job could not be started because there are no available drivers!
+                // TODO: give error to player, employee is not available at the planned time!
             }
         }
 
@@ -103,12 +121,12 @@ namespace TruckerX
                     
                     foreach(var plannedJob in dock.Schedule.Jobs)
                     {
-                        foreach(var shipTime in plannedJob.ShipTime)
+                        foreach(var shipTime in plannedJob.ShipTimes)
                         {
                             if ((shipTime.Key == (Weekday)(Time.DayOfWeek-1) || shipTime.Key == Weekday.Sunday && Time.DayOfWeek == DayOfWeek.Sunday) 
-                                && Time.Hour == shipTime.Value.Hours && Time.Minute == shipTime.Value.Minutes)
+                                && Time.Hour == shipTime.Value.Time.Hours && Time.Minute == shipTime.Value.Time.Minutes)
                             {
-                                StartJob(place, plannedJob);
+                                StartJob(place, shipTime.Value, plannedJob);
                             }
                         }
                     }
@@ -118,6 +136,7 @@ namespace TruckerX
 
         public void Update(GameTime gameTime)
         {
+            GetNextLeavingTimeslot();
             Time += TimeSpan.FromMinutes((gameTime.ElapsedGameTime.TotalMilliseconds/1000.0f) * minutesPerSecond);
 
             if (Time.Minute % 15 == 0)

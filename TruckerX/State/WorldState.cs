@@ -7,9 +7,24 @@ using TruckerX.TransportableItems;
 namespace TruckerX.State
 {
     [Serializable]
-    public class WorldState
+    public static class WorldState
     {
         public static List<PlaceState> OwnedPlaces { get; set; }
+
+        private static int freeEmployeeId = 1;
+        public static int FreeId { get { return freeEmployeeId++; } }
+
+        public static EmployeeState GetEmployeeById(string id)
+        {
+            foreach(var place in OwnedPlaces)
+            {
+                foreach(var employee in place.Employees)
+                {
+                    if (employee.Id == id) return employee;
+                }
+            }
+            return null;
+        }
 
         public static void CreateDefault()
         {
@@ -31,7 +46,7 @@ namespace TruckerX.State
                 WorldData.GetPlaceByName("Ottawa"), 
                 TransportableItem.Bananas, 
                 400, 
-                new List<Weekday>() { Weekday.Monday, Weekday.Wednesday }));
+                new List<Weekday>() { Weekday.Friday, Weekday.Saturday, Weekday.Sunday }));
 
             var existingJob = new JobOffer(2,
                 winnipeg.Place,
@@ -44,7 +59,10 @@ namespace TruckerX.State
                 TransportableItem.Peanuts,
                 350,
                 new List<Weekday>() { Weekday.Monday, Weekday.Tuesday });
-            winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(existingJob, new Dictionary<Weekday, TimeSpan>() { { Weekday.Monday, new TimeSpan(7, 15,0) }, { Weekday.Tuesday, new TimeSpan(12, 30, 0) } }));
+            winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(existingJob,  
+                new Dictionary<Weekday, ShipTimeAssignment>() { 
+                    { Weekday.Monday, new ShipTimeAssignment(new TimeSpan(7, 15,0), WorldState.GetEmployeeById("#000001")) },
+                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000001")) } }));
         }
 
         public static bool PlaceOwned(BasePlace place)
@@ -90,9 +108,6 @@ namespace TruckerX.State
         public List<EmployeeState> Employees { get; set; }
         public List<JobOffer> AvailableJobs { get; set; }
         public List<DockState> Docks { get; set; }
-
-        private int freeEmployeeId = 1;
-        public int FreeId { get { return freeEmployeeId++; } }
 
         public PlaceState(BasePlace place)
         {

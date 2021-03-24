@@ -76,7 +76,7 @@ namespace TruckerX.Scenes
 
         public override void DeclareAssets()
         {
-            Textures = new Dictionary<string, AssetDefinition<Texture2D>>()
+            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
             {
                 // Images
                 { "trees", new AssetDefinition<Texture2D>("Textures/trees") },
@@ -86,20 +86,14 @@ namespace TruckerX.Scenes
                 { "leaf", new AssetDefinition<Texture2D>("Textures/leaf") },
                 { "rope", new AssetDefinition<Texture2D>("Textures/rope") },
                 { "white", new AssetDefinition<Texture2D>("Textures/white") },
-            };
+            });
 
-            Songs = new Dictionary<string, AssetDefinition<Song>>()
-            {
-                // Songs
-                
-            };
-
-            Samples = new Dictionary<string, AssetDefinition<SoundEffect>>()
+            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
             {
                 // Songs
                 { "pop2", new AssetDefinition<SoundEffect>("Sounds/pop2") },
                 { "rope-pull", new AssetDefinition<SoundEffect>("Sounds/rope-pull") },
-            };
+            });
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
@@ -161,9 +155,9 @@ namespace TruckerX.Scenes
 
             if (!this.ChangingScene && nextCampaignSelectorScene.DoneLoading)
             {
-                buttonCampaign.Update(gameTime);
-                buttonFreePlay.Update(gameTime);
-                buttonSettings.Update(gameTime);
+                buttonCampaign.Update(this, gameTime);
+                buttonFreePlay.Update(this, gameTime);
+                buttonSettings.Update(this, gameTime);
             }
 
             base.Update(gameTime);

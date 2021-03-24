@@ -5,6 +5,7 @@ using TruckerX.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TruckerX.Scenes;
 
 namespace TruckerX.Widgets
 {
@@ -15,11 +16,10 @@ namespace TruckerX.Widgets
         public WidgetState State { get; set; } = WidgetState.MouseUp;
         public bool Interactive { get; set; } = true;
         public bool Disabled { get; set; } = false;
+        public BaseScene Scene { get; set; }
 
-        protected BaseWidget(Vector2 position, Vector2 size, bool interactive = true)
+        protected BaseWidget(bool interactive = true)
         {
-            Position = position;
-            Size = size;
             Interactive = interactive;
         }
 
@@ -27,7 +27,7 @@ namespace TruckerX.Widgets
 
         public abstract void Draw(SpriteBatch batch, GameTime gameTime);
 
-        public virtual void Update(GameTime gameTime)
+        public virtual void Update(BaseScene scene, GameTime gameTime)
         {
             if (!Interactive) return;
             if (Disabled)

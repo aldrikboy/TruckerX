@@ -70,7 +70,7 @@ namespace TruckerX.Scenes
             tabcontrol.Draw(batch, gameTime);
         }
 
-        public override void CustomUpdate(GameTime gameTime)
+        public override void CustomUpdate( GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
@@ -84,11 +84,11 @@ namespace TruckerX.Scenes
 
             tabcontrol.Size = new Vector2(132 * place.Docks.Count, 26) * GetRDMultiplier();
             tabcontrol.Position = schedules[selectedDockIndex].Position - new Vector2(0, tabcontrol.Size.Y - 1);
-            tabcontrol.Update(gameTime);
+            tabcontrol.Update(this, gameTime);
 
             schedules[selectedDockIndex].Position = new Vector2(rec.X + startLeft, rec.Y + startTop);
             schedules[selectedDockIndex].Size = new Vector2(rec.Width - (rec.Width * Padding * 4), height);
-            schedules[selectedDockIndex].Update(gameTime);
+            schedules[selectedDockIndex].Update(this, gameTime);
         }
     }
 }

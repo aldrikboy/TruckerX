@@ -29,6 +29,8 @@ namespace TruckerX.State
         public decimal OfferedReward { get; set; }
         public List<Weekday> ShipDays { get; set; }
 
+        public bool IsReturnDrive { get { return Id == -1; } }
+
         private double distance = -1; // We store this so we only have to calculate this once.
 
         public JobOffer(int id, BasePlace from, List<BasePlace> connections, BasePlace to, TransportableItem item, decimal reward, List<Weekday> shipDays)
@@ -40,6 +42,17 @@ namespace TruckerX.State
             OfferedReward = reward;
             ShipDays = shipDays;
             Connections = connections;
+        }
+
+        public JobOffer Reverse()
+        {
+            var reversedConnections = new List<BasePlace>();
+            for (int i = Connections.Count-1; i >= 0; i--)
+            {
+                reversedConnections.Add(Connections[i]);
+            }
+            var reversePath = new JobOffer(-1, this.To, reversedConnections, this.From, null, 0, null);
+            return reversePath;
         }
 
         public Vector2 ProgressPercentageToWorldLocation(float percentage)

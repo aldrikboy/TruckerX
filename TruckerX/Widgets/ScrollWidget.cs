@@ -24,7 +24,7 @@ namespace TruckerX.Widgets
         public float Percentage { get { if (ScrollbarTrackHeight == this.Size.Y) return 0; else return scrollY / (this.Size.Y - (float)ScrollbarTrackHeight); } }
         private int scrollY = 0;
 
-        public ScrollWidget(BaseScene scene) : base(new Vector2(0, 0), new Vector2(10, 10))
+        public ScrollWidget(BaseScene scene) : base()
         {
             bg = scene.GetTexture("white");
         }
@@ -35,9 +35,9 @@ namespace TruckerX.Widgets
             batch.Draw(bg, new Rectangle(new Point((int)this.Position.X, (int)this.Position.Y + scrollY), new Point((int)this.Size.X, ScrollbarTrackHeight)), Color.FromNonPremultiplied(255, 173, 123, 255));
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(BaseScene scene, GameTime gameTime)
         {
-            base.Update(gameTime);
+            base.Update(scene, gameTime);
 
             var scroll = InputHelper.ScrollValue();
             var maxScroll = this.Size.Y - ScrollbarTrackHeight;

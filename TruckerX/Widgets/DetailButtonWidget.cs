@@ -20,7 +20,7 @@ namespace TruckerX.Widgets
 
         public string Text { get; set; }
 
-        public DetailButtonWidget(BaseScene scene, Vector2 position, Vector2 size, bool flipped = false) : base(position, size)
+        public DetailButtonWidget(BaseScene scene, bool flipped = false) : base()
         {
             bg = scene.GetTexture("detail-button");
             padlock = scene.GetTexture("padlock");
@@ -57,6 +57,12 @@ namespace TruckerX.Widgets
             int offsetx = (int)this.Position.X - (int)strSize.X / 2 + (int)this.Size.X / 2;
             int offsety = (int)this.Position.Y - (int)strSize.Y / 2 + (int)this.Size.Y / 2;
             batch.DrawString(font, str, new Vector2(offsetx, offsety), textColor, angle, new Vector2(0, 0), 1.0f, SpriteEffects.None, 1.0f);
+        }
+
+        public override void Update(BaseScene scene, GameTime gameTime)
+        {
+            Size = new Vector2(300, 70) * scene.GetRDMultiplier();
+            base.Update(scene, gameTime);
         }
     }
 }

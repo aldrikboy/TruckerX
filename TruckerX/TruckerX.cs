@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TruckerX.Extensions;
 using TruckerX.Locations;
 using TruckerX.Scenes;
 using TruckerX.State;
@@ -99,6 +100,8 @@ namespace TruckerX
 
         protected override void Update(GameTime gameTime)
         {
+            KeyboardExtensions.Update();
+
             overlayScene.Update(gameTime);
             simulation.Update(gameTime);
             activeScene.Update(gameTime);

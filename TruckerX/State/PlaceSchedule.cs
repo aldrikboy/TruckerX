@@ -4,20 +4,42 @@ using System.Text;
 
 namespace TruckerX.State
 {
+    public class ShipTimeAssignment
+    {
+        public TimeSpan Time { get; set; }
+        public EmployeeState AssignedEmployee { get; set; }
+
+        public ShipTimeAssignment(TimeSpan time, EmployeeState assignedEmployee)
+        {
+            Time = time;
+            AssignedEmployee = assignedEmployee;
+        }
+    }
+
     public class ScheduledJob
     {
         public JobOffer Job { get; set; }
-        public Dictionary<Weekday,TimeSpan> ShipTime { get; set; } = new Dictionary<Weekday, TimeSpan>();
+        public Dictionary<Weekday, ShipTimeAssignment> ShipTimes { get; set; } = new Dictionary<Weekday, ShipTimeAssignment>();
 
         public ScheduledJob(JobOffer job)
         {
             Job = job;
         }
 
-        public ScheduledJob(JobOffer job, Dictionary<Weekday, TimeSpan> shipTime) : this(job)
+        public bool AllShipTimesHaveAssignees()
         {
-            ShipTime = shipTime;
-            foreach(var item in ShipTime)
+            foreach(var item in ShipTimes)
+            {
+                if (item.Value.AssignedEmployee == null) return false;
+            }
+            return true;
+        }
+
+        public ScheduledJob(JobOffer job, Dictionary<Weekday, ShipTimeAssignment> shipTime) : this(job)
+        {
+            ShipTimes = shipTime;
+            if (job.IsReturnDrive) return;
+            foreach(var item in ShipTimes)
             {
                 if (!job.ShipDays.Contains(item.Key)) throw new Exception("Shipday and time assigned to job that shouldn't ship on that day.");
             }
@@ -34,9 +56,9 @@ namespace TruckerX.State
         {
             foreach(var item in Jobs)
             {
-                foreach(var plannedTime in item.ShipTime)
+                foreach(var plannedTime in item.ShipTimes)
                 {
-                    if (plannedTime.Key == day && plannedTime.Value == time)
+                    if (plannedTime.Key == day && plannedTime.Value.Time == time)
                     {
                         return false;
                     }

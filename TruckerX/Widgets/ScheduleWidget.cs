@@ -29,11 +29,13 @@ namespace TruckerX.Widgets
         Texture2D padlock;
         float quarterHour;
 
+        private Weekday lastModifiedShipDay = Weekday.Monday;
         public ScheduledJob newScheduledJob;
 
         public event EventHandler OnScheduledOfferSelected;
+        public event EventHandler OnNewShipTimeSelected;
 
-        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true) : base(Vector2.Zero, Vector2.Zero)
+        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true) : base()
         {
             this.scene = scene;
             this.schedule = schedule;
@@ -44,15 +46,23 @@ namespace TruckerX.Widgets
             newScheduledJob = new ScheduledJob(offerToPlan);
         }
 
+        public void AssignEmployeeToNewTimeslot(EmployeeState employee)
+        {
+            if (newScheduledJob.ShipTimes.ContainsKey(lastModifiedShipDay))
+            {
+                newScheduledJob.ShipTimes[lastModifiedShipDay].AssignedEmployee = employee;
+            }
+        }
+
         public void ClearSchedulingJob()
         {
-            newScheduledJob.ShipTime.Clear();
+            newScheduledJob.ShipTimes.Clear();
             selectedScheduledJob = null;
         }
 
         public bool DoneSchedulingJob()
         {
-            return newScheduledJob.ShipTime.Keys.Count == newScheduledJob.Job.ShipDays.Count;
+            return newScheduledJob.ShipTimes.Keys.Count == newScheduledJob.Job.ShipDays.Count && newScheduledJob.AllShipTimesHaveAssignees();
         }
 
         private Vector2 getQuarterPositionForHoveredTile()
@@ -144,17 +154,17 @@ namespace TruckerX.Widgets
             {
                 var c = Color.FromNonPremultiplied(134, 232, 85, 100);
                 if (job == selectedScheduledJob) c = Color.FromNonPremultiplied(255, 165, 0, 100);
-                foreach (var item in job.ShipTime)
+                foreach (var item in job.ShipTimes)
                 {
-                    Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value);
+                    Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
                     DrawQuarterBlock(batch, pos.X, pos.Y, c);
                 }
             }
 
             // Current selection for ship times
-            foreach (var item in newScheduledJob.ShipTime)
+            foreach (var item in newScheduledJob.ShipTimes)
             {
-                Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value);
+                Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
                 DrawQuarterBlock(batch, pos.X, pos.Y, Color.FromNonPremultiplied(255,0,0,100));
             }
 
@@ -175,10 +185,12 @@ namespace TruckerX.Widgets
             TimeSpan time = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(15 * hoveringTile.X);
             if (schedule.CanScheduleJob(day, time))
             {
-                if (newScheduledJob.ShipTime.ContainsKey(day))
-                    newScheduledJob.ShipTime[day] = time;
+                if (newScheduledJob.ShipTimes.ContainsKey(day))
+                    newScheduledJob.ShipTimes[day].Time = time;
                 else
-                    newScheduledJob.ShipTime.Add(day, time);
+                    newScheduledJob.ShipTimes.Add(day, new ShipTimeAssignment(time, null));
+                lastModifiedShipDay = day;
+                OnNewShipTimeSelected?.Invoke(newScheduledJob.ShipTimes[day], null);
             }
         }
 
@@ -189,7 +201,7 @@ namespace TruckerX.Widgets
             TimeSpan time = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(15 * hoveringTile.X);
             foreach (var job in schedule.Jobs)
             {
-                if (job.ShipTime.ContainsKey(day) && job.ShipTime[day] == time)
+                if (job.ShipTimes.ContainsKey(day) && job.ShipTimes[day].Time == time)
                 {
                     selectedScheduledJob = job;
                     OnScheduledOfferSelected?.Invoke(job, null);
@@ -197,7 +209,7 @@ namespace TruckerX.Widgets
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(BaseScene scene, GameTime gameTime)
         {
             cutoffDaysColumn = 60 * scene.GetRDMultiplier();
             rowHeight = this.Size.Y / 8;
@@ -239,7 +251,7 @@ namespace TruckerX.Widgets
                 }
             }
 
-            base.Update(gameTime);
+            base.Update(scene, gameTime);
         }
     }
 }

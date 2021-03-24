@@ -18,7 +18,7 @@ namespace TruckerX.Widgets
         public object Data { get; set; }
         private BaseScene scene;
 
-        public TabControlItemWidget(BaseScene scene, string title, object data) : base(Vector2.Zero, Vector2.Zero)
+        public TabControlItemWidget(BaseScene scene, string title, object data) : base()
         {
             bg = scene.GetTexture("tab-background");
             Title = title;
@@ -56,7 +56,7 @@ namespace TruckerX.Widgets
         private List<TabControlItemWidget> items;
         private BaseScene scene;
 
-        public TabControlWidget(BaseScene scene, List<TabControlItemWidget> items) : base(Vector2.Zero, Vector2.Zero, false)
+        public TabControlWidget(BaseScene scene, List<TabControlItemWidget> items) : base(false)
         {
             this.scene = scene;
             this.items = items;
@@ -70,16 +70,17 @@ namespace TruckerX.Widgets
             }
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(BaseScene scene, GameTime gameTime)
         {
-            base.Update(gameTime);
+            base.Update(scene, gameTime);
 
+            float widthPerItem = this.Size.X / items.Count;
             for (int i = 0; i < items.Count; i++)
             {
                 var item = items[i];
-                item.Size = new Vector2(132, 26) * scene.GetRDMultiplier();
-                item.Position = new Vector2(this.Position.X + ((item.Size.X+2) * i), this.Position.Y);
-                item.Update(gameTime);
+                item.Size = new Vector2(widthPerItem, 26 * scene.GetRDMultiplier());
+                item.Position = new Vector2(this.Position.X + ((item.Size.X) * i), this.Position.Y);
+                item.Update(scene, gameTime);
             }
         }
     }

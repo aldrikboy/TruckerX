@@ -55,7 +55,7 @@ namespace TruckerX.Scenes
 
         public override void DeclareAssets()
         {
-            Textures = new Dictionary<string, AssetDefinition<Texture2D>>()
+            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
             {
                 // Images
                 { "trees", new AssetDefinition<Texture2D>("Textures/trees") },
@@ -64,18 +64,13 @@ namespace TruckerX.Scenes
                 { "leaf", new AssetDefinition<Texture2D>("Textures/leaf") },
                 { "white", new AssetDefinition<Texture2D>("Textures/white") },
                 { "sign", new AssetDefinition<Texture2D>("Textures/sign") },
-            };
+            });
 
-            Songs = new Dictionary<string, AssetDefinition<Song>>()
-            {
-                // Songs
-            };
-
-            Samples = new Dictionary<string, AssetDefinition<SoundEffect>>()
+            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
             {
                 // Songs
                 { "pop2", new AssetDefinition<SoundEffect>("Sounds/pop2") },
-            };
+            });
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
@@ -102,17 +97,17 @@ namespace TruckerX.Scenes
                         OffsetY + rec.Y + (int)(item.Place.MapY * rec.Height / zoom));
                     Vector2 end = new Vector2(OffsetX + rec.X + (int)(connection.MapX * rec.Width / zoom),
                         OffsetY + rec.Y + (int)(connection.MapY * rec.Height / zoom));
-                    Primitives2D.DrawLine(batch, start, end, Color.Red);
+                    Primitives2D.DrawLine(batch, start, end, Color.FromNonPremultiplied(100,100,100,255));
                 }
             }
 
             foreach(var activeJob in Simulation.simulation.ActiveJobs)
             {
-                Vector2 size = new Vector2(placeDotSize, placeDotSize);
+                Vector2 size = new Vector2(placeDotSize / (int)PlaceSize.Small, placeDotSize / (int)PlaceSize.Small);
                 var pos = activeJob.GetCurrentWorldLocation();
-                Vector2 location = new Vector2(OffsetX + rec.X + (int)(pos.X * rec.Width / zoom),
-                        OffsetY + rec.Y + (int)(pos.Y * rec.Height / zoom));
-                Primitives2D.DrawRectangle(batch, location, size, Color.Red);
+                Vector2 location = new Vector2(OffsetX + rec.X + (int)(pos.X * rec.Width / zoom) - (size.X/2),
+                        OffsetY + rec.Y + (int)(pos.Y * rec.Height / zoom) - (size.Y / 2));
+                Primitives2D.FillRectangle(batch, location, size, Color.Orange);
             }
 
             foreach (var item in Locations)
@@ -228,9 +223,8 @@ namespace TruckerX.Scenes
                     OffsetX + rec.X + (int)(item.Place.MapX * rec.Width / zoom) - (dotSize / 2),
                     OffsetY + rec.Y + (int)(item.Place.MapY * rec.Height / zoom) - (dotSize / 2));
                 item.Size = new Vector2(dotSize, dotSize);
-                item.Update(gameTime);
+                item.Update(this, gameTime);
             }
-
 
             base.Update(gameTime);
         }

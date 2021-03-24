@@ -99,7 +99,7 @@ namespace TruckerX.Scenes
             base.Draw(batch, gameTime);
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update( GameTime gameTime)
         {
             base.Update(gameTime);
             CustomUpdate(gameTime);

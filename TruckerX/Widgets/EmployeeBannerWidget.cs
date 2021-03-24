@@ -58,6 +58,16 @@ namespace TruckerX.Widgets
             {
                 // Occupation + id
                 var str = Employee.Job.ToString() + " - " + Employee.Id;
+                var strSize = font.MeasureString(str);
+                int offsetx = (int)this.Position.X + padding + portraitSize + padding;
+                int offsety = (int)this.Position.Y + padding + nameHeight;
+                nameHeight += (int)strSize.Y;
+                batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
+            }
+
+            {
+                // Occupation + id
+                var str = Employee.CurrentJob != null ? "Driving to " + Employee.CurrentJob.Job.Job.To.Name : "";
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding + nameHeight;
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));

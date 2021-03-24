@@ -17,7 +17,7 @@ namespace TruckerX.Widgets
         public BasePlace Place { get; set; }
         public bool owned = false;
 
-        public WorldLocationWidget(BaseScene scene, BasePlace place) : base(new Vector2(0,0), new Vector2(10, 10))
+        public WorldLocationWidget(BaseScene scene, BasePlace place) : base()
         {
             bg = scene.GetTexture("menu-button");
             Place = place;
@@ -26,18 +26,15 @@ namespace TruckerX.Widgets
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
-            if (this.State == WidgetState.MouseHover)
-            {
-                batch.Draw(bg, new Rectangle((this.Position).ToPoint(), (this.Size).ToPoint()), Color.White);
-            }
-            else if (this.State == WidgetState.MouseDown)
-            {
-                batch.Draw(bg, new Rectangle((this.Position).ToPoint(), (this.Size).ToPoint()), Color.White);
-            }
-            else
-            {
-                batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), owned ? Color.Red : Color.Black);
-            }
+            Color c = owned ? Color.Red : Color.Black;
+            if (this.State == WidgetState.MouseHover || this.State == WidgetState.MouseDown) c = Color.White;
+            MonoGame.Primitives2D.DrawCircle(batch, this.Position + new Vector2(this.Size.X / 2, this.Size.Y / 2), 
+                this.Size.X / 2, 32, c, this.Size.X / 2);
+        }
+
+        public override void Update(BaseScene scene, GameTime gameTime)
+        {
+            base.Update(scene, gameTime);
         }
     }
 }

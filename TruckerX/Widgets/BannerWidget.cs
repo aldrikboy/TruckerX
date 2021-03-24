@@ -15,7 +15,7 @@ namespace TruckerX.Widgets
     {
         private Texture2D bg;
 
-        public BannerWidget(BaseScene scene) : base(Vector2.Zero, Vector2.Zero)
+        public BannerWidget(BaseScene scene) : base()
         {
             bg = scene.GetTexture("detail-view");
         }
@@ -32,6 +32,12 @@ namespace TruckerX.Widgets
             {
                 batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), Color.FromNonPremultiplied(0, 0, 0, 150));
             }
+        }
+
+        public override void Update(BaseScene scene, GameTime gameTime)
+        {
+            this.Size = new Vector2(367, 88) * scene.GetRDMultiplier();
+            base.Update(scene, gameTime);
         }
     }
 }

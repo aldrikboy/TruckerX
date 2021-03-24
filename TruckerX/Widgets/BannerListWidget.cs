@@ -21,7 +21,7 @@ namespace TruckerX.Widgets
         private ScrollWidget scroll;
         int totalScrollArea = 0;
 
-        public BannerListWidget(DetailScene scene, List<BannerWidget> widgets) : base(Vector2.Zero, Vector2.Zero, false)
+        public BannerListWidget(DetailScene scene, List<BannerWidget> widgets) : base(false)
         {
             bg = scene.GetTexture("detail-view");
             font = scene.GetRDFont("main_font_15");
@@ -51,13 +51,13 @@ namespace TruckerX.Widgets
             TruckerX.Game.GraphicsDevice.ScissorRectangle = currentScissor;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(BaseScene scene, GameTime gameTime)
         {
             var rec = new Rectangle(this.Position.ToPoint(), this.Size.ToPoint());
             var currentScissor = TruckerX.Game.GraphicsDevice.ScissorRectangle;
             TruckerX.Game.GraphicsDevice.ScissorRectangle = rec;
 
-            base.Update(gameTime);
+            base.Update(scene, gameTime);
 
             int spacing = 2;
             float scrollY = (this.scroll.Percentage * (totalScrollArea - (float)this.Size.Y));
@@ -66,7 +66,7 @@ namespace TruckerX.Widgets
                 var item = Widgets[i];
                 item.Size = new Vector2(367, 88) * scene.GetRDMultiplier();
                 item.Position = new Vector2(this.Position.X, this.Position.Y + (i * ((int)item.Size.Y + spacing) - scrollY));
-                item.Update(gameTime);
+                item.Update(scene, gameTime);
             }
             totalScrollArea = 0;
             if (Widgets.Count != 0) totalScrollArea = Widgets.Count * ((int)Widgets[0].Size.Y + spacing);
@@ -76,7 +76,7 @@ namespace TruckerX.Widgets
             scroll.Position = new Vector2(this.Position.X + this.Size.X - scroll.Size.X, this.Position.Y);
             if (totalScrollArea > scroll.Size.Y) scroll.ScrollbarTrackHeight = (int)(scroll.Size.Y * (scroll.Size.Y / totalScrollArea));
             else scroll.ScrollbarTrackHeight = (int)scroll.Size.Y;
-            scroll.Update(gameTime);
+            scroll.Update(scene, gameTime);
 
             TruckerX.Game.GraphicsDevice.ScissorRectangle = currentScissor;
         }

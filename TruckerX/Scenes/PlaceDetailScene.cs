@@ -71,9 +71,9 @@ namespace TruckerX.Scenes
 
         private void ContentLoader_OnLoaded(object sender, EventArgs e)
         {
-            employeeButton = new DetailButtonWidget(this, new Vector2(0, 0), new Vector2(300, 70));
-            offersButton = new DetailButtonWidget(this, new Vector2(0, 0), new Vector2(300, 70));
-            schedulesButton = new DetailButtonWidget(this, new Vector2(0, 0), new Vector2(300, 70));
+            employeeButton = new DetailButtonWidget(this);
+            offersButton = new DetailButtonWidget(this);
+            schedulesButton = new DetailButtonWidget(this);
 
             employeeButton.OnClick += EmployeeButton_OnClick;
             offersButton.OnClick += JobsButton_OnClick;
@@ -155,19 +155,18 @@ namespace TruckerX.Scenes
             int buttonPadY = (int)(80.0f * GetRDMultiplier());
 
             employeeButton.Text = String.Format("Employees: ({0}/{1})", state.Employees.Count, state.ActiveEmployeeCount());
-            employeeButton.Size = new Vector2(300, 70) * GetRDMultiplier();
             employeeButton.Position = employeeButton.Position.FromPercentageWithOffset(0.05f, 0.05f) + new Vector2(0,buttonStartY);
-            employeeButton.Update(gameTime);
+            employeeButton.Update(this, gameTime);
             
             schedulesButton.Text = "Schedules";
             schedulesButton.Size = employeeButton.Size;
             schedulesButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 1);
-            schedulesButton.Update(gameTime);
+            schedulesButton.Update(this, gameTime);
 
             offersButton.Text = "Job Offers";
             offersButton.Size = employeeButton.Size;
             offersButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 2);
-            offersButton.Update(gameTime);
+            offersButton.Update(this, gameTime);
 
             employeeBanners.Size = new Vector2().FromPercentage(0.32f, 0.8f);
             employeeBanners.Position = new Vector2().FromPercentageWithOffset(0.565f, 0.1f);
@@ -177,8 +176,8 @@ namespace TruckerX.Scenes
 
             switch(currentView)
             {
-                case SelectedDetailView.Employees: employeeBanners.Update(gameTime); break;
-                case SelectedDetailView.Jobs: jobBanners.Update(gameTime); break;
+                case SelectedDetailView.Employees: employeeBanners.Update(this, gameTime); break;
+                case SelectedDetailView.Jobs: jobBanners.Update(this, gameTime); break;
             }
         }
     }

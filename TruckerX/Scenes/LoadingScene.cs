@@ -47,7 +47,7 @@ namespace TruckerX.Scenes
 
         public override void DeclareAssets()
         {
-            Textures = new Dictionary<string, AssetDefinition<Texture2D>>()
+            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
             {
                 // Images
                 { "sloth", new AssetDefinition<Texture2D>("Textures/sloth-drawing") },
@@ -56,25 +56,26 @@ namespace TruckerX.Scenes
                 { "loading-bg", new AssetDefinition<Texture2D>("Textures/loading-bg") },
                 { "star", new AssetDefinition<Texture2D>("Textures/star") },
                 { "leaf", new AssetDefinition<Texture2D>("Textures/leaf") },
-            };
+            });
 
-            Songs = new Dictionary<string, AssetDefinition<Song>>()
+            Songs.AddRange(new Dictionary<string, AssetDefinition<Song>>()
             {
                 // Songs
                 { "background-song", new AssetDefinition<Song>("Sounds/background-ambience") },
-            };
+            });
 
-            Samples = new Dictionary<string, AssetDefinition<SoundEffect>>()
+            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
             {
                 // Songs
                 { "pop1", new AssetDefinition<SoundEffect>("Sounds/pop1") },
-            };
+            });
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
             if (!ContentLoader.Done) return;
 
+#if false
             if (MediaPlayer.PlayPosition.TotalMilliseconds == 0)
             {
                 var bgSong = this.GetSong("background-song");
@@ -82,6 +83,7 @@ namespace TruckerX.Scenes
                 MediaPlayer.Volume = 0.01f;
                 MediaPlayer.Play(bgSong);
             }
+#endif
 
             {
                 var bg = this.GetTexture("loading-background");
