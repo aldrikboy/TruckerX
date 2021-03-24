@@ -20,7 +20,9 @@ namespace TruckerX
         private SpriteBatch _spriteBatch;
 
         public BaseScene activeScene = null;
+        public SimulationOverlayScene overlayScene = null;
         RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
+        Simulation simulation;
 
         public TruckerX()
         {
@@ -84,7 +86,9 @@ namespace TruckerX
         protected override void Initialize()
         {
             this.activeScene = new LoadingScene();
+            this.overlayScene = new SimulationOverlayScene();
             TargetRetangle = GetRenderRectangle();
+            simulation = new Simulation();
             base.Initialize();
         }
 
@@ -95,6 +99,8 @@ namespace TruckerX
 
         protected override void Update(GameTime gameTime)
         {
+            overlayScene.Update(gameTime);
+            simulation.Update(gameTime);
             activeScene.Update(gameTime);
 
             base.Update(gameTime);
@@ -107,6 +113,7 @@ namespace TruckerX
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,
                        null, null, _rasterizerState);
             activeScene.Draw(_spriteBatch, gameTime);
+            overlayScene.Draw(_spriteBatch, gameTime);
             _spriteBatch.End();
 
             base.Draw(gameTime);

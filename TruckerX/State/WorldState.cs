@@ -18,7 +18,7 @@ namespace TruckerX.State
 
             var winnipeg = GetStateForPlace(WorldData.GetPlaceByName("Winnipeg"));
             var employees = winnipeg.Employees;
-            for (int i = 0; i < 7; i++) employees.Add(EmployeeState.GenerateNew());
+            for (int i = 0; i < 2; i++) employees.Add(EmployeeState.GenerateNew(winnipeg));
 
             var jobs = winnipeg.AvailableJobs;
             jobs.Add(new JobOffer(1, 
@@ -33,7 +33,7 @@ namespace TruckerX.State
                 400, 
                 new List<Weekday>() { Weekday.Monday, Weekday.Wednesday }));
 
-            jobs.Add(new JobOffer(2,
+            var existingJob = new JobOffer(2,
                 winnipeg.Place,
                 new List<BasePlace>() {
                     WorldData.GetPlaceByName("Thunder Bay"),
@@ -43,8 +43,8 @@ namespace TruckerX.State
                 WorldData.GetPlaceByName("Ottawa"),
                 TransportableItem.Peanuts,
                 350,
-                new List<Weekday>() { Weekday.Monday, Weekday.Tuesday }));
-            winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(jobs[1], new Dictionary<Weekday, TimeSpan>() { { Weekday.Monday, new TimeSpan(7, 15,0) }, { Weekday.Tuesday, new TimeSpan(12, 30, 0) } }));
+                new List<Weekday>() { Weekday.Monday, Weekday.Tuesday });
+            winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(existingJob, new Dictionary<Weekday, TimeSpan>() { { Weekday.Monday, new TimeSpan(7, 15,0) }, { Weekday.Tuesday, new TimeSpan(12, 30, 0) } }));
         }
 
         public static bool PlaceOwned(BasePlace place)
@@ -91,6 +91,9 @@ namespace TruckerX.State
         public List<JobOffer> AvailableJobs { get; set; }
         public List<DockState> Docks { get; set; }
 
+        private int freeEmployeeId = 1;
+        public int FreeId { get { return freeEmployeeId++; } }
+
         public PlaceState(BasePlace place)
         {
             Employees = new List<EmployeeState>();
@@ -99,6 +102,12 @@ namespace TruckerX.State
             Docks.Add(new DockState(true));
             for (int i = 0; i < 6; i++) Docks.Add(new DockState(false));
             Place = place;
+        }
+
+        public void PlanJob(DockState dock, ScheduledJob job)
+        {
+            dock.Schedule.Jobs.Add(job);
+            AvailableJobs.Remove(job.Job);
         }
 
         public int ActiveEmployeeCount()

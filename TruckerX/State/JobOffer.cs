@@ -4,6 +4,7 @@ using System.Text;
 using TruckerX.Locations;
 using TruckerX.TransportableItems;
 using GeoCoordinatePortable;
+using Microsoft.Xna.Framework;
 
 namespace TruckerX.State
 {
@@ -28,6 +29,8 @@ namespace TruckerX.State
         public decimal OfferedReward { get; set; }
         public List<Weekday> ShipDays { get; set; }
 
+        private double distance = -1; // We store this so we only have to calculate this once.
+
         public JobOffer(int id, BasePlace from, List<BasePlace> connections, BasePlace to, TransportableItem item, decimal reward, List<Weekday> shipDays)
         {
             Id = id;
@@ -39,10 +42,49 @@ namespace TruckerX.State
             Connections = connections;
         }
 
+        public Vector2 ProgressPercentageToWorldLocation(float percentage)
+        {
+            var allLocations = new List<BasePlace>();
+            allLocations.AddRange(Connections);
+            allLocations.Add(To);
+
+            var looingForKm = GetDistanceInKm() * percentage;
+
+            double currentKm;
+            double prevKm;
+            float percentageCompletedOfBetween2Connections;
+
+            var prevPlace = From;
+            var sCoord = new GeoCoordinate(From.Lattitude, From.Longtitude);
+            double totalDistance = 0.0;
+            double prevTotalDistance;
+            foreach (var place in allLocations)
+            {
+                var coord = new GeoCoordinate(place.Lattitude, place.Longtitude);
+                prevTotalDistance = totalDistance;
+                totalDistance += sCoord.GetDistanceTo(coord);
+
+                currentKm = Math.Round(totalDistance / 1000.0);
+                prevKm = Math.Round(prevTotalDistance / 1000.0);
+                if (currentKm > looingForKm) // Truck is between sCoord and coord.
+                {
+                    percentageCompletedOfBetween2Connections = (float)((looingForKm - prevKm)/(currentKm - prevKm));
+                    return new Vector2((float)(prevPlace.MapX + ((place.MapX- prevPlace.MapX)*percentageCompletedOfBetween2Connections)), 
+                        (float)(prevPlace.MapY + ((place.MapY - prevPlace.MapY)*percentageCompletedOfBetween2Connections)));
+                }
+
+                prevPlace = place;
+                sCoord = coord;
+            }
+
+            throw new Exception("Invalid Job, it likely has no destination.");
+        }
+
         public double GetDistanceInKm()
         {
-            var sCoord = new GeoCoordinate(From.Lattitude, From.Longtitude);
+            if (distance != -1) return distance;
 
+            var sCoord = new GeoCoordinate(From.Lattitude, From.Longtitude);
             double totalDistance = 0.0;
             foreach(var place in Connections)
             {
@@ -54,7 +96,8 @@ namespace TruckerX.State
             var eCoord = new GeoCoordinate(To.Lattitude, To.Longtitude);
             totalDistance += sCoord.GetDistanceTo(eCoord);
 
-            return Math.Round(totalDistance / 1000.0);
+            distance = Math.Round(totalDistance / 1000.0);
+            return distance;
         }
 
         private float GetDetourMultiplier()

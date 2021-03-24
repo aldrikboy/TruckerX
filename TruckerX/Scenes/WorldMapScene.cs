@@ -106,6 +106,15 @@ namespace TruckerX.Scenes
                 }
             }
 
+            foreach(var activeJob in Simulation.simulation.ActiveJobs)
+            {
+                Vector2 size = new Vector2(placeDotSize, placeDotSize);
+                var pos = activeJob.GetCurrentWorldLocation();
+                Vector2 location = new Vector2(OffsetX + rec.X + (int)(pos.X * rec.Width / zoom),
+                        OffsetY + rec.Y + (int)(pos.Y * rec.Height / zoom));
+                Primitives2D.DrawRectangle(batch, location, size, Color.Red);
+            }
+
             foreach (var item in Locations)
             {
                 item.Draw(batch, gameTime);

@@ -27,6 +27,7 @@ namespace TruckerX.Scenes
 
         DetailButtonWidget employeeButton;
         DetailButtonWidget offersButton;
+        DetailButtonWidget schedulesButton;
 
         BannerListWidget employeeBanners;
         BannerListWidget jobBanners;
@@ -72,12 +73,19 @@ namespace TruckerX.Scenes
         {
             employeeButton = new DetailButtonWidget(this, new Vector2(0, 0), new Vector2(300, 70));
             offersButton = new DetailButtonWidget(this, new Vector2(0, 0), new Vector2(300, 70));
+            schedulesButton = new DetailButtonWidget(this, new Vector2(0, 0), new Vector2(300, 70));
 
             employeeButton.OnClick += EmployeeButton_OnClick;
             offersButton.OnClick += JobsButton_OnClick;
+            schedulesButton.OnClick += SchedulesButton_OnClick;
 
             createEmployeeBanners();
             createJobBanners();
+        }
+
+        private void SchedulesButton_OnClick(object sender, EventArgs e)
+        {
+            this.SwitchSceneTo(new ScheduleDetailScene(state));
         }
 
         private void JobsButton_OnClick(object sender, EventArgs e)
@@ -97,7 +105,7 @@ namespace TruckerX.Scenes
                 // Images
                 { "detail-button", new AssetDefinition<Texture2D>("Textures/detailbutton") },
                 { "detail-view", new AssetDefinition<Texture2D>("Textures/detailview") },
-
+                { "padlock", new AssetDefinition<Texture2D>("Textures/padlock") },
                 { "portrait", new AssetDefinition<Texture2D>("Textures/portrait") },
             });
 
@@ -124,6 +132,7 @@ namespace TruckerX.Scenes
         {
             employeeButton.Draw(batch, gameTime);
             offersButton.Draw(batch, gameTime);
+            schedulesButton.Draw(batch, gameTime);
 
             switch (currentView)
             {
@@ -149,10 +158,15 @@ namespace TruckerX.Scenes
             employeeButton.Size = new Vector2(300, 70) * GetRDMultiplier();
             employeeButton.Position = employeeButton.Position.FromPercentageWithOffset(0.05f, 0.05f) + new Vector2(0,buttonStartY);
             employeeButton.Update(gameTime);
+            
+            schedulesButton.Text = "Schedules";
+            schedulesButton.Size = employeeButton.Size;
+            schedulesButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 1);
+            schedulesButton.Update(gameTime);
 
-            offersButton.Text = "Offers";
+            offersButton.Text = "Job Offers";
             offersButton.Size = employeeButton.Size;
-            offersButton.Position = employeeButton.Position + new Vector2(0, buttonPadY*1);
+            offersButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 2);
             offersButton.Update(gameTime);
 
             employeeBanners.Size = new Vector2().FromPercentage(0.32f, 0.8f);

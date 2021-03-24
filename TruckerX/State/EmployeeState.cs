@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TruckerX.Locations;
 
 namespace TruckerX.State
 {
@@ -21,6 +22,7 @@ namespace TruckerX.State
 
     public class EmployeeState
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public DateTime HireDate { get; set; }
         public int Age { get; set; }
@@ -29,13 +31,15 @@ namespace TruckerX.State
         public decimal Salary { get; set; }
         public bool OnPaidLeave { get; set; }
         public JobTitle Job { get; set; }
+        public ActiveJob CurrentJob { get; set; } = null;
 
-        public static EmployeeState GenerateNew()
+        public static EmployeeState GenerateNew(PlaceState place)
         {
             var rand = new Random();
             string[] names = { "John Johnson", "Jan Jansen", "Pete Peterson", "Joe Mama", "Hans Klok", "Mo Lester", "Mike Ockitch" };
             return new EmployeeState() {
-                Job = (JobTitle)rand.Next((int)JobTitle.Driver, (int)JobTitle.Mechanic+1),
+                Id = place.Place.Name.Substring(0, 2) + "#" + String.Format("{0:0000}", place.FreeId),
+                Job = JobTitle.Driver,
                 Name = names[rand.Next(0, names.Length)], 
                 Age = rand.Next(18, 66), 
                 Gender = (Gender)rand.Next(0, 2), 

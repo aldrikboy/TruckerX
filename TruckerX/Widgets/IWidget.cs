@@ -12,6 +12,7 @@ namespace TruckerX.Widgets
         MouseUp,
         MouseHover,
         Idle,
+        Disabled,
     }
 
     public interface IWidget

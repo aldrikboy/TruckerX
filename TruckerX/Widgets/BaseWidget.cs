@@ -14,6 +14,7 @@ namespace TruckerX.Widgets
         public Vector2 Size { get; set; }
         public WidgetState State { get; set; } = WidgetState.MouseUp;
         public bool Interactive { get; set; } = true;
+        public bool Disabled { get; set; } = false;
 
         protected BaseWidget(Vector2 position, Vector2 size, bool interactive = true)
         {
@@ -29,6 +30,11 @@ namespace TruckerX.Widgets
         public virtual void Update(GameTime gameTime)
         {
             if (!Interactive) return;
+            if (Disabled)
+            {
+                State = WidgetState.Disabled;
+                return;
+            }
             var state = Mouse.GetState();
 
             if (state.Clicked(this))

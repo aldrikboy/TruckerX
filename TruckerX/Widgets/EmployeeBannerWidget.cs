@@ -54,10 +54,10 @@ namespace TruckerX.Widgets
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(60, 60, 60, 255));
             }
 
-            font = scene.GetRDFont("main_font_15");
+            font = scene.GetRDFont("main_font_12");
             {
-                // Occupation
-                var str = Employee.Job.ToString();
+                // Occupation + id
+                var str = Employee.Job.ToString() + " - " + Employee.Id;
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding + nameHeight;
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
