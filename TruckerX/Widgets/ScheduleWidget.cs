@@ -8,6 +8,7 @@ using System.Text;
 using TruckerX.State;
 using MonoGame;
 using Microsoft.Xna.Framework.Input;
+using TruckerX.Extensions;
 
 namespace TruckerX.Widgets
 {
@@ -15,22 +16,54 @@ namespace TruckerX.Widgets
     {
         BaseScene scene;
         PlaceSchedule schedule;
+        JobOffer offerToPlan;
 
         Vector2 hoveringTile = new Vector2(-1,-1);
         float cutoffDaysColumn;
         float rowHeight;
         int columns;
         float columnWidth;
+        bool enabled;
+        Texture2D bg;
+        Texture2D padlock;
+        float quarterHour;
 
-        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule) : base(Vector2.Zero, Vector2.Zero)
+        ScheduledJob newScheduledJob;
+
+        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true) : base(Vector2.Zero, Vector2.Zero)
         {
             this.scene = scene;
             this.schedule = schedule;
+            this.offerToPlan = offerToPlan;
+            this.enabled = enabled;
+            bg = scene.GetTexture("white");
+            padlock = scene.GetTexture("padlock");
+            newScheduledJob = new ScheduledJob(offerToPlan);
+        }
+
+        private Vector2 getQuarterPositionForHoveredTile()
+        {
+            float x = this.Position.X + cutoffDaysColumn + (hoveringTile.X * quarterHour);
+            float y = this.Position.Y + (hoveringTile.Y + 1) * rowHeight;
+            return new Vector2(x, y);
+        }
+
+        private Vector2 getQuarterPositionForPlannedShipDate(Weekday day, TimeSpan time)
+        {
+            int quarterCount = (int)time.Subtract(TimeSpan.FromHours(6)).TotalMinutes / 15;
+            float x = this.Position.X + cutoffDaysColumn + (quarterCount * quarterHour);
+            float y = this.Position.Y + ((int)day + 1) * rowHeight;
+            return new Vector2(x, y);
+        }
+
+        private void DrawQuarterBlock(SpriteBatch batch, float x, float y, Color color)
+        {
+            Primitives2D.FillRectangle(batch, x, y, quarterHour, rowHeight, color, 0.0f);
+            Primitives2D.FillRectangle(batch, x+2, y+2, quarterHour-4, rowHeight-3, color, 0.0f);
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
-            var bg = scene.GetTexture("white");
             batch.Draw(bg, new Rectangle((this.Position).ToPoint(), (this.Size).ToPoint()), Color.White);
 
             var color = Color.FromNonPremultiplied(60,60,60,155);
@@ -45,7 +78,7 @@ namespace TruckerX.Widgets
                 float x = this.Position.X;
                 float y = this.Position.Y;
                 Primitives2D.FillRectangle(batch,
-                    x-1, y-1, this.Size.X+1, rowHeight+2, color, 0.0f);
+                    x-1, y, this.Size.X+1, rowHeight+1, Color.FromNonPremultiplied(255, 173, 123, 255), 0.0f);
             }
 
             // Hours
@@ -74,25 +107,47 @@ namespace TruckerX.Widgets
                 Primitives2D.DrawLine(batch, this.Position.X, y, this.Position.X + this.Size.X, y, color);
             }
 
-            if (hoveringTile.X >= 0 && hoveringTile.X < columns && hoveringTile.Y >= 0 && hoveringTile.Y < 7)
+            // Days highlight
+            foreach(var item in offerToPlan.ShipDays)
             {
-                float x = this.Position.X + cutoffDaysColumn + (hoveringTile.X * columnWidth);
-                float y = this.Position.Y + (hoveringTile.Y + 1) * rowHeight;
+                float x = this.Position.X + cutoffDaysColumn;
+                float y = this.Position.Y + ((int)item+1) * rowHeight;
                 Primitives2D.FillRectangle(batch,
-                    x, y, columnWidth, rowHeight, color, 0.0f);
+                    x, y, this.Size.X - cutoffDaysColumn, rowHeight, Color.FromNonPremultiplied(255,0,0,50), 0.0f);
             }
 
-            /*
-            var strSize = font.MeasureString(text);
-            float angle = (float)Math.PI * 0.0f / 180.0f;
-            int offsetx = (int)this.Position.X - (int)strSize.X / 2 + (int)this.Size.X / 2;
-            int offsety = (int)this.Position.Y - (int)strSize.Y / 2 + (int)this.Size.Y / 2;
-            if (this.State == WidgetState.MouseHover) offsety -= 2;
-            if (this.State == WidgetState.MouseDown) offsety += 2;
+            if (hoveringTile.X >= 0 && hoveringTile.X < columns*4 && hoveringTile.Y >= 0 && hoveringTile.Y < 7)
+            {
+                Vector2 pos = getQuarterPositionForHoveredTile();
+                DrawQuarterBlock(batch, pos.X, pos.Y, color);
+            }
 
-            batch.DrawString(font, text, new Vector2(offsetx, offsety + 2), Color.Black, angle, new Vector2(0, 0), 1.0f, SpriteEffects.None, 1.0f);
-            batch.DrawString(font, text, new Vector2(offsetx, offsety), Color.White, angle, new Vector2(0, 0), 1.0f, SpriteEffects.None, 1.0f);
-            */
+            // Already planned times
+            foreach (var job in schedule.Jobs)
+            {
+                foreach (var item in job.ShipTime)
+                {
+                    Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value);
+                    DrawQuarterBlock(batch, pos.X, pos.Y, Color.FromNonPremultiplied(134, 232, 85, 100));
+                }
+            }
+
+            // Current selection for ship times
+            foreach (var item in newScheduledJob.ShipTime)
+            {
+                Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value);
+                DrawQuarterBlock(batch, pos.X, pos.Y, Color.FromNonPremultiplied(255,0,0,100));
+            }
+
+            Primitives2D.DrawRectangle(batch, new Rectangle((this.Position).ToPoint(), (this.Size).ToPoint()), Color.FromNonPremultiplied(60, 60, 60, 255), 2);
+
+            if (!enabled)
+            {
+                Primitives2D.FillRectangle(batch, new Rectangle((this.Position).ToPoint(), (this.Size).ToPoint()), Color.FromNonPremultiplied(60, 60, 60, 225));
+                float lockW = padlock.Width / 2 * scene.GetRDMultiplier();
+                float lockH = padlock.Height / 2 * scene.GetRDMultiplier();
+                batch.Draw(padlock, new Rectangle((int)(this.Position.X + (this.Size.X / 2) - (lockW / 2)), (int)(this.Position.Y + (this.Size.Y / 2) - (lockH / 2)), (int)lockW, (int)lockH), Color.White);
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -102,8 +157,40 @@ namespace TruckerX.Widgets
             columns = schedule.EndHour - schedule.StartHour + 1;
             columnWidth = (this.Size.X - cutoffDaysColumn) / columns;
 
-            var pos = Mouse.GetState();
-            hoveringTile = new Vector2((int)(pos.X - this.Position.X - cutoffDaysColumn) / (int)columnWidth, (int)(pos.Y - this.Position.Y - rowHeight) / (int)rowHeight);
+            if (enabled)
+            {
+                var pos = Mouse.GetState();
+                quarterHour = columnWidth / 4;
+                if (pos.X > this.Position.X + cutoffDaysColumn && pos.Y > this.Position.Y + rowHeight)
+                    hoveringTile = new Vector2((int)((pos.X - this.Position.X - cutoffDaysColumn) / quarterHour), (int)(pos.Y - this.Position.Y - rowHeight) / (int)rowHeight);
+                else
+                    hoveringTile = new Vector2(-1, -1);
+
+                bool hoveringSelectableDay = false;
+                foreach (var item in offerToPlan.ShipDays)
+                {
+                    if (hoveringTile.Y == (int)item)
+                    {
+                        hoveringSelectableDay = true;
+                        break;
+                    }
+                }
+                if (!hoveringSelectableDay) hoveringTile = new Vector2(-1, -1);
+
+                var pp = getQuarterPositionForHoveredTile();
+                if (pos.Clicked(pp.X, pp.Y, quarterHour, rowHeight))
+                {
+                    Weekday day = (Weekday)hoveringTile.Y;
+                    TimeSpan time = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(15 * hoveringTile.X);
+                    if (schedule.CanScheduleJob(day, time))
+                    {
+                        if (newScheduledJob.ShipTime.ContainsKey(day))
+                            newScheduledJob.ShipTime[day] = time;
+                        else
+                            newScheduledJob.ShipTime.Add(day, time);
+                    }
+                }
+            }
 
             base.Update(gameTime);
         }

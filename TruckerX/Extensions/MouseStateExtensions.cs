@@ -39,5 +39,20 @@ namespace TruckerX.Extensions
             }
             return result;
         }
+
+        public static bool Clicked(this MouseState state, float x, float y, float w, float h)
+        {
+            if (state.LeftButton == ButtonState.Released)
+            {
+                wasDown = false;
+            }
+            if (wasDown) return false;
+            var result = state.X >=x  && state.Y >= y && state.X <= x + w && state.Y <= y + h && state.LeftButton == ButtonState.Pressed;
+            if (result)
+            {
+                wasDown = true;
+            }
+            return result;
+        }
     }
 }

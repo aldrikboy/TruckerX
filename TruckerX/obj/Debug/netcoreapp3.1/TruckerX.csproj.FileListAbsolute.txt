@@ -71,3 +71,5 @@ C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Fonts\main_font_9.
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\detailview.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\portrait.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\GeoCoordinate.NetCore.dll
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\tab-background.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\padlock.xnb
