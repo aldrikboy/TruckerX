@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TeixeiraSoftware.Finance;
 using TruckerX.TransportableItems;
 
 namespace TruckerX.Locations
@@ -40,6 +41,8 @@ namespace TruckerX.Locations
         public abstract float DetourMultiplier { get; }
 
         public abstract void MakeConnections();
+
+        public abstract Currency Currency { get; }
 
         protected void Connect(string p1, string p2)
         {

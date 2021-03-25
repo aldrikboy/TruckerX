@@ -11,7 +11,7 @@ namespace TruckerX.Particles
     public class LeafParticleEffect : ParticleEffect
     {
         public LeafParticleEffect(BaseScene scene)
-            : base(new List<Texture2D> { scene.GetTexture("leaf") }, TimeSpan.FromMilliseconds(2000), 1, 60.0f, TimeSpan.FromSeconds(6), new Vector2(30, 30))
+            : base(new List<Texture2D> { ContentLoader.GetTexture("leaf") }, TimeSpan.FromMilliseconds(2000), 1, 60.0f, TimeSpan.FromSeconds(6), new Vector2(30, 30))
         {
 
         }

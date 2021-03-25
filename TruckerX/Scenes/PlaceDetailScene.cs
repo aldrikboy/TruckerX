@@ -37,8 +37,18 @@ namespace TruckerX.Scenes
         public PlaceDetailScene(BasePlace place) : base(place.Name)
         {
             this.place = place;
-            this.ContentLoader.OnLoaded += ContentLoader_OnLoaded;
             this.state = WorldState.GetStateForPlace(place);
+
+            employeeButton = new DetailButtonWidget(this);
+            offersButton = new DetailButtonWidget(this);
+            schedulesButton = new DetailButtonWidget(this);
+
+            employeeButton.OnClick += EmployeeButton_OnClick;
+            offersButton.OnClick += JobsButton_OnClick;
+            schedulesButton.OnClick += SchedulesButton_OnClick;
+
+            createEmployeeBanners();
+            createJobBanners();
         }
 
         private void createJobBanners()
@@ -62,25 +72,26 @@ namespace TruckerX.Scenes
         private void createEmployeeBanners()
         {
             var employeeBannerList = new List<BannerWidget>();
-            foreach (var item in state.Employees)
+            foreach(var place in WorldState.OwnedPlaces)
             {
-                employeeBannerList.Add(new EmployeeBannerWidget(this, item));
+                foreach(var employee in place.Employees)
+                {
+                    if (employee.OriginalLocation == state.Place)
+                    {
+                        employeeBannerList.Add(new EmployeeBannerWidget(this, employee));
+                    }
+                }
             }
+
+            foreach (var job in Simulation.simulation.ActiveJobs)
+            {
+                if (job.Employee.OriginalLocation == state.Place)
+                {
+                    employeeBannerList.Add(new EmployeeBannerWidget(this, job.Employee));
+                }
+            }
+
             employeeBanners = new BannerListWidget(this, employeeBannerList);
-        }
-
-        private void ContentLoader_OnLoaded(object sender, EventArgs e)
-        {
-            employeeButton = new DetailButtonWidget(this);
-            offersButton = new DetailButtonWidget(this);
-            schedulesButton = new DetailButtonWidget(this);
-
-            employeeButton.OnClick += EmployeeButton_OnClick;
-            offersButton.OnClick += JobsButton_OnClick;
-            schedulesButton.OnClick += SchedulesButton_OnClick;
-
-            createEmployeeBanners();
-            createJobBanners();
         }
 
         private void SchedulesButton_OnClick(object sender, EventArgs e)
@@ -96,31 +107,6 @@ namespace TruckerX.Scenes
         private void EmployeeButton_OnClick(object sender, EventArgs e)
         {
             currentView = SelectedDetailView.Employees;
-        }
-
-        public override void DeclareAssets()
-        {
-            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
-            {
-                // Images
-                { "detail-button", new AssetDefinition<Texture2D>("Textures/detailbutton") },
-                { "detail-view", new AssetDefinition<Texture2D>("Textures/detailview") },
-                { "padlock", new AssetDefinition<Texture2D>("Textures/padlock") },
-                { "portrait", new AssetDefinition<Texture2D>("Textures/portrait") },
-            });
-
-            Songs.AddRange(new Dictionary<string, AssetDefinition<Song>>()
-            {
-                // Songs
-            });
-
-            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
-            {
-                // Samples
-                { "pop2", new AssetDefinition<SoundEffect>("Sounds/pop2") },
-            });
-
-            base.DeclareAssets();
         }
 
         public override void CustomDraw(SpriteBatch batch, GameTime gameTime)

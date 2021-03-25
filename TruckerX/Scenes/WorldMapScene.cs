@@ -31,12 +31,7 @@ namespace TruckerX.Scenes
 
         public WorldMapScene()
         {
-            this.ContentLoader.OnLoaded += ContentLoader_OnLoaded;
-        }
-
-        private void ContentLoader_OnLoaded(object sender, EventArgs e)
-        {
-            foreach(var country in WorldData.Countries)
+            foreach (var country in WorldData.Countries)
             {
                 foreach (var place in country.Places)
                 {
@@ -53,30 +48,10 @@ namespace TruckerX.Scenes
             this.SwitchSceneTo(new PlaceDetailScene(btn.Place));
         }
 
-        public override void DeclareAssets()
-        {
-            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
-            {
-                // Images
-                { "trees", new AssetDefinition<Texture2D>("Textures/trees") },
-                { "world", new AssetDefinition<Texture2D>("Textures/world") },
-                { "menu-button", new AssetDefinition<Texture2D>("Textures/menu-button") },
-                { "leaf", new AssetDefinition<Texture2D>("Textures/leaf") },
-                { "white", new AssetDefinition<Texture2D>("Textures/white") },
-                { "sign", new AssetDefinition<Texture2D>("Textures/sign") },
-            });
-
-            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
-            {
-                // Songs
-                { "pop2", new AssetDefinition<SoundEffect>("Sounds/pop2") },
-            });
-        }
-
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
             {
-                var bg = this.GetTexture("world");
+                var bg = ContentLoader.GetTexture("world");
                 var targetRec = TruckerX.TargetRetangle;
                 targetRec.X += OffsetX;
                 targetRec.Y += OffsetY;
@@ -105,9 +80,9 @@ namespace TruckerX.Scenes
             {
                 Vector2 size = new Vector2(placeDotSize / (int)PlaceSize.Small, placeDotSize / (int)PlaceSize.Small);
                 var pos = activeJob.GetCurrentWorldLocation();
-                Vector2 location = new Vector2(OffsetX + rec.X + (int)(pos.X * rec.Width / zoom) - (size.X/2),
-                        OffsetY + rec.Y + (int)(pos.Y * rec.Height / zoom) - (size.Y / 2));
-                Primitives2D.FillRectangle(batch, location, size, Color.Orange);
+                Vector2 location = new Vector2(OffsetX + rec.X + (int)(pos.X * rec.Width / zoom),
+                        OffsetY + rec.Y + (int)(pos.Y * rec.Height / zoom));
+                Primitives2D.DrawCircle(batch, location.X, location.Y, size.X/2.0f, 32, Color.Orange, size.X/2);
             }
 
             foreach (var item in Locations)

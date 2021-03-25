@@ -17,7 +17,7 @@ namespace TruckerX.Widgets
 
         public BannerWidget(BaseScene scene) : base()
         {
-            bg = scene.GetTexture("detail-view");
+            bg = ContentLoader.GetTexture("detail-view");
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)

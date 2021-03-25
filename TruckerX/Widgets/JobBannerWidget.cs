@@ -24,7 +24,7 @@ namespace TruckerX.Widgets
             this.scene = scene;
             Job = job;
 
-            portrait = scene.GetTexture("portrait");
+            portrait = ContentLoader.GetTexture("logo-placeholder");
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
@@ -46,12 +46,33 @@ namespace TruckerX.Widgets
             int nameHeight = 0;
             {
                 // Name
-                var str = Job.Item.Name;
+                var str = Job.Company;
                 var strSize = font.MeasureString(str);
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding;
                 nameHeight = (int)strSize.Y;
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(60, 60, 60, 255));
+            }
+
+            font = scene.GetRDFont("main_font_12");
+            {
+                // Transport item name
+                var str = Job.Item.Name;
+                var strSize = font.MeasureString(str);
+                int offsetx = (int)this.Position.X + padding + portraitSize + padding;
+                int offsety = (int)this.Position.Y + padding + nameHeight;
+                nameHeight += (int)strSize.Y;
+                batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
+            }
+
+            {
+                // Reward
+                var str = "Reward: " + Job.From.Country.Currency.Sign + Job.OfferedReward.ToString() + "/Trip";
+                var strSize = font.MeasureString(str);
+                int offsetx = (int)this.Position.X + padding + portraitSize + padding;
+                int offsety = (int)this.Position.Y + padding + nameHeight + (int)(5 * scene.GetRDMultiplier());
+                nameHeight += (int)strSize.Y;
+                batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
             }
         }
     }

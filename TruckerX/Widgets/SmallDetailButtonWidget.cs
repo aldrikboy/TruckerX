@@ -10,7 +10,7 @@ using TruckerX.State;
 
 namespace TruckerX.Widgets
 {
-    public class DetailButtonWidget : BaseWidget
+    public class SmallDetailButtonWidget : BaseWidget
     {
         private Texture2D bg;
         private Texture2D padlock;
@@ -20,7 +20,7 @@ namespace TruckerX.Widgets
 
         public string Text { get; set; }
 
-        public DetailButtonWidget(BaseScene scene, bool flipped = false) : base()
+        public SmallDetailButtonWidget(BaseScene scene, bool flipped = false) : base()
         {
             bg = ContentLoader.GetTexture("detail-button");
             padlock = ContentLoader.GetTexture("padlock");
@@ -31,7 +31,7 @@ namespace TruckerX.Widgets
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
-            font = scene.GetRDFont("main_font_18");
+            font = scene.GetRDFont("main_font_12");
             batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), null, Color.White, 0.0f, Vector2.Zero, flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0.0f);
             Color textColor = Color.FromNonPremultiplied(60, 60, 60, 255);
             if (this.State == WidgetState.MouseHover)
@@ -46,8 +46,8 @@ namespace TruckerX.Widgets
             {
                 textColor = Color.FromNonPremultiplied(255,255,255,150);
                 batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), null, Color.FromNonPremultiplied(0, 0, 0, 230), 0.0f, Vector2.Zero, flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0.0f);
-                float lockW = padlock.Width / 6 * scene.GetRDMultiplier();
-                float lockH = padlock.Height / 6 * scene.GetRDMultiplier();
+                float lockW = padlock.Width / 12 * scene.GetRDMultiplier();
+                float lockH = padlock.Height / 12 * scene.GetRDMultiplier();
                 batch.Draw(padlock, new Rectangle((int)(this.Position.X + (this.Size.X / 2) - (lockW / 2)), (int)(this.Position.Y + (this.Size.Y / 2) - (lockH / 2)), (int)lockW, (int)lockH), Color.White);
             }
 
@@ -61,7 +61,7 @@ namespace TruckerX.Widgets
 
         public override void Update(BaseScene scene, GameTime gameTime)
         {
-            Size = new Vector2(300, 70) * scene.GetRDMultiplier();
+            Size = new Vector2(150, 35) * scene.GetRDMultiplier();
             base.Update(scene, gameTime);
         }
     }

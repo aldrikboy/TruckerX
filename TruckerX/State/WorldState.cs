@@ -37,6 +37,7 @@ namespace TruckerX.State
 
             var jobs = winnipeg.AvailableJobs;
             jobs.Add(new JobOffer(1, 
+                "Good Foods Inc",
                 winnipeg.Place, 
                 new List<BasePlace>() { 
                     WorldData.GetPlaceByName("Thunder Bay"),
@@ -49,6 +50,7 @@ namespace TruckerX.State
                 new List<Weekday>() { Weekday.Friday, Weekday.Saturday, Weekday.Sunday }));
 
             var existingJob = new JobOffer(2,
+                "Nutty Inc",
                 winnipeg.Place,
                 new List<BasePlace>() {
                     WorldData.GetPlaceByName("Thunder Bay"),
@@ -62,7 +64,7 @@ namespace TruckerX.State
             winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(existingJob,  
                 new Dictionary<Weekday, ShipTimeAssignment>() { 
                     { Weekday.Monday, new ShipTimeAssignment(new TimeSpan(7, 15,0), WorldState.GetEmployeeById("#000001")) },
-                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000001")) } }));
+                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000002")) } }));
         }
 
         public static bool PlaceOwned(BasePlace place)

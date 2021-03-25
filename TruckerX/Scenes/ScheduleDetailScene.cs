@@ -19,14 +19,11 @@ namespace TruckerX.Scenes
         TabControlWidget tabcontrol;
         //ScheduledJob selectedJob;
 
+        EmployeeFinderWidget employeeFinderWidget;
+
         public ScheduleDetailScene(PlaceState state) : base("Schedule for " + state.Place.Name)
         {
             this.place = state;
-            this.ContentLoader.OnLoaded += ContentLoader_OnLoaded;
-        }
-
-        private void ContentLoader_OnLoaded(object sender, EventArgs e)
-        {
             List<TabControlItemWidget> tabs = new List<TabControlItemWidget>();
             for (int i = 0; i < place.Docks.Count; i++)
             {
@@ -34,9 +31,30 @@ namespace TruckerX.Scenes
                 var tab = new TabControlItemWidget(this, "Dock " + (i + 1), item);
                 tab.OnClick += Tab_OnClick;
                 tabs.Add(tab);
-                schedules.Add(new ScheduleWidget(this, item.Schedule, null, item.Unlocked));
+                var schedule = new ScheduleWidget(this, item.Schedule, null, item.Unlocked);
+                schedule.OnScheduledOfferSelected += Schedule_OnScheduledOfferSelected;
+                schedules.Add(schedule);
             }
             tabcontrol = new TabControlWidget(this, tabs);
+
+            employeeFinderWidget = new EmployeeFinderWidget(this);
+            employeeFinderWidget.OnEmployeeSelected += EmployeeFinderWidget_OnEmployeeSelected;
+        }
+
+        private void Schedule_OnScheduledOfferSelected(object sender, EventArgs e)
+        {
+            var assignment = sender as ShipTimeAssignment;
+            employeeFinderWidget.SetSelectedEmployee(assignment == null ? null : assignment.AssignedEmployee);
+        }
+
+        private void EmployeeFinderWidget_OnEmployeeSelected(object sender, EventArgs e)
+        {
+            // Assign selected employee to timeslot.
+            if (!schedules[selectedDockIndex].Disabled)
+            {
+                var employee = sender as EmployeeState;
+                //
+            }
         }
 
         private void Tab_OnClick(object sender, EventArgs e)
@@ -49,25 +67,16 @@ namespace TruckerX.Scenes
 
                 var item = place.Docks[i];
                 if (item == ((DockState)tab.Data)) selectedDockIndex = i;
+                employeeFinderWidget.Clear();
             }
-        }
-
-        public override void DeclareAssets()
-        {
-            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
-            {
-                // Images
-                { "tab-background", new AssetDefinition<Texture2D>("Textures/tab-background") },
-                { "padlock", new AssetDefinition<Texture2D>("Textures/padlock") },
-                { "detail-button", new AssetDefinition<Texture2D>("Textures/detailbutton") },
-            });
-            base.DeclareAssets();
         }
 
         public override void CustomDraw(SpriteBatch batch, GameTime gameTime)
         {
             schedules[selectedDockIndex].Draw(batch, gameTime);
             tabcontrol.Draw(batch, gameTime);
+
+            employeeFinderWidget.Draw(batch, gameTime);
         }
 
         public override void CustomUpdate( GameTime gameTime)
@@ -82,13 +91,16 @@ namespace TruckerX.Scenes
             var height = 300 * GetRDMultiplier();
             var startTop = rec.Height - height - (Padding * rec.Height) - (Padding * rec.Width);
 
-            tabcontrol.Size = new Vector2(132 * place.Docks.Count, 26) * GetRDMultiplier();
+            tabcontrol.Size = new Vector2(schedules[selectedDockIndex].Size.X, 26 * GetRDMultiplier());
             tabcontrol.Position = schedules[selectedDockIndex].Position - new Vector2(0, tabcontrol.Size.Y - 1);
             tabcontrol.Update(this, gameTime);
 
             schedules[selectedDockIndex].Position = new Vector2(rec.X + startLeft, rec.Y + startTop);
-            schedules[selectedDockIndex].Size = new Vector2(rec.Width - (rec.Width * Padding * 4), height);
+            schedules[selectedDockIndex].Size = new Vector2(rec.Width - (rec.Width * Padding * 4) - employeeFinderWidget.Size.X - 50, height);
             schedules[selectedDockIndex].Update(this, gameTime);
+
+            employeeFinderWidget.Position = new Vector2(rec.X + (rec.Width * 0.9f) - employeeFinderWidget.Size.X, schedules[selectedDockIndex].Position.Y);
+            employeeFinderWidget.Update(this, gameTime);
         }
     }
 }

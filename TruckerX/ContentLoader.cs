@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TruckerX
 {
@@ -32,7 +33,45 @@ namespace TruckerX
 
     public static class ContentDefinition
     {
-        public static Dictionary<string, AssetDefinition<SpriteFont>> AllFonts = new Dictionary<string, AssetDefinition<SpriteFont>> {
+        public static Dictionary<string, AssetDefinition<Texture2D>> Textures { get; internal set; } = new Dictionary<string, AssetDefinition<Texture2D>>()
+        {
+            { "sloth", new AssetDefinition<Texture2D>("Textures/sloth-drawing") },
+            { "trees", new AssetDefinition<Texture2D>("Textures/trees") },
+            { "loading-background", new AssetDefinition<Texture2D>("Textures/loading-background") },
+            { "loading-bg", new AssetDefinition<Texture2D>("Textures/loading-bg") },
+            { "star", new AssetDefinition<Texture2D>("Textures/star") },
+            { "leaf", new AssetDefinition<Texture2D>("Textures/leaf") },
+            { "black", new AssetDefinition<Texture2D>("Textures/black") },
+            { "menu-button", new AssetDefinition<Texture2D>("Textures/menu-button") },
+            { "rope", new AssetDefinition<Texture2D>("Textures/rope") },
+            { "white", new AssetDefinition<Texture2D>("Textures/white") },
+            { "world", new AssetDefinition<Texture2D>("Textures/world") },
+            { "sign", new AssetDefinition<Texture2D>("Textures/sign") },
+            { "overlay-background", new AssetDefinition<Texture2D>("Textures/overlay-background") },
+            { "tab-background", new AssetDefinition<Texture2D>("Textures/tab-background") },
+            { "padlock", new AssetDefinition<Texture2D>("Textures/padlock") },
+            { "detail-button", new AssetDefinition<Texture2D>("Textures/detailbutton") },
+            { "detail-view", new AssetDefinition<Texture2D>("Textures/detailview") },
+            { "portrait", new AssetDefinition<Texture2D>("Textures/portrait") },
+            { "logo-placeholder", new AssetDefinition<Texture2D>("Textures/logo-placeholder") },
+            { "search", new AssetDefinition<Texture2D>("Textures/search") },
+        };
+
+        public static Dictionary<string, AssetDefinition<Song>> Songs { get; internal set; } = new Dictionary<string, AssetDefinition<Song>>()
+        {
+            { "background-song", new AssetDefinition<Song>("Sounds/background-ambience") },
+        };
+
+        public static Dictionary<string, AssetDefinition<SoundEffect>> Samples { get; internal set; } = new Dictionary<string, AssetDefinition<SoundEffect>>()
+        {
+            { "pop1", new AssetDefinition<SoundEffect>("Sounds/pop1") },
+            { "pop2", new AssetDefinition<SoundEffect>("Sounds/pop2") },
+            { "rope-pull", new AssetDefinition<SoundEffect>("Sounds/rope-pull") },
+        };
+
+        public static Dictionary<string, AssetDefinition<SpriteFont>> Fonts = new Dictionary<string, AssetDefinition<SpriteFont>> {
+            { "main_font_3", new AssetDefinition<SpriteFont>("Fonts/main_font_3") },
+            { "main_font_6", new AssetDefinition<SpriteFont>("Fonts/main_font_6") },
             { "main_font_9", new AssetDefinition<SpriteFont>("Fonts/main_font_9") },
             { "main_font_12", new AssetDefinition<SpriteFont>("Fonts/main_font_12") },
             { "main_font_15", new AssetDefinition<SpriteFont>("Fonts/main_font_15") },
@@ -50,35 +89,82 @@ namespace TruckerX
         };
     }
 
-    public class ContentLoader
+    public static class ContentLoader
     {
-        public bool Done { get; set; } = false;
+        public static bool Done { get; set; } = false;
 
-        public event EventHandler OnLoaded;
-
-        public void LoadContent(ContentManager content, BaseScene scene)
+        public static void LoadContent(ContentManager content)
         {
-            Thread thread = new Thread(() => {
-                foreach (var item in scene.Textures)
+            Thread thread = new Thread(() =>
+            {
+                foreach (var item in ContentDefinition.Textures)
                 {
                     item.Value.Load(content);
                 }
-                foreach (var item in scene.Fonts)
+                foreach (var item in ContentDefinition.Fonts)
                 {
                     item.Value.Load(content);
                 }
-                foreach (var item in scene.Songs)
+                foreach (var item in ContentDefinition.Songs)
                 {
                     item.Value.Load(content);
                 }
-                foreach (var item in scene.Samples)
+                foreach (var item in ContentDefinition.Samples)
                 {
                     item.Value.Load(content);
                 }
-                OnLoaded?.Invoke(this, null);
                 Done = true;
             });
             thread.Start();
         }
+
+        public static Texture2D GetTexture(string identifier)
+        {
+            foreach (var item in ContentDefinition.Textures)
+            {
+                if (item.Key == identifier)
+                {
+                    return item.Value.Get();
+                }
+            }
+            throw new Exception("Texture does not exist");
+        }
+
+        public static SpriteFont GetFont(string identifier)
+        {
+            foreach (var item in ContentDefinition.Fonts)
+            {
+                if (item.Key == identifier)
+                {
+                    return item.Value.Get();
+                }
+            }
+            throw new Exception("Font does not exist");
+        }
+
+        public static Song GetSong(string identifier)
+        {
+            foreach (var item in ContentDefinition.Songs)
+            {
+                if (item.Key == identifier)
+                {
+                    return item.Value.Get();
+                }
+            }
+            throw new Exception("Song does not exist");
+        }
+
+        public static SoundEffect GetSample(string identifier)
+        {
+            foreach (var item in ContentDefinition.Samples)
+            {
+                if (item.Key == identifier)
+                {
+                    return item.Value.Get();
+                }
+            }
+            throw new Exception("Song does not exist");
+        }
+
     }
 }

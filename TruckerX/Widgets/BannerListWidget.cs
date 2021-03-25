@@ -23,7 +23,7 @@ namespace TruckerX.Widgets
 
         public BannerListWidget(DetailScene scene, List<BannerWidget> widgets) : base(false)
         {
-            bg = scene.GetTexture("detail-view");
+            bg = ContentLoader.GetTexture("detail-view");
             font = scene.GetRDFont("main_font_15");
             this.scene = scene;
             Widgets = widgets;

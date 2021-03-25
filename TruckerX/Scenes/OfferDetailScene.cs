@@ -24,17 +24,13 @@ namespace TruckerX.Scenes
         DetailButtonWidget buttonAccept;
         EmployeeFinderWidget employeeFinderWidget;
 
-        public OfferDetailScene(JobOffer offer, PlaceState state) : base("Company Name")
+        public OfferDetailScene(JobOffer offer, PlaceState state) : base(offer.Company)
         {
             this.offer = offer;
             this.place = state;
-            this.ContentLoader.OnLoaded += ContentLoader_OnLoaded;
             distance = this.offer.GetDistanceInKm();
             travelHours = this.offer.GetTravelTime();
-        }
 
-        private void ContentLoader_OnLoaded(object sender, EventArgs e)
-        {
             List<TabControlItemWidget> tabs = new List<TabControlItemWidget>();
             for (int i = 0; i < place.Docks.Count; i++)
             {
@@ -89,19 +85,6 @@ namespace TruckerX.Scenes
                 var item = place.Docks[i];
                 if (item == ((DockState)tab.Data)) selectedDockIndex = i;
             }
-        }
-
-        public override void DeclareAssets()
-        {
-            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
-            {
-                // Images
-                { "tab-background", new AssetDefinition<Texture2D>("Textures/tab-background") },
-                { "padlock", new AssetDefinition<Texture2D>("Textures/padlock") },
-                { "search", new AssetDefinition<Texture2D>("Textures/search") },
-                { "detail-button", new AssetDefinition<Texture2D>("Textures/detailbutton") },
-            });
-            base.DeclareAssets();
         }
 
         private int AddLine(SpriteBatch batch, string text, SpriteFont font, float x, float y)

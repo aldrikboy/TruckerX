@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ITu5QCwiDaxAuxks4DmqLPJI4Uf9ExmpRfBoGqLUgMssAG1OjysHmsmLjd0qqw6S8VvbhPP1HJAUOmNAnykR5Q==",
+  "dgSpecHash": "atmwFH2UoQu7QOvo062l8PVtNTcTd9FxF9EZdjmmvGSr+N17gALmTKYocsHIvPypJpoWDC2fov3MpReNWdmv2A==",
   "success": true,
   "projectFilePath": "C:\\TruckerX\\TruckerX\\TruckerX\\TruckerX.csproj",
   "expectedPackageFiles": [
@@ -127,7 +127,9 @@
     "C:\\Users\\aldri\\.nuget\\packages\\system.xml.xdocument\\4.0.11\\system.xml.xdocument.4.0.11.nupkg.sha512",
     "C:\\Users\\aldri\\.nuget\\packages\\system.xml.xmldocument\\4.0.1\\system.xml.xmldocument.4.0.1.nupkg.sha512",
     "C:\\Users\\aldri\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
-    "C:\\Users\\aldri\\.nuget\\packages\\system.xml.xpath.xdocument\\4.0.1\\system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
+    "C:\\Users\\aldri\\.nuget\\packages\\system.xml.xpath.xdocument\\4.0.1\\system.xml.xpath.xdocument.4.0.1.nupkg.sha512",
+    "C:\\Users\\aldri\\.nuget\\packages\\teixeirasoftware.finance.currency\\4.1.0\\teixeirasoftware.finance.currency.4.1.0.nupkg.sha512",
+    "C:\\Users\\aldri\\.nuget\\packages\\teixeirasoftware.finance.icurrency\\1.0.0\\teixeirasoftware.finance.icurrency.1.0.0.nupkg.sha512"
   ],
   "logs": [
     {

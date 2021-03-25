@@ -32,6 +32,7 @@ namespace TruckerX
             IsMouseVisible = true;
             _graphics.PreferredBackBufferWidth = 1280;
             _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferMultiSampling = true;
             _graphics.ApplyChanges();
             Game = this;
             Window.AllowAltF4 = true;
@@ -86,6 +87,8 @@ namespace TruckerX
 
         protected override void Initialize()
         {
+            ContentLoader.LoadContent(Content);
+
             this.activeScene = new LoadingScene();
             this.overlayScene = new SimulationOverlayScene();
             TargetRetangle = GetRenderRectangle();

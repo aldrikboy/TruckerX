@@ -11,7 +11,7 @@ namespace TruckerX.Particles
     public class StarParticleEffect : ParticleEffect
     {
         public StarParticleEffect(BaseScene scene) 
-            : base(new List<Texture2D> { scene.GetTexture("star") }, TimeSpan.FromMilliseconds(150), 1, 100.0f, TimeSpan.FromSeconds(1), new Vector2(50, 50))
+            : base(new List<Texture2D> { ContentLoader.GetTexture("star") }, TimeSpan.FromMilliseconds(150), 1, 100.0f, TimeSpan.FromSeconds(1), new Vector2(50, 50))
         {
 
         }

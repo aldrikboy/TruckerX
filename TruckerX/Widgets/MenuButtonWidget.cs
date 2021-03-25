@@ -16,9 +16,9 @@ namespace TruckerX.Widgets
 
         public MenuButtonWidget(BaseScene scene, string text, Vector2 position, Vector2 size) : base()
         {
-            bg = scene.GetTexture("menu-button");
+            bg = ContentLoader.GetTexture("menu-button");
             this.text = text;
-            font = scene.GetFont("main_font_24");
+            font = ContentLoader.GetFont("main_font_24");
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)

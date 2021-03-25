@@ -55,6 +55,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/main_font_27.spritefont
 
+#begin Fonts/main_font_3.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/main_font_3.spritefont
+
 #begin Fonts/main_font_30.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -103,6 +110,13 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/main_font_48.spritefont
+
+#begin Fonts/main_font_6.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/main_font_6.spritefont
 
 #begin Fonts/main_font_9.spritefont
 /importer:FontDescriptionImporter
@@ -210,6 +224,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/loading-bg.png
 
+#begin Textures/loading-bg.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/loading-bg.png
+
+#begin Textures/logo-placeholder.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/logo-placeholder.jpg
+
 #begin Textures/menu-button.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -221,6 +259,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/menu-button.png
+
+#begin Textures/overlay-background.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/overlay-background.png
 
 #begin Textures/padlock.png
 /importer:TextureImporter

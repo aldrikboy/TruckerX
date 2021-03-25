@@ -20,7 +20,7 @@ namespace TruckerX.Widgets
 
         public TabControlItemWidget(BaseScene scene, string title, object data) : base()
         {
-            bg = scene.GetTexture("tab-background");
+            bg = ContentLoader.GetTexture("tab-background");
             Title = title;
             Data = data;
             this.scene = scene;

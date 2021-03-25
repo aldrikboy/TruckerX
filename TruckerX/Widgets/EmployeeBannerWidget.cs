@@ -24,7 +24,7 @@ namespace TruckerX.Widgets
             this.scene = scene;
             Employee = employee;
 
-            portrait = scene.GetTexture("portrait");
+            portrait = ContentLoader.GetTexture("portrait");
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
@@ -66,8 +66,17 @@ namespace TruckerX.Widgets
             }
 
             {
-                // Occupation + id
-                var str = Employee.CurrentJob != null ? "Driving to " + Employee.CurrentJob.Job.Job.To.Name : "";
+                // Driving to
+                string str = "";
+                if (Employee.CurrentJob == null)
+                {
+                    if (Employee.CurrentLocation == Employee.OriginalLocation) str = "Located at " + Employee.CurrentLocation.Name;
+                }
+                if (Employee.CurrentJob != null)
+                {
+                    if (!Employee.CurrentJob.Job.Job.IsReturnDrive) str = "Driving to " + Employee.CurrentJob.Job.Job.To.Name;
+                    else str = "Returning to " + Employee.OriginalLocation.Name;
+                }
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding + nameHeight;
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));

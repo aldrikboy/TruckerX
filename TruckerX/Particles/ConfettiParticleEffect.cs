@@ -11,7 +11,7 @@ namespace TruckerX.Particles
     public class ConfettiParticleEffect : ParticleEffect
     {
         public ConfettiParticleEffect(BaseScene scene)
-           : base(new List<Texture2D> { scene.GetTexture("white") }, TimeSpan.FromMilliseconds(150), 50, 150.0f, TimeSpan.FromSeconds(1), new Vector2(10, 10))
+           : base(new List<Texture2D> { ContentLoader.GetTexture("white") }, TimeSpan.FromMilliseconds(150), 50, 150.0f, TimeSpan.FromSeconds(1), new Vector2(10, 10))
         {
 
         }

@@ -2288,6 +2288,27 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
+      },
+      "TeixeiraSoftware.Finance.Currency/4.1.0": {
+        "type": "package",
+        "dependencies": {
+          "TeixeiraSoftware.Finance.ICurrency": "1.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/TeixeiraSoftware.Finance.Currency.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/TeixeiraSoftware.Finance.Currency.dll": {}
+        }
+      },
+      "TeixeiraSoftware.Finance.ICurrency/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/TeixeiraSoftware.Finance.ICurrency.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/TeixeiraSoftware.Finance.ICurrency.dll": {}
+        }
       }
     }
   },
@@ -7450,6 +7471,32 @@
         "system.xml.xpath.xdocument.4.0.1.nupkg.sha512",
         "system.xml.xpath.xdocument.nuspec"
       ]
+    },
+    "TeixeiraSoftware.Finance.Currency/4.1.0": {
+      "sha512": "8m0Wk1Hh/liadyXk0Cz/CMeKtWBgQefo61IyXvAMMjNsMON3RB7y9B+hgKcBkLbNp+YtfGnXYLJCyIubV413Xw==",
+      "type": "package",
+      "path": "teixeirasoftware.finance.currency/4.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/TeixeiraSoftware.Finance.Currency.dll",
+        "lib/netstandard2.0/TeixeiraSoftware.Finance.Currency.xml",
+        "teixeirasoftware.finance.currency.4.1.0.nupkg.sha512",
+        "teixeirasoftware.finance.currency.nuspec"
+      ]
+    },
+    "TeixeiraSoftware.Finance.ICurrency/1.0.0": {
+      "sha512": "OzDnOlgD7vqtNQWew9gyBMbPKIp2uBRgpFx3WQdOe+T41wrz/WMW1jo0ZyjcinvrHc1a40YhysBFcnNvVax37Q==",
+      "type": "package",
+      "path": "teixeirasoftware.finance.icurrency/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/TeixeiraSoftware.Finance.ICurrency.dll",
+        "lib/netstandard2.0/TeixeiraSoftware.Finance.ICurrency.xml",
+        "teixeirasoftware.finance.icurrency.1.0.0.nupkg.sha512",
+        "teixeirasoftware.finance.icurrency.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -7457,7 +7504,8 @@
       "GeoCoordinate.NetCore >= 1.0.0.1",
       "MonoGame.Content.Builder.Task >= 3.8.0.1641",
       "MonoGame.Framework.WindowsDX >= 3.8.0.1641",
-      "MonoGame.Primitives2D >= 1.1.1"
+      "MonoGame.Primitives2D >= 1.1.1",
+      "TeixeiraSoftware.Finance.Currency >= 4.1.0"
     ]
   },
   "packageFolders": {
@@ -7514,6 +7562,10 @@
           "MonoGame.Primitives2D": {
             "target": "Package",
             "version": "[1.1.1, )"
+          },
+          "TeixeiraSoftware.Finance.Currency": {
+            "target": "Package",
+            "version": "[4.1.0, )"
           }
         },
         "imports": [

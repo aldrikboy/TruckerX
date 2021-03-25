@@ -74,3 +74,9 @@ C:\TruckerX\TruckerX\TruckerX\obj\Debug\netcoreapp3.1\TruckerX.pdb
 C:\TruckerX\TruckerX\TruckerX\obj\Debug\netcoreapp3.1\TruckerX.genruntimeconfig.cache
 C:\TruckerX\TruckerX\TruckerX\obj\Debug\netcoreapp3.1\TruckerX.csprojAssemblyReference.cache
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\search.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\overlay-background.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\TeixeiraSoftware.Finance.Currency.dll
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\TeixeiraSoftware.Finance.ICurrency.dll
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Fonts\main_font_3.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Fonts\main_font_6.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\logo-placeholder.xnb

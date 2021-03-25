@@ -22,6 +22,7 @@ namespace TruckerX.State
     public class JobOffer
     {
         public int Id { get; set; }
+        public string Company { get; set; }
         public BasePlace From { get; set; }
         public List<BasePlace> Connections { get; set; } = new List<BasePlace>();
         public BasePlace To { get; set; }
@@ -33,7 +34,7 @@ namespace TruckerX.State
 
         private double distance = -1; // We store this so we only have to calculate this once.
 
-        public JobOffer(int id, BasePlace from, List<BasePlace> connections, BasePlace to, TransportableItem item, decimal reward, List<Weekday> shipDays)
+        public JobOffer(int id, string company, BasePlace from, List<BasePlace> connections, BasePlace to, TransportableItem item, decimal reward, List<Weekday> shipDays)
         {
             Id = id;
             From = from;
@@ -42,6 +43,7 @@ namespace TruckerX.State
             OfferedReward = reward;
             ShipDays = shipDays;
             Connections = connections;
+            Company = company;
         }
 
         public JobOffer Reverse()
@@ -51,7 +53,7 @@ namespace TruckerX.State
             {
                 reversedConnections.Add(Connections[i]);
             }
-            var reversePath = new JobOffer(-1, this.To, reversedConnections, this.From, null, 0, null);
+            var reversePath = new JobOffer(-1, Company, this.To, reversedConnections, this.From, null, 0, null);
             return reversePath;
         }
 

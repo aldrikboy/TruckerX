@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TeixeiraSoftware.Finance;
 
 namespace TruckerX.Locations
 {
@@ -10,6 +11,8 @@ namespace TruckerX.Locations
 
         public override float TrafficMultiplier => 1.0f;
         public override float DetourMultiplier => 1.4f;
+
+        public override Currency Currency => Currency.CAD;
 
         public CountryCanada() : base(new List<BasePlace>() { 
             new PlaceOttawa(), new PlaceWinnipeg(), new PlaceThunderBay(), new PlaceNipigon(),

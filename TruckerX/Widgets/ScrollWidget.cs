@@ -26,7 +26,7 @@ namespace TruckerX.Widgets
 
         public ScrollWidget(BaseScene scene) : base()
         {
-            bg = scene.GetTexture("white");
+            bg = ContentLoader.GetTexture("white");
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)

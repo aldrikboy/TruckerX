@@ -18,7 +18,7 @@ namespace TruckerX.Widgets
         PlaceSchedule schedule;
         JobOffer offerToPlan;
 
-        ScheduledJob selectedScheduledJob = null;
+        ShipTimeAssignment selectedScheduledJobAssignment = null;
         Vector2 hoveringTile = new Vector2(-1,-1);
         float cutoffDaysColumn;
         float rowHeight;
@@ -41,8 +41,8 @@ namespace TruckerX.Widgets
             this.schedule = schedule;
             this.offerToPlan = offerToPlan;
             this.enabled = enabled;
-            bg = scene.GetTexture("white");
-            padlock = scene.GetTexture("padlock");
+            bg = ContentLoader.GetTexture("white");
+            padlock = ContentLoader.GetTexture("padlock");
             newScheduledJob = new ScheduledJob(offerToPlan);
         }
 
@@ -57,7 +57,7 @@ namespace TruckerX.Widgets
         public void ClearSchedulingJob()
         {
             newScheduledJob.ShipTimes.Clear();
-            selectedScheduledJob = null;
+            selectedScheduledJobAssignment = null;
         }
 
         public bool DoneSchedulingJob()
@@ -152,10 +152,11 @@ namespace TruckerX.Widgets
             // Already planned times
             foreach (var job in schedule.Jobs)
             {
-                var c = Color.FromNonPremultiplied(134, 232, 85, 100);
-                if (job == selectedScheduledJob) c = Color.FromNonPremultiplied(255, 165, 0, 100);
+                var c = Color.White;
                 foreach (var item in job.ShipTimes)
                 {
+                    if (item.Value == selectedScheduledJobAssignment) c = Color.FromNonPremultiplied(255, 165, 0, 100);
+                    else c = Color.FromNonPremultiplied(134, 232, 85, 100);
                     Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
                     DrawQuarterBlock(batch, pos.X, pos.Y, c);
                 }
@@ -196,17 +197,19 @@ namespace TruckerX.Widgets
 
         private void selectHoveredTile()
         {
-            selectedScheduledJob = null;
+            selectedScheduledJobAssignment = null;
             Weekday day = (Weekday)hoveringTile.Y;
             TimeSpan time = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(15 * hoveringTile.X);
             foreach (var job in schedule.Jobs)
             {
                 if (job.ShipTimes.ContainsKey(day) && job.ShipTimes[day].Time == time)
                 {
-                    selectedScheduledJob = job;
-                    OnScheduledOfferSelected?.Invoke(job, null);
+                    selectedScheduledJobAssignment = job.ShipTimes[day];
+                    OnScheduledOfferSelected?.Invoke(selectedScheduledJobAssignment, null);
+                    return;
                 }
             }
+            OnScheduledOfferSelected?.Invoke(null, null);
         }
 
         public override void Update(BaseScene scene, GameTime gameTime)

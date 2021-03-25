@@ -32,6 +32,8 @@ namespace TruckerX.State
         public bool OnPaidLeave { get; set; }
         public JobTitle Job { get; set; }
         public ActiveJob CurrentJob { get; set; } = null;
+        public BasePlace OriginalLocation { get; set; }
+        public BasePlace CurrentLocation { get; set; } = null;
 
         public static EmployeeState GenerateNew(PlaceState place)
         {
@@ -46,7 +48,9 @@ namespace TruckerX.State
                 HasDiploma = true, 
                 HireDate = DateTime.Now, 
                 Salary = rand.Next(1600, 2500), 
-                OnPaidLeave = false 
+                OnPaidLeave = false,
+                OriginalLocation = place.Place,
+                CurrentLocation = place.Place,
             };
         }
     }

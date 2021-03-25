@@ -19,6 +19,7 @@ namespace TruckerX.Widgets
         float textBoxHeight = 50;
         private BaseScene scene;
         private Texture2D searchTexture;
+        private SmallDetailButtonWidget confirmButton;
         public string text { get; set; } = "";
 
         bool selected = false;
@@ -28,7 +29,15 @@ namespace TruckerX.Widgets
         public EmployeeFinderWidget(BaseScene scene) : base()
         {
             this.scene = scene;
-            searchTexture = scene.GetTexture("search");
+            searchTexture = ContentLoader.GetTexture("search");
+            confirmButton = new SmallDetailButtonWidget(scene);
+            confirmButton.Text = "Assign";
+            confirmButton.OnClick += ConfirmButton_OnClick;
+        }
+
+        private void ConfirmButton_OnClick(object sender, EventArgs e)
+        {
+            OnEmployeeSelected?.Invoke(selectedEmployee, null);
         }
 
         public void Clear()
@@ -114,12 +123,19 @@ namespace TruckerX.Widgets
 
             DrawTextbox(batch);
             DrawSelectedEmployeeData(batch);
+
+            confirmButton.Draw(batch, gameTime);
         }
 
         public override void Update(BaseScene scene, GameTime gameTime)
         {
             this.Size = new Vector2(250, 300) * scene.GetRDMultiplier();
             textBoxHeight = 50 * scene.GetRDMultiplier();
+
+            confirmButton.Position = new Vector2(this.Position.X+1, this.Position.Y + this.Size.Y - confirmButton.Size.Y - (10*scene.GetRDMultiplier()));
+            confirmButton.Disabled = selectedEmployee == null;
+            confirmButton.Update(scene, gameTime);
+
             var mouseState = Mouse.GetState();
             if (this.State == WidgetState.MouseDown) selected = true;
             if (!mouseState.Hovering(this) && mouseState.LeftButton == ButtonState.Pressed) selected = false;
@@ -144,7 +160,6 @@ namespace TruckerX.Widgets
                     }
 
                     selectedEmployee = WorldState.GetEmployeeById(text);
-                    OnEmployeeSelected?.Invoke(selectedEmployee, null);
                 }
             }
 

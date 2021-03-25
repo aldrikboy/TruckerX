@@ -19,7 +19,7 @@ namespace TruckerX.Widgets
 
         public WorldLocationWidget(BaseScene scene, BasePlace place) : base()
         {
-            bg = scene.GetTexture("menu-button");
+            bg = ContentLoader.GetTexture("menu-button");
             Place = place;
             owned = WorldState.PlaceOwned(place);
         }

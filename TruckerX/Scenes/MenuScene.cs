@@ -31,22 +31,6 @@ namespace TruckerX.Scenes
 
         public MenuScene()
         {
-            this.ContentLoader.OnLoaded += ContentLoader_OnLoaded;
-            this.OnDisplay += MenuScene_OnDisplay;
-
-            buttonsEnterScreenAnimation = new LinearAnimation(TimeSpan.FromMilliseconds(500));
-
-            nextCampaignSelectorScene = new WorldMapScene();
-        }
-
-        private void MenuScene_OnDisplay(object sender, EventArgs e)
-        {
-            ropeFallSoundEffect = this.GetSample("rope-pull");
-            ropeFallSoundEffect.Play(0.2f, 0.0f, 0.0f);
-        }
-
-        private void ContentLoader_OnLoaded(object sender, EventArgs e)
-        {
             leafParticleEffectTree1 = new LeafParticleEffect(this);
             leafParticleEffectTree2 = new LeafParticleEffect(this);
 
@@ -61,11 +45,22 @@ namespace TruckerX.Scenes
 
             clickEffect = new ConfettiParticleEffect(this);
             clickEffect.Stop();
+            this.OnDisplay += MenuScene_OnDisplay;
+
+            buttonsEnterScreenAnimation = new LinearAnimation(TimeSpan.FromMilliseconds(500));
+
+            nextCampaignSelectorScene = new WorldMapScene();
+        }
+
+        private void MenuScene_OnDisplay(object sender, EventArgs e)
+        {
+            ropeFallSoundEffect = ContentLoader.GetSample("rope-pull");
+            ropeFallSoundEffect.Play(0.2f, 0.0f, 0.0f);
         }
 
         private void ButtonStart_OnClick(object sender, EventArgs e)
         {
-            var sample1 = this.GetSample("pop2");
+            var sample1 = ContentLoader.GetSample("pop2");
             sample1.Play(0.15f, 0.0f, 0.0f);
 
             clickEffect.Position = Mouse.GetState().Position.ToVector2();
@@ -74,32 +69,10 @@ namespace TruckerX.Scenes
             SwitchSceneTo(nextCampaignSelectorScene);
         }
 
-        public override void DeclareAssets()
-        {
-            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
-            {
-                // Images
-                { "trees", new AssetDefinition<Texture2D>("Textures/trees") },
-                { "loading-background", new AssetDefinition<Texture2D>("Textures/loading-background") },
-                { "loading-bg", new AssetDefinition<Texture2D>("Textures/loading-bg") },
-                { "menu-button", new AssetDefinition<Texture2D>("Textures/menu-button") },
-                { "leaf", new AssetDefinition<Texture2D>("Textures/leaf") },
-                { "rope", new AssetDefinition<Texture2D>("Textures/rope") },
-                { "white", new AssetDefinition<Texture2D>("Textures/white") },
-            });
-
-            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
-            {
-                // Songs
-                { "pop2", new AssetDefinition<SoundEffect>("Sounds/pop2") },
-                { "rope-pull", new AssetDefinition<SoundEffect>("Sounds/rope-pull") },
-            });
-        }
-
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
             {
-                var bg = this.GetTexture("loading-background");
+                var bg = ContentLoader.GetTexture("loading-background");
                 Vector2 size = bg.ScaleToWindow(1.0f);
                 int offsetx = (TruckerX.WindowWidth - (int)size.X) / 2;
                 int offsety = (TruckerX.WindowHeight - (int)size.Y) / 2;
@@ -107,7 +80,7 @@ namespace TruckerX.Scenes
             }
 
             {
-                var trees = this.GetTexture("trees");
+                var trees = ContentLoader.GetTexture("trees");
                 Vector2 size = trees.ScaleToWindow(1.0f);
                 int offsetx = (TruckerX.WindowWidth - (int)size.X) / 2;
                 int offsety = (TruckerX.WindowHeight - (int)size.Y) / 2;
@@ -129,7 +102,7 @@ namespace TruckerX.Scenes
             }
 
             int offsetY = (int)(-300 + (300*buttonsEnterScreenAnimation.Percentage));
-            var rope = this.GetTexture("rope");
+            var rope = ContentLoader.GetTexture("rope");
             batch.Draw(rope, new Rectangle(200, offsetY, 43, 500), Color.White);
             batch.Draw(rope, new Rectangle(400-43, offsetY, 43, 500), Color.White);
 
@@ -153,7 +126,7 @@ namespace TruckerX.Scenes
             leafParticleEffectTree1?.Update(gameTime);
             leafParticleEffectTree2?.Update(gameTime);
 
-            if (!this.ChangingScene && nextCampaignSelectorScene.DoneLoading)
+            if (!this.ChangingScene)
             {
                 buttonCampaign.Update(this, gameTime);
                 buttonFreePlay.Update(this, gameTime);

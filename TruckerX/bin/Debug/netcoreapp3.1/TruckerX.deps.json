@@ -11,7 +11,8 @@
           "GeoCoordinate.NetCore": "1.0.0.1",
           "MonoGame.Content.Builder.Task": "3.8.0.1641",
           "MonoGame.Framework.WindowsDX": "3.8.0.1641",
-          "MonoGame.Primitives2D": "1.1.1"
+          "MonoGame.Primitives2D": "1.1.1",
+          "TeixeiraSoftware.Finance.Currency": "4.1.0"
         },
         "runtime": {
           "TruckerX.dll": {}
@@ -1502,6 +1503,25 @@
           "System.Xml.XDocument": "4.0.11",
           "System.Xml.XPath": "4.0.1"
         }
+      },
+      "TeixeiraSoftware.Finance.Currency/4.1.0": {
+        "dependencies": {
+          "TeixeiraSoftware.Finance.ICurrency": "1.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/TeixeiraSoftware.Finance.Currency.dll": {
+            "assemblyVersion": "4.1.0.0",
+            "fileVersion": "4.1.0.0"
+          }
+        }
+      },
+      "TeixeiraSoftware.Finance.ICurrency/1.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/TeixeiraSoftware.Finance.ICurrency.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -2378,6 +2398,20 @@
       "sha512": "sha512-FLhdYJx4331oGovQypQ8JIw2kEmNzCsjVOVYY/16kZTUoquZG85oVn7yUhBE2OZt1yGPSXAL0HTEfzjlbNpM7Q==",
       "path": "system.xml.xpath.xdocument/4.0.1",
       "hashPath": "system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
+    },
+    "TeixeiraSoftware.Finance.Currency/4.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8m0Wk1Hh/liadyXk0Cz/CMeKtWBgQefo61IyXvAMMjNsMON3RB7y9B+hgKcBkLbNp+YtfGnXYLJCyIubV413Xw==",
+      "path": "teixeirasoftware.finance.currency/4.1.0",
+      "hashPath": "teixeirasoftware.finance.currency.4.1.0.nupkg.sha512"
+    },
+    "TeixeiraSoftware.Finance.ICurrency/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OzDnOlgD7vqtNQWew9gyBMbPKIp2uBRgpFx3WQdOe+T41wrz/WMW1jo0ZyjcinvrHc1a40YhysBFcnNvVax37Q==",
+      "path": "teixeirasoftware.finance.icurrency/1.0.0",
+      "hashPath": "teixeirasoftware.finance.icurrency.1.0.0.nupkg.sha512"
     }
   }
 }

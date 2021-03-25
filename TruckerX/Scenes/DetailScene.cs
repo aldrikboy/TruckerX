@@ -22,32 +22,11 @@ namespace TruckerX.Scenes
         public DetailScene(string title)
         {
             Title = title;
-            this.ContentLoader.OnLoaded += ContentLoader_OnLoaded;
         }
 
         private void ContentLoader_OnLoaded(object sender, EventArgs e)
         {
 
-        }
-
-        public override void DeclareAssets()
-        {
-            Textures.AddRange(new Dictionary<string, AssetDefinition<Texture2D>>()
-            {
-                // Images
-                { "world", new AssetDefinition<Texture2D>("Textures/world") },
-                { "white", new AssetDefinition<Texture2D>("Textures/white") },
-            });
-
-            Songs.AddRange(new Dictionary<string, AssetDefinition<Song>>()
-            {
-                // Songs
-            });
-
-            Samples.AddRange(new Dictionary<string, AssetDefinition<SoundEffect>>()
-            {
-                // Songs
-            });
         }
 
         public abstract void CustomDraw(SpriteBatch batch, GameTime gameTime);
@@ -66,12 +45,12 @@ namespace TruckerX.Scenes
         {
             var rec = TruckerX.TargetRetangle;
             {
-                var bg = this.GetTexture("world");
+                var bg = ContentLoader.GetTexture("world");
                 batch.Draw(bg, rec, Color.White);
             }
 
             {
-                var bg = this.GetTexture("white");
+                var bg = ContentLoader.GetTexture("white");
                 var containerOffset = Padding;
                 var containerSize = 1.0f - containerOffset * 2;
                 batch.Draw(bg, new Rectangle(
