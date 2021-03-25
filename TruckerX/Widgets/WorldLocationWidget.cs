@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TruckerX.Widgets
 {
     public class WorldLocationWidget : BaseWidget
     {
         private Texture2D bg;
-
+        private SoundEffect clickEffect;
         public BasePlace Place { get; set; }
         public bool owned = false;
 
@@ -22,6 +23,13 @@ namespace TruckerX.Widgets
             bg = ContentLoader.GetTexture("menu-button");
             Place = place;
             owned = WorldState.PlaceOwned(place);
+            clickEffect = ContentLoader.GetSample("pop2");
+            this.OnClick += WorldLocationWidget_OnClick;
+        }
+
+        private void WorldLocationWidget_OnClick(object sender, EventArgs e)
+        {
+            clickEffect.Play(0.15f, 0.0f, 0.0f);
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)

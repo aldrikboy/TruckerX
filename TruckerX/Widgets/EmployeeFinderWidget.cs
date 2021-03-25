@@ -50,11 +50,13 @@ namespace TruckerX.Widgets
         {
             var font = scene.GetRDFont("main_font_15");
             {
-                var str = string.IsNullOrWhiteSpace(text) && !selected ? "E.G. #000001" : text;
+                bool isPlaceholder = string.IsNullOrWhiteSpace(text) && !selected;
+                var str = isPlaceholder ? "E.G. #000001" : text;
                 var strSize = font.MeasureString(str);
                 float offsetx = this.Position.X + (10 * scene.GetRDMultiplier());
                 float offsety = this.Position.Y + (textBoxHeight / 2) - (strSize.Y / 2);
-                batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 100));
+                Color c = isPlaceholder ? Color.FromNonPremultiplied(80, 80, 80, 100) : Color.FromNonPremultiplied(20,20,20, 255);
+                batch.DrawString(font, str, new Vector2(offsetx, offsety), c);
             }
         }
 

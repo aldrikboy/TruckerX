@@ -45,7 +45,7 @@ namespace TruckerX
 
         public decimal Money = 0.0M; // In USD
         public DateTime Time { get; set; }
-        private const float minutesPerSecond = 500;
+        private const float minutesPerSecond = 250;
         private bool quarterHalfReached = false;
         private bool salariesPaidOutThisMonth = false;
 

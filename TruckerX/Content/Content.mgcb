@@ -224,18 +224,6 @@
 /processorParam:TextureFormat=Color
 /build:Textures/loading-bg.png
 
-#begin Textures/loading-bg.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Textures/loading-bg.png
-
 #begin Textures/logo-placeholder.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

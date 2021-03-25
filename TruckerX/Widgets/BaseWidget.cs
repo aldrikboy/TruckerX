@@ -35,6 +35,7 @@ namespace TruckerX.Widgets
                 State = WidgetState.Disabled;
                 return;
             }
+            if (!Disabled && State == WidgetState.Disabled) State = WidgetState.Idle;
             var state = Mouse.GetState();
 
             if (state.Clicked(this))

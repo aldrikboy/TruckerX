@@ -140,7 +140,7 @@ namespace TruckerX.Scenes
             int buttonStartY = (int)(120.0f * GetRDMultiplier());
             int buttonPadY = (int)(80.0f * GetRDMultiplier());
 
-            employeeButton.Text = String.Format("Employees: ({0}/{1})", state.Employees.Count, state.ActiveEmployeeCount());
+            employeeButton.Text = "Employees";
             employeeButton.Position = employeeButton.Position.FromPercentageWithOffset(0.05f, 0.05f) + new Vector2(0,buttonStartY);
             employeeButton.Update(this, gameTime);
             

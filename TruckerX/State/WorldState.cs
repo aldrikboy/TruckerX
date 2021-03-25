@@ -23,6 +23,10 @@ namespace TruckerX.State
                     if (employee.Id == id) return employee;
                 }
             }
+            foreach(var job in Simulation.simulation.ActiveJobs)
+            {
+                if (job.Employee.Id == id) return job.Employee;
+            }
             return null;
         }
 
@@ -39,11 +43,6 @@ namespace TruckerX.State
             jobs.Add(new JobOffer(1, 
                 "Good Foods Inc",
                 winnipeg.Place, 
-                new List<BasePlace>() { 
-                    WorldData.GetPlaceByName("Thunder Bay"),
-                    WorldData.GetPlaceByName("Nipigon"),
-                    WorldData.GetPlaceByName("Sudbury"),
-                },
                 WorldData.GetPlaceByName("Ottawa"), 
                 TransportableItem.Bananas, 
                 400, 
@@ -52,12 +51,7 @@ namespace TruckerX.State
             var existingJob = new JobOffer(2,
                 "Nutty Inc",
                 winnipeg.Place,
-                new List<BasePlace>() {
-                    WorldData.GetPlaceByName("Thunder Bay"),
-                    WorldData.GetPlaceByName("Nipigon"),
-                    WorldData.GetPlaceByName("Sudbury"),
-                },
-                WorldData.GetPlaceByName("Ottawa"),
+                WorldData.GetPlaceByName("Calgary"),
                 TransportableItem.Peanuts,
                 350,
                 new List<Weekday>() { Weekday.Monday, Weekday.Tuesday });
@@ -125,16 +119,6 @@ namespace TruckerX.State
         {
             dock.Schedule.Jobs.Add(job);
             AvailableJobs.Remove(job.Job);
-        }
-
-        public int ActiveEmployeeCount()
-        {
-            int count = 0;
-            foreach(var item in Employees)
-            {
-                if (!item.OnPaidLeave) count++;
-            }
-            return count;
         }
     }
 }

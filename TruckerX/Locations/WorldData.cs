@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using TeixeiraSoftware.Finance;
 using TruckerX.TransportableItems;
@@ -52,13 +54,20 @@ namespace TruckerX.Locations
             pp2.Connections.Add(pp1);
         }
 
-        public BaseCountry(List<BasePlace> places)
+        public BaseCountry(string nameSpace)
         {
-            Places = places;   
-            foreach(var place in Places)
+            List<BasePlace> places = new List<BasePlace>();
+            var types = Assembly.GetExecutingAssembly().GetTypes()
+              .Where(t => String.Equals(t.Namespace, nameSpace, StringComparison.Ordinal))
+              .ToArray();
+            foreach(var type in types)
             {
+                BasePlace place = (BasePlace)Activator.CreateInstance(type);
                 place.Country = this;
+                places.Add(place);
             }
+
+            Places = places;   
         }
     }
 

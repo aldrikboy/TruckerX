@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
+using Microsoft.Xna.Framework.Audio;
 
 namespace TruckerX.Widgets
 {
@@ -16,6 +17,7 @@ namespace TruckerX.Widgets
         private Texture2D padlock;
         private SpriteFont font;
         private BaseScene scene;
+        private SoundEffect clickEffect;
         private bool flipped = false;
 
         public string Text { get; set; }
@@ -25,8 +27,15 @@ namespace TruckerX.Widgets
             bg = ContentLoader.GetTexture("detail-button");
             padlock = ContentLoader.GetTexture("padlock");
             font = scene.GetRDFont("main_font_15");
+            clickEffect = ContentLoader.GetSample("pop2");
             this.scene = scene;
             this.flipped = flipped;
+            this.OnClick += DetailButtonWidget_OnClick;
+        }
+
+        private void DetailButtonWidget_OnClick(object sender, EventArgs e)
+        {
+            clickEffect.Play(0.15f, 0.0f, 0.0f);
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)

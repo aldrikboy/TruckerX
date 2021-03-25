@@ -195,6 +195,11 @@ namespace TruckerX.Widgets
             }
         }
 
+        public void AssignEmployeeToCurrentlySelectedJobAssignment(EmployeeState employee)
+        {
+            if (selectedScheduledJobAssignment != null) selectedScheduledJobAssignment.AssignedEmployee = employee;
+        }
+
         private void selectHoveredTile()
         {
             selectedScheduledJobAssignment = null;

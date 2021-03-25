@@ -5,6 +5,7 @@ using TruckerX.Locations;
 using TruckerX.TransportableItems;
 using GeoCoordinatePortable;
 using Microsoft.Xna.Framework;
+using System.Linq;
 
 namespace TruckerX.State
 {
@@ -34,15 +35,57 @@ namespace TruckerX.State
 
         private double distance = -1; // We store this so we only have to calculate this once.
 
-        public JobOffer(int id, string company, BasePlace from, List<BasePlace> connections, BasePlace to, TransportableItem item, decimal reward, List<Weekday> shipDays)
+        private bool GetConnection(ref List<BasePlace> places, BasePlace parent, BasePlace from)
+        {
+            places.Add(from);
+            int countBefore = places.Count;
+
+            var destVec = new Vector2((float)To.MapX, (float)To.MapY);
+            var orderedConnections = new List<Tuple<float,BasePlace>>();
+            foreach(var connection in from.Connections)
+            {
+                float distance = Vector2.Distance(new Vector2((float)connection.MapX, (float)connection.MapY), destVec);
+                orderedConnections.Add(new Tuple<float, BasePlace>(distance, connection));
+            }
+            orderedConnections = orderedConnections.OrderBy(e => e.Item1).ToList();
+
+            foreach(var connection in orderedConnections)
+            {
+                if (places.Contains(connection.Item2)) continue;
+                if (parent == connection.Item2) continue;
+                if (connection.Item2 == this.To) return true;
+                if (GetConnection(ref places, from, connection.Item2)) 
+                    return true;
+                else 
+                    places.RemoveRange(countBefore, places.Count - countBefore);
+            }      
+            return false;
+        }
+        private List<BasePlace> GetConnections()
+        {
+            List<List<BasePlace>> successfulHits = new List<List<BasePlace>>();
+            if (From.Connections.Count == 0) throw new Exception("Start location does not have any connections");
+            foreach (var connection in From.Connections)
+            {
+                List<BasePlace> places = new List<BasePlace>();
+                bool success = GetConnection(ref places, From, connection);
+                if (success) successfulHits.Add(places);
+            }
+
+            var best = successfulHits.OrderBy(e => e.Count).First();
+            return best;
+        }
+
+        public JobOffer(int id, string company, BasePlace from, BasePlace to, TransportableItem item, decimal reward, List<Weekday> shipDays, List<BasePlace> connections = null)
         {
             Id = id;
             From = from;
             To = to;
+            var conn = connections == null ? GetConnections() : connections;
             Item = item;
             OfferedReward = reward;
             ShipDays = shipDays;
-            Connections = connections;
+            Connections = conn;
             Company = company;
         }
 
@@ -53,7 +96,7 @@ namespace TruckerX.State
             {
                 reversedConnections.Add(Connections[i]);
             }
-            var reversePath = new JobOffer(-1, Company, this.To, reversedConnections, this.From, null, 0, null);
+            var reversePath = new JobOffer(-1, Company, this.To, this.From, null, 0, null, reversedConnections);
             return reversePath;
         }
 

@@ -179,6 +179,19 @@ namespace TruckerX.Scenes
             }
         }
 
+        private Vector2 LatLonToOffset(double lat, double lon)
+        {
+            var rec = TruckerX.TargetRetangle;
+            const double FE = 180;
+            double radius = ((rec.Width / zoom) / (2.0*Math.PI));
+            double latRad = (Math.PI / 180) * lat;
+            double lonRad = (Math.PI / 180) * (lon + FE);
+            double x = lonRad * radius;
+            double YfromEquator = radius * Math.Log(Math.Tan(Math.PI / 4 + latRad / 2));
+            double y = (rec.Height / zoom) / 2 - YfromEquator;
+            return new Vector2((float)x, (float)y);
+        }
+
         public override void Update(GameTime gameTime)
         {
             const int defaultDotSize = 5;

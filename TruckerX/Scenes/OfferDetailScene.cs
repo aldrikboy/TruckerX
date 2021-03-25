@@ -130,13 +130,14 @@ namespace TruckerX.Scenes
             var startLeft = (Padding * 2  * rec.Width);
             var height = 300 * GetRDMultiplier();
             var startTop = rec.Height - height - (Padding * rec.Height) - (Padding * rec.Width);
+            var scheduleWidth = rec.Width - (rec.Width * Padding * 4) - employeeFinderWidget.Size.X - 50;
 
-            tabcontrol.Size = new Vector2(schedules[selectedDockIndex].Size.X, 26 * GetRDMultiplier());
+            tabcontrol.Size = new Vector2(scheduleWidth, 26 * GetRDMultiplier());
             tabcontrol.Position = schedules[selectedDockIndex].Position - new Vector2(0, tabcontrol.Size.Y - 1);
             tabcontrol.Update(this, gameTime);
 
             schedules[selectedDockIndex].Position = new Vector2(rec.X + startLeft, rec.Y + startTop);
-            schedules[selectedDockIndex].Size = new Vector2(rec.Width - (rec.Width * Padding * 4) - employeeFinderWidget.Size.X - 50, height);
+            schedules[selectedDockIndex].Size = new Vector2(scheduleWidth, height);
             schedules[selectedDockIndex].Update(this, gameTime);
 
             int buttonStartY = (int)(80.0f * GetRDMultiplier());

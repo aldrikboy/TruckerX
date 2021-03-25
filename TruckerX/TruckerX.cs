@@ -48,14 +48,14 @@ namespace TruckerX
         private void Window_ClientSizeChanged(object sender, System.EventArgs e)
         {
             // Minimum window size
-            if (Window.ClientBounds.Width < 640)
+            if (Window.ClientBounds.Width < 768)
             {
-                _graphics.PreferredBackBufferWidth = 640;
+                _graphics.PreferredBackBufferWidth = 768;
                 _graphics.ApplyChanges();
             }
-            if (Window.ClientBounds.Height < 360)
+            if (Window.ClientBounds.Height < 432)
             {
-                _graphics.PreferredBackBufferHeight = 360;
+                _graphics.PreferredBackBufferHeight = 432;
                 _graphics.ApplyChanges();
             }
 

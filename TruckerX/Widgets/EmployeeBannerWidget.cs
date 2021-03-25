@@ -78,7 +78,7 @@ namespace TruckerX.Widgets
                     else str = "Returning to " + Employee.OriginalLocation.Name;
                 }
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
-                int offsety = (int)this.Position.Y + padding + nameHeight;
+                int offsety = (int)this.Position.Y + padding + nameHeight + (int)(5 * scene.GetRDMultiplier());
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
             }
         }
