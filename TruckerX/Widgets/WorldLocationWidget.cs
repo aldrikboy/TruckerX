@@ -8,6 +8,7 @@ using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Input;
 
 namespace TruckerX.Widgets
 {
@@ -35,7 +36,10 @@ namespace TruckerX.Widgets
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
             Color c = owned ? Color.Red : Color.Black;
-            if (this.State == WidgetState.MouseHover || this.State == WidgetState.MouseDown) c = Color.White;
+            if (this.State == WidgetState.MouseHover || this.State == WidgetState.MouseDown)
+            {
+                c = Color.White;
+            }
             MonoGame.Primitives2D.DrawCircle(batch, this.Position + new Vector2(this.Size.X / 2, this.Size.Y / 2), 
                 this.Size.X / 2, 32, c, this.Size.X / 2);
         }
@@ -43,6 +47,7 @@ namespace TruckerX.Widgets
         public override void Update(BaseScene scene, GameTime gameTime)
         {
             base.Update(scene, gameTime);
+            if (this.State == WidgetState.MouseHover) Mouse.SetCursor(MouseCursor.Hand);
         }
     }
 }

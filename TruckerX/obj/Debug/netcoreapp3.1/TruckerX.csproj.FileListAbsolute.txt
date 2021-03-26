@@ -82,3 +82,5 @@ C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Fonts\main_font_6.
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\logo-placeholder.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\world-test.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\world-test2.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\edit.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\error.xnb

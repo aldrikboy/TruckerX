@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
+using Microsoft.Xna.Framework.Input;
 
 namespace TruckerX.Widgets
 {

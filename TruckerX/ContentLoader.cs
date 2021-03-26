@@ -55,6 +55,8 @@ namespace TruckerX
             { "portrait", new AssetDefinition<Texture2D>("Textures/portrait") },
             { "logo-placeholder", new AssetDefinition<Texture2D>("Textures/logo-placeholder") },
             { "search", new AssetDefinition<Texture2D>("Textures/search") },
+            { "error", new AssetDefinition<Texture2D>("Textures/error") },
+            { "edit", new AssetDefinition<Texture2D>("Textures/edit") },
         };
 
         public static Dictionary<string, AssetDefinition<Song>> Songs { get; internal set; } = new Dictionary<string, AssetDefinition<Song>>()

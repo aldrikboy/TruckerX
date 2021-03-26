@@ -8,6 +8,7 @@ using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
 using TruckerX.Extensions;
+using Microsoft.Xna.Framework.Input;
 
 namespace TruckerX.Widgets
 {
@@ -36,6 +37,7 @@ namespace TruckerX.Widgets
 
         public override void Update(BaseScene scene, GameTime gameTime)
         {
+            if (this.State == WidgetState.MouseHover) Mouse.SetCursor(MouseCursor.Hand);
             this.Size = new Vector2(367, 88) * scene.GetRDMultiplier();
             base.Update(scene, gameTime);
         }

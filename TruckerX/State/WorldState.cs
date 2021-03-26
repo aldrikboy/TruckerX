@@ -51,7 +51,7 @@ namespace TruckerX.State
             var existingJob = new JobOffer(2,
                 "Nutty Inc",
                 winnipeg.Place,
-                WorldData.GetPlaceByName("Calgary"),
+                WorldData.GetPlaceByName("Quebec"),
                 TransportableItem.Peanuts,
                 350,
                 new List<Weekday>() { Weekday.Monday, Weekday.Tuesday });
@@ -111,7 +111,8 @@ namespace TruckerX.State
             AvailableJobs = new List<JobOffer>();          
             Docks = new List<DockState>();
             Docks.Add(new DockState(true));
-            for (int i = 0; i < 6; i++) Docks.Add(new DockState(false));
+            Docks.Add(new DockState(true));
+            for (int i = 0; i < 5; i++) Docks.Add(new DockState(false));
             Place = place;
         }
 

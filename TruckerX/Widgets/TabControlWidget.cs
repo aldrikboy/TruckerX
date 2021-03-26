@@ -8,6 +8,7 @@ using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
 using TruckerX.Extensions;
+using Microsoft.Xna.Framework.Input;
 
 namespace TruckerX.Widgets
 {
@@ -47,6 +48,12 @@ namespace TruckerX.Widgets
                 batch.DrawString(font, Title, new Vector2(x + 1, y + 1), Color.Gray);
                 batch.DrawString(font, Title, new Vector2(x, y), Color.White);
             }
+        }
+
+        public override void Update(BaseScene scene, GameTime gameTime)
+        {
+            base.Update(scene, gameTime);
+            if (this.State == WidgetState.MouseHover) Mouse.SetCursor(MouseCursor.Hand);
         }
     }
 

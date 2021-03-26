@@ -103,6 +103,8 @@ namespace TruckerX
 
         protected override void Update(GameTime gameTime)
         {
+            Mouse.SetCursor(MouseCursor.Arrow);
+
             KeyboardExtensions.Update();
 
             overlayScene.Update(gameTime);

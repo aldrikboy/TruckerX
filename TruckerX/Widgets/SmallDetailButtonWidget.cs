@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
+using Microsoft.Xna.Framework.Input;
 
 namespace TruckerX.Widgets
 {
@@ -36,6 +37,7 @@ namespace TruckerX.Widgets
             Color textColor = Color.FromNonPremultiplied(60, 60, 60, 255);
             if (this.State == WidgetState.MouseHover)
             {
+                Mouse.SetCursor(MouseCursor.Hand);
                 batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), null, Color.FromNonPremultiplied(0, 0, 0, 50), 0.0f, Vector2.Zero, flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0.0f);
             }
             else if (this.State == WidgetState.MouseDown)

@@ -23,9 +23,11 @@ namespace TruckerX.Scenes
 
         DetailButtonWidget buttonAccept;
         EmployeeFinderWidget employeeFinderWidget;
+        bool isRescheduling;
 
-        public OfferDetailScene(JobOffer offer, PlaceState state) : base(offer.Company)
+        public OfferDetailScene(JobOffer offer, PlaceState state, bool isRescheduling = false) : base(offer.Company)
         {
+            this.isRescheduling = isRescheduling;
             this.offer = offer;
             this.place = state;
             distance = this.offer.GetDistanceInKm();
@@ -38,7 +40,7 @@ namespace TruckerX.Scenes
                 var tab = new TabControlItemWidget(this, "Dock " + (i + 1), item);
                 tab.OnClick += Tab_OnClick;
                 tabs.Add(tab);
-                var newSchedule = new ScheduleWidget(this, item.Schedule, offer, item.Unlocked);
+                var newSchedule = new ScheduleWidget(this, item.Schedule, offer, item.Unlocked, isRescheduling);
                 newSchedule.OnNewShipTimeSelected += NewSchedule_OnNewShipTimeSelected;
                 schedules.Add(newSchedule);
             }
@@ -50,10 +52,19 @@ namespace TruckerX.Scenes
             buttonAccept.OnClick += ButtonAccept_OnClick;
         }
 
-        private void NewSchedule_OnNewShipTimeSelected(object sender, EventArgs e)
+        private void NewSchedule_OnNewShipTimeSelected(object sender, NewShipTimeSelectedEvent e)
         {
             // timeslot on schedule selected for new job.
             var assignment = sender as ShipTimeAssignment;
+
+
+            for (int i = 0; i < schedules.Count; i++)
+            {
+                if (i == selectedDockIndex) continue;
+                var employee = schedules[i].ResetTimeslotForNewScheduledJob(e.Day);
+                if (employee != null) assignment.AssignedEmployee = employee;
+            }
+
             employeeFinderWidget.SetSelectedEmployee(assignment.AssignedEmployee);
         }
 
@@ -69,8 +80,22 @@ namespace TruckerX.Scenes
 
         private void ButtonAccept_OnClick(object sender, EventArgs e)
         {
-            //schedules[selectedDockIndex].newScheduledJob.AssignedEmployee = employeeFinderWidget.selectedEmployee;
-            place.PlanJob(place.Docks[selectedDockIndex], schedules[selectedDockIndex].newScheduledJob);
+            if (isRescheduling)
+            {
+                // remove old timeslots.
+                for (int i = 0; i < schedules.Count; i++)
+                {
+                    place.Docks[i].Schedule.RemoveJobById(schedules[i].newScheduledJob.Job.Id);
+                }
+            }
+
+            // Job timeslots can be distributed over different docks.
+            for (int i = 0; i < schedules.Count; i++)
+            {
+                if (schedules[i].newScheduledJob.ShipTimes.Count != 0)
+                    place.PlanJob(place.Docks[i], schedules[i].newScheduledJob);
+            }
+
             this.SwitchSceneTo(new PlaceDetailScene(place.Place));
         }
 
@@ -80,8 +105,6 @@ namespace TruckerX.Scenes
 
             for (int i = 0; i < place.Docks.Count; i++)
             {
-                schedules[selectedDockIndex].ClearSchedulingJob();
-
                 var item = place.Docks[i];
                 if (item == ((DockState)tab.Data)) selectedDockIndex = i;
             }
@@ -119,6 +142,26 @@ namespace TruckerX.Scenes
             buttonAccept.Draw(batch, gameTime);
         }
 
+        private bool doneSchedulingJob()
+        {
+            List<Weekday> lookingFor = new List<Weekday>();
+            foreach (var day in offer.ShipDays)
+            {
+                lookingFor.Add(day);
+            }
+
+            foreach(var day in offer.ShipDays)
+            {
+                for (int i = 0; i < schedules.Count; i++)
+                {
+                    if (schedules[i].newScheduledJob.ShipTimes.ContainsKey(day) && 
+                        schedules[i].newScheduledJob.ShipTimes[day].AssignedEmployee != null) 
+                        lookingFor.Remove(day);
+                }
+            }
+            return lookingFor.Count == 0;
+        }
+
         public override void CustomUpdate(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -144,7 +187,7 @@ namespace TruckerX.Scenes
             buttonAccept.Text = "Accept";
             buttonAccept.Position = buttonAccept.Position.FromPercentageWithOffset(0.95f, 0.05f) + new Vector2(-buttonAccept.Size.X, buttonStartY);
             buttonAccept.Update(this, gameTime);
-            buttonAccept.Disabled = !schedules[selectedDockIndex].DoneSchedulingJob();
+            buttonAccept.Disabled = !doneSchedulingJob();
 
             employeeFinderWidget.Position = new Vector2(rec.X + (rec.Width * 0.9f) - employeeFinderWidget.Size.X, schedules[selectedDockIndex].Position.Y);
             employeeFinderWidget.Update(this, gameTime);

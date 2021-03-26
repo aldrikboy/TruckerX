@@ -52,10 +52,11 @@ namespace TruckerX.State
         public int StartHour { get; } = 6;
         public int EndHour { get; } = 18;
 
-        public bool CanScheduleJob(Weekday day, TimeSpan time)
+        public bool CanScheduleJob(Weekday day, TimeSpan time, JobOffer toReplace = null)
         {
             foreach(var item in Jobs)
             {
+                if (toReplace != null && item.Job.Id == toReplace.Id) continue;
                 foreach(var plannedTime in item.ShipTimes)
                 {
                     if (plannedTime.Key == day && plannedTime.Value.Time == time)
@@ -65,6 +66,18 @@ namespace TruckerX.State
                 }
             }
             return true;
+        }
+
+        public void RemoveJobById(int id)
+        {
+            foreach(var job in Jobs)
+            {
+                if (job.Job.Id == id)
+                {
+                    Jobs.Remove(job);
+                    return;
+                }
+            }
         }
     }
 }

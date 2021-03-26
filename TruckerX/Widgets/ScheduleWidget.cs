@@ -12,13 +12,27 @@ using TruckerX.Extensions;
 
 namespace TruckerX.Widgets
 {
+    public class NewShipTimeSelectedEvent : EventArgs
+    {
+        public Weekday Day { get; set; }
+        public TimeSpan Time { get; set; }
+
+        public NewShipTimeSelectedEvent(Weekday day, TimeSpan time)
+        {
+            Day = day;
+            Time = time;
+        }
+    }
+
     public class ScheduleWidget : BaseWidget
     {
         BaseScene scene;
         PlaceSchedule schedule;
-        JobOffer offerToPlan;
 
-        ShipTimeAssignment selectedScheduledJobAssignment = null;
+        JobOffer offerToPlan = null;
+        ScheduledJob selectedScheduledJob = null;
+        public bool IsJobSelected { get { return selectedScheduledJob != null; } }
+
         Vector2 hoveringTile = new Vector2(-1,-1);
         float cutoffDaysColumn;
         float rowHeight;
@@ -27,23 +41,53 @@ namespace TruckerX.Widgets
         bool enabled;
         Texture2D bg;
         Texture2D padlock;
+        Texture2D error;
+        Texture2D edit;
         float quarterHour;
 
+        bool isRescheduling = false;
         private Weekday lastModifiedShipDay = Weekday.Monday;
         public ScheduledJob newScheduledJob;
 
         public event EventHandler OnScheduledOfferSelected;
-        public event EventHandler OnNewShipTimeSelected;
+        public event EventHandler<NewShipTimeSelectedEvent> OnNewShipTimeSelected;
 
-        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true) : base()
+        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true, bool isRescheduling = false) : base()
         {
+            this.isRescheduling = isRescheduling;
             this.scene = scene;
             this.schedule = schedule;
             this.offerToPlan = offerToPlan;
             this.enabled = enabled;
             bg = ContentLoader.GetTexture("white");
             padlock = ContentLoader.GetTexture("padlock");
+            error = ContentLoader.GetTexture("error");
+            edit = ContentLoader.GetTexture("edit");
             newScheduledJob = new ScheduledJob(offerToPlan);
+
+            if (isRescheduling)
+            {
+                foreach(var job in schedule.Jobs)
+                {
+                    if (job.Job.Id != offerToPlan.Id) continue;
+                    foreach(var time in job.ShipTimes)
+                    {
+                        lastModifiedShipDay = time.Key;
+                        newScheduledJob.ShipTimes.Add(time.Key, new ShipTimeAssignment(time.Value.Time, time.Value.AssignedEmployee));
+                    }
+                }
+            }
+        }
+
+        public EmployeeState ResetTimeslotForNewScheduledJob(Weekday day)
+        {
+            if (newScheduledJob != null && newScheduledJob.ShipTimes.ContainsKey(day))
+            {
+                var employee = newScheduledJob.ShipTimes[day].AssignedEmployee;
+                newScheduledJob.ShipTimes.Remove(day);
+                return employee;
+            }
+            return null;
         }
 
         public void AssignEmployeeToNewTimeslot(EmployeeState employee)
@@ -54,15 +98,26 @@ namespace TruckerX.Widgets
             }
         }
 
+        public void SetSelectedScheduledJobById(int id)
+        {
+            foreach (var job in schedule.Jobs)
+            {
+                if (job.Job.Id != id) continue;
+                selectedScheduledJob = job;
+                return;
+            }
+            selectedScheduledJob = null;
+        }
+
+        public ScheduledJob GetSelectedScheduledJob()
+        {
+            return selectedScheduledJob;
+        }
+
         public void ClearSchedulingJob()
         {
             newScheduledJob.ShipTimes.Clear();
-            selectedScheduledJobAssignment = null;
-        }
-
-        public bool DoneSchedulingJob()
-        {
-            return newScheduledJob.ShipTimes.Keys.Count == newScheduledJob.Job.ShipDays.Count && newScheduledJob.AllShipTimesHaveAssignees();
+            selectedScheduledJob = null;
         }
 
         private Vector2 getQuarterPositionForHoveredTile()
@@ -139,7 +194,7 @@ namespace TruckerX.Widgets
                     float x = this.Position.X + cutoffDaysColumn;
                     float y = this.Position.Y + ((int)item + 1) * rowHeight;
                     Primitives2D.FillRectangle(batch,
-                        x, y, this.Size.X - cutoffDaysColumn, rowHeight, Color.FromNonPremultiplied(255, 0, 0, 50), 0.0f);
+                        x, y, this.Size.X - cutoffDaysColumn, rowHeight, Color.FromNonPremultiplied(255, 0, 0, 30), 0.0f);
                 }
             }
 
@@ -152,11 +207,13 @@ namespace TruckerX.Widgets
             // Already planned times
             foreach (var job in schedule.Jobs)
             {
+                if (offerToPlan != null && offerToPlan.Id == job.Job.Id && isRescheduling) continue; // Dont draw job that is being rescheduled.
+
                 var c = Color.White;
+                if (job == selectedScheduledJob) c = Color.FromNonPremultiplied(255, 165, 0, 100);
+                else c = Color.FromNonPremultiplied(134, 232, 85, 100);
                 foreach (var item in job.ShipTimes)
                 {
-                    if (item.Value == selectedScheduledJobAssignment) c = Color.FromNonPremultiplied(255, 165, 0, 100);
-                    else c = Color.FromNonPremultiplied(134, 232, 85, 100);
                     Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
                     DrawQuarterBlock(batch, pos.X, pos.Y, c);
                 }
@@ -166,7 +223,18 @@ namespace TruckerX.Widgets
             foreach (var item in newScheduledJob.ShipTimes)
             {
                 Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
-                DrawQuarterBlock(batch, pos.X, pos.Y, Color.FromNonPremultiplied(255,0,0,100));
+
+                Color c = Color.FromNonPremultiplied(255, 0, 0, 100);
+                if (item.Value.AssignedEmployee != null) c = Color.FromNonPremultiplied(0, 255, 0, 100);
+                DrawQuarterBlock(batch, pos.X, pos.Y, c);
+
+                bool isSelected = newScheduledJob.ShipTimes.ContainsKey(lastModifiedShipDay) && newScheduledJob.ShipTimes[lastModifiedShipDay] == item.Value;
+                if (item.Value.AssignedEmployee == null || isSelected)
+                {
+                    int iconWidth = (int)(columnWidth / 4);
+                    Texture2D icon = !isSelected ? error : edit;
+                    batch.Draw(icon, new Rectangle((int)pos.X + (iconWidth/3), (int)pos.Y - (iconWidth/3), iconWidth, iconWidth), Color.Black);
+                }
             }
 
             Primitives2D.DrawRectangle(batch, new Rectangle((this.Position).ToPoint(), (this.Size).ToPoint()), Color.FromNonPremultiplied(60, 60, 60, 255), 2);
@@ -184,33 +252,28 @@ namespace TruckerX.Widgets
         {
             Weekday day = (Weekday)hoveringTile.Y;
             TimeSpan time = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(15 * hoveringTile.X);
-            if (schedule.CanScheduleJob(day, time))
+            if (schedule.CanScheduleJob(day, time, isRescheduling ? offerToPlan : null))
             {
                 if (newScheduledJob.ShipTimes.ContainsKey(day))
                     newScheduledJob.ShipTimes[day].Time = time;
                 else
                     newScheduledJob.ShipTimes.Add(day, new ShipTimeAssignment(time, null));
                 lastModifiedShipDay = day;
-                OnNewShipTimeSelected?.Invoke(newScheduledJob.ShipTimes[day], null);
+                OnNewShipTimeSelected?.Invoke(newScheduledJob.ShipTimes[day], new NewShipTimeSelectedEvent(day, time));
             }
-        }
-
-        public void AssignEmployeeToCurrentlySelectedJobAssignment(EmployeeState employee)
-        {
-            if (selectedScheduledJobAssignment != null) selectedScheduledJobAssignment.AssignedEmployee = employee;
         }
 
         private void selectHoveredTile()
         {
-            selectedScheduledJobAssignment = null;
+            selectedScheduledJob = null;
             Weekday day = (Weekday)hoveringTile.Y;
             TimeSpan time = TimeSpan.FromHours(6) + TimeSpan.FromMinutes(15 * hoveringTile.X);
             foreach (var job in schedule.Jobs)
             {
                 if (job.ShipTimes.ContainsKey(day) && job.ShipTimes[day].Time == time)
                 {
-                    selectedScheduledJobAssignment = job.ShipTimes[day];
-                    OnScheduledOfferSelected?.Invoke(selectedScheduledJobAssignment, null);
+                    selectedScheduledJob = job;
+                    OnScheduledOfferSelected?.Invoke(selectedScheduledJob, null);
                     return;
                 }
             }
@@ -241,6 +304,7 @@ namespace TruckerX.Widgets
                         if (hoveringTile.Y == (int)item)
                         {
                             hoveringSelectableDay = true;
+                            Mouse.SetCursor(MouseCursor.Hand);
                             break;
                         }
                     }

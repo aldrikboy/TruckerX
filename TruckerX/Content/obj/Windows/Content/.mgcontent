@@ -27,6 +27,8 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/black.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/detailbutton.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/detailview.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/edit.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/error.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/leaf.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/loading-background.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/loading-bg.png</File>
@@ -46,6 +48,8 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
