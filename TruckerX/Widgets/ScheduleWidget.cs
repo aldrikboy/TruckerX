@@ -304,7 +304,7 @@ namespace TruckerX.Widgets
                         if (hoveringTile.Y == (int)item)
                         {
                             hoveringSelectableDay = true;
-                            Mouse.SetCursor(MouseCursor.Hand);
+                            Helper.CursorToSet = MouseCursor.Hand;
                             break;
                         }
                     }

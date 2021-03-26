@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <SourceFile>C:/TruckerX/TruckerX/TruckerX/Content/Textures/overlay-background.png</SourceFile>
-  <SourceTime>2021-03-25T09:12:32.9191034+01:00</SourceTime>
+  <SourceTime>2021-03-26T20:22:13.3789956+01:00</SourceTime>
   <DestFile>C:/TruckerX/TruckerX/TruckerX/Content/bin/Windows/Content/Textures/overlay-background.xnb</DestFile>
-  <DestTime>2021-03-25T09:13:20.8380984+01:00</DestTime>
+  <DestTime>2021-03-26T20:23:48.8030125+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2020-08-10T16:17:54+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

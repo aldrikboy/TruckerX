@@ -11,7 +11,7 @@ namespace TruckerX.Locations
         public override string Name => "Canada";
 
         public override float TrafficMultiplier => 1.0f;
-        public override float DetourMultiplier => 1.4f;
+        public override float DetourMultiplier => 1.3f;
 
         public override Currency Currency => Currency.CAD;
 

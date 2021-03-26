@@ -47,7 +47,7 @@ namespace TruckerX.Widgets
         public override void Update(BaseScene scene, GameTime gameTime)
         {
             base.Update(scene, gameTime);
-            if (this.State == WidgetState.MouseHover) Mouse.SetCursor(MouseCursor.Hand);
+            if (this.State == WidgetState.MouseHover) Helper.CursorToSet = MouseCursor.Hand;
         }
     }
 }

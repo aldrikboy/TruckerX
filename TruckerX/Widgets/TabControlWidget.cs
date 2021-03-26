@@ -19,6 +19,8 @@ namespace TruckerX.Widgets
         public object Data { get; set; }
         private BaseScene scene;
 
+        public bool Selected { get; set; } = false;
+
         public TabControlItemWidget(BaseScene scene, string title, object data) : base()
         {
             bg = ContentLoader.GetTexture("tab-background");
@@ -31,11 +33,11 @@ namespace TruckerX.Widgets
         {
             batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), Color.White);
 
-            if (this.State == WidgetState.MouseHover)
+            if (this.State == WidgetState.MouseHover && !Selected)
             {
                 batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), Color.FromNonPremultiplied(0, 0, 0, 50));
             }
-            else if (this.State == WidgetState.MouseDown)
+            else if (this.State == WidgetState.MouseDown || Selected)
             {
                 batch.Draw(bg, new Rectangle(this.Position.ToPoint(), this.Size.ToPoint()), Color.FromNonPremultiplied(0, 0, 0, 150));
             }
@@ -53,7 +55,7 @@ namespace TruckerX.Widgets
         public override void Update(BaseScene scene, GameTime gameTime)
         {
             base.Update(scene, gameTime);
-            if (this.State == WidgetState.MouseHover) Mouse.SetCursor(MouseCursor.Hand);
+            if (this.State == WidgetState.MouseHover) Helper.CursorToSet = MouseCursor.Hand;
         }
     }
 
@@ -67,6 +69,21 @@ namespace TruckerX.Widgets
         {
             this.scene = scene;
             this.items = items;
+
+            foreach(var item in items)
+            {
+                item.OnClick += Item_OnClick;
+            }
+        }
+
+        private void Item_OnClick(object sender, EventArgs e)
+        {
+            foreach (var item in items)
+            {
+                item.Selected = false;
+            }
+            var tab = sender as TabControlItemWidget;
+            tab.Selected = true;
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)

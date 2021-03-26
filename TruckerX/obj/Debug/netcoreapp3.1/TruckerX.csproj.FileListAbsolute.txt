@@ -84,3 +84,5 @@ C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\world-tes
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\world-test2.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\edit.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\error.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\overlay-button.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\list.xnb

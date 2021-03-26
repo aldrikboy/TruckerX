@@ -71,7 +71,7 @@ namespace TruckerX.Widgets
                 string str = "";
                 if (Employee.CurrentJob == null)
                 {
-                    if (Employee.CurrentLocation == Employee.OriginalLocation) str = "Located at " + Employee.CurrentLocation.Name;
+                    str = "Located at " + Employee.CurrentLocation.Name;
                 }
                 if (Employee.CurrentJob != null)
                 {
@@ -79,7 +79,7 @@ namespace TruckerX.Widgets
                     else str = "Returning to " + Employee.OriginalLocation.Name;
                 }
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
-                int offsety = (int)this.Position.Y + padding + nameHeight + (int)(5 * scene.GetRDMultiplier());
+                int offsety = (int)this.Position.Y + padding + nameHeight + (int)(3 * scene.GetRDMultiplier());
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
             }
         }

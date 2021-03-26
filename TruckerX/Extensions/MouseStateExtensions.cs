@@ -9,16 +9,18 @@ namespace TruckerX.Extensions
     public static class MouseStateExtensions
     {
         private static bool wasDown = false;
+        public static bool MouseUsedThisFrame { get; set; } = false;
 
         public static bool Hovering(this MouseState state, IWidget widget)
         {
+            if (MouseUsedThisFrame) return false;
             var scissor = TruckerX.Game.GraphicsDevice.ScissorRectangle;
             var result = (state.X >= widget.Position.X && state.X <= widget.Position.X + widget.Size.X) &&
                 (state.Y >= widget.Position.Y && state.Y <= widget.Position.Y + widget.Size.Y)
                 &&
                 (state.X >= scissor.X && state.X <= scissor.X + scissor.Size.X) &&
                 (state.Y >= scissor.Y && state.Y <= scissor.Y + scissor.Size.Y);
-            if (result) widget.State = WidgetState.MouseHover;
+            if (result) { MouseUsedThisFrame = true; widget.State = WidgetState.MouseHover; }
             else widget.State = WidgetState.Idle;
             return result;
         }
@@ -31,9 +33,11 @@ namespace TruckerX.Extensions
                 widget.State = WidgetState.MouseUp;
             }
             if (wasDown) return false;
+            if (MouseUsedThisFrame) return false;
             var result = Hovering(state, widget) && state.LeftButton == ButtonState.Pressed && widget.State == WidgetState.MouseHover;
             if (result)
             {
+                MouseUsedThisFrame = true;
                 widget.State = WidgetState.MouseDown;
                 wasDown = true;
             }
@@ -47,10 +51,12 @@ namespace TruckerX.Extensions
                 wasDown = false;
             }
             if (wasDown) return false;
+            if (MouseUsedThisFrame) return false;
             var result = state.X >=x  && state.Y >= y && state.X <= x + w && state.Y <= y + h && state.LeftButton == ButtonState.Pressed;
             if (result)
             {
                 wasDown = true;
+                MouseUsedThisFrame = true;
             }
             return result;
         }

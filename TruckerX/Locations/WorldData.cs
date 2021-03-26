@@ -41,6 +41,7 @@ namespace TruckerX.Locations
         public List<BasePlace> Places { get; }
         public abstract float TrafficMultiplier { get; }
         public abstract float DetourMultiplier { get; }
+        //public abstract float GasPricePerGallon { get; }
 
         public abstract void MakeConnections();
 

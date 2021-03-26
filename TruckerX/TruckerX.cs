@@ -103,7 +103,8 @@ namespace TruckerX
 
         protected override void Update(GameTime gameTime)
         {
-            Mouse.SetCursor(MouseCursor.Arrow);
+            Helper.PrevCursorToSet = Helper.CursorToSet;
+            Helper.CursorToSet = MouseCursor.Arrow;
 
             KeyboardExtensions.Update();
 
@@ -123,6 +124,10 @@ namespace TruckerX
             activeScene.Draw(_spriteBatch, gameTime);
             overlayScene.Draw(_spriteBatch, gameTime);
             _spriteBatch.End();
+
+            if (Helper.PrevCursorToSet != Helper.CursorToSet)
+                Mouse.SetCursor(Helper.CursorToSet);
+            MouseStateExtensions.MouseUsedThisFrame = false;
 
             base.Draw(gameTime);
         }

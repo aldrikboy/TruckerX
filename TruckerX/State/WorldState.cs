@@ -34,6 +34,7 @@ namespace TruckerX.State
         {
             OwnedPlaces = new List<PlaceState>();
             OwnedPlaces.Add(new PlaceState(WorldData.GetPlaceByName("Winnipeg")));
+            OwnedPlaces.Add(new PlaceState(WorldData.GetPlaceByName("Quebec")));
 
             var winnipeg = GetStateForPlace(WorldData.GetPlaceByName("Winnipeg"));
             var employees = winnipeg.Employees;

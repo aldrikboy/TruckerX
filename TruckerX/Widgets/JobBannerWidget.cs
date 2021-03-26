@@ -70,7 +70,7 @@ namespace TruckerX.Widgets
                 var str = "Reward: " + Job.From.Country.Currency.Sign + Job.OfferedReward.ToString() + "/Trip";
                 var strSize = font.MeasureString(str);
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
-                int offsety = (int)this.Position.Y + padding + nameHeight + (int)(5 * scene.GetRDMultiplier());
+                int offsety = (int)this.Position.Y + padding + nameHeight + (int)(3 * scene.GetRDMultiplier());
                 nameHeight += (int)strSize.Y;
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
             }
