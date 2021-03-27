@@ -34,7 +34,7 @@ namespace TruckerX.Scenes
                 schedules.Add(schedule);
             }
             tabcontrol = new TabControlWidget(this, tabs);
-            buttonEdit = new DetailButtonWidget(this, true);
+            buttonEdit = new DetailButtonWidget(true);
             buttonEdit.OnClick += ButtonEdit_OnClick;
         }
 

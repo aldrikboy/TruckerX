@@ -39,9 +39,9 @@ namespace TruckerX.Scenes
             this.place = place;
             this.state = WorldState.GetStateForPlace(place);
 
-            employeeButton = new DetailButtonWidget(this);
-            offersButton = new DetailButtonWidget(this);
-            schedulesButton = new DetailButtonWidget(this);
+            employeeButton = new DetailButtonWidget();
+            offersButton = new DetailButtonWidget();
+            schedulesButton = new DetailButtonWidget();
 
             employeeButton.OnClick += EmployeeButton_OnClick;
             offersButton.OnClick += JobsButton_OnClick;

@@ -87,6 +87,9 @@ namespace TruckerX.Locations
         public abstract double Longtitude { get; }
         public abstract double Lattitude { get; }
 
+        public abstract decimal GaragePrice { get; }
+        public abstract decimal DockPrice { get; }
+
         public abstract double MapX { get; }
         public abstract double MapY { get; }
 

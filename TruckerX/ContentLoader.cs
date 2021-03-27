@@ -59,6 +59,7 @@ namespace TruckerX
             { "search", new AssetDefinition<Texture2D>("Textures/search") },
             { "error", new AssetDefinition<Texture2D>("Textures/error") },
             { "edit", new AssetDefinition<Texture2D>("Textures/edit") },
+            { "popup-background", new AssetDefinition<Texture2D>("Textures/popup-background") },
         };
 
         public static Dictionary<string, AssetDefinition<Song>> Songs { get; internal set; } = new Dictionary<string, AssetDefinition<Song>>()
@@ -170,5 +171,21 @@ namespace TruckerX
             throw new Exception("Song does not exist");
         }
 
+        public static float GetRDMultiplier()
+        {
+            return (TruckerX.TargetRetangle.Width / 1280.0f);
+        }
+
+        public static SpriteFont GetRDFont(string identifier)
+        {
+            float ratio = TruckerX.TargetRetangle.Width / 1280.0f;
+            var current = ContentLoader.GetFont(identifier);
+            var lookingFor = current.LineSpacing * ratio;
+            foreach (var font in ContentDefinition.Fonts)
+            {
+                if (font.Value.Asset.LineSpacing >= lookingFor) return font.Value.Asset;
+            }
+            return null;
+        }
     }
 }

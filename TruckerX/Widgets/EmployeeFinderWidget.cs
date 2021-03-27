@@ -30,7 +30,7 @@ namespace TruckerX.Widgets
         {
             this.scene = scene;
             searchTexture = ContentLoader.GetTexture("search");
-            confirmButton = new SmallDetailButtonWidget(scene);
+            confirmButton = new SmallDetailButtonWidget();
             confirmButton.Text = "Assign";
             confirmButton.OnClick += ConfirmButton_OnClick;
         }

@@ -48,7 +48,7 @@ namespace TruckerX.Scenes
             employeeFinderWidget = new EmployeeFinderWidget(this);
             employeeFinderWidget.OnEmployeeSelected += EmployeeFinderWidget_OnEmployeeSelected;
 
-            buttonAccept = new DetailButtonWidget(this, true);
+            buttonAccept = new DetailButtonWidget(true);
             buttonAccept.OnClick += ButtonAccept_OnClick;
         }
 

@@ -9,7 +9,7 @@ namespace TruckerX.State
     [Serializable]
     public static class WorldState
     {
-        public static List<PlaceState> OwnedPlaces { get; set; }
+        public static List<PlaceState> OwnedPlaces { get; private set; }
 
         private static int freeEmployeeId = 1;
         public static int FreeId { get { return freeEmployeeId++; } }
@@ -28,6 +28,16 @@ namespace TruckerX.State
                 if (job.Employee.Id == id) return job.Employee;
             }
             return null;
+        }
+
+        public static void UnlockPlace(BasePlace place)
+        {
+            foreach (var p in OwnedPlaces)
+            {
+                if (p.Place.Name == place.Name) throw new Exception("Place is already unlocked.");
+            }
+            Simulation.simulation.Money -= place.GaragePrice;
+            OwnedPlaces.Add(new PlaceState(place));
         }
 
         public static void CreateDefault()

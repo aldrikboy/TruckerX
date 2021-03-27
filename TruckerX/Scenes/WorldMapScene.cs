@@ -12,6 +12,7 @@ using System.Text;
 using TruckerX.Locations;
 using MonoGame;
 using TruckerX.Input;
+using TruckerX.State;
 
 namespace TruckerX.Scenes
 {
@@ -29,8 +30,20 @@ namespace TruckerX.Scenes
         public int OffsetX { get { return -(currentOffsetX + dragDiffX); } }
         public int OffsetY { get { return -(currentOffsetY + dragDiffY); } }
 
+        PopupWidget popupPurchasePlace = null;
+
         public WorldMapScene()
         {
+            loadWorldLocationWidgets();
+
+            popupPurchasePlace = new PopupWidget();
+            popupPurchasePlace.OnDecline += PopupPurchasePlace_OnDecline;
+            popupPurchasePlace.OnAccept += PopupPurchasePlace_OnAccept;
+        }
+
+        private void loadWorldLocationWidgets()
+        {
+            Locations.Clear();
             foreach (var country in WorldData.Countries)
             {
                 foreach (var place in country.Places)
@@ -42,10 +55,27 @@ namespace TruckerX.Scenes
             }
         }
 
+        private void PopupPurchasePlace_OnAccept(object sender, EventArgs e)
+        {
+            var place = sender as BasePlace;
+            WorldState.UnlockPlace(place);
+            popupPurchasePlace.Hide();
+            loadWorldLocationWidgets();
+        }
+
+        private void PopupPurchasePlace_OnDecline(object sender, EventArgs e)
+        {
+            popupPurchasePlace.Hide();
+        }
+
         private void Btn_OnClick(object sender, EventArgs e)
         {
             var btn = sender as WorldLocationWidget;
-            this.SwitchSceneTo(new PlaceDetailScene(btn.Place));
+
+            if (WorldState.PlaceOwned(btn.Place))
+                this.SwitchSceneTo(new PlaceDetailScene(btn.Place));
+            else
+                popupPurchasePlace.Show(string.Format("Purchase a garage in {0} for\n{1}{2}?", btn.Place.Name, btn.Place.Country.Currency.Sign, btn.Place.GaragePrice), btn.Place);
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
@@ -89,6 +119,8 @@ namespace TruckerX.Scenes
             {
                 item.Draw(batch, gameTime);
             }
+
+            popupPurchasePlace.Draw(batch, gameTime);
 
 #if true
             var font = GetRDFont("main_font_15");
@@ -197,6 +229,8 @@ namespace TruckerX.Scenes
             const int defaultDotSize = 5;
             var rec = TruckerX.TargetRetangle;
             placeDotSize = (int)(defaultDotSize / zoom / (1280.0f / rec.Width));
+
+            popupPurchasePlace.Update(this, gameTime);
 
             if (TruckerX.Game.IsActive)
             {

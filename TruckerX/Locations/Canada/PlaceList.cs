@@ -16,6 +16,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.414; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
 
     class PlaceNipigon : BasePlace
@@ -29,6 +32,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.389; } }
 
         public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
     }
 
     class PlaceOttawa : BasePlace
@@ -42,6 +48,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.415; } }
 
         public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 600_000M;
+        public override decimal DockPrice => 200_000M;
     }
 
     class PlaceQuebec : BasePlace
@@ -55,6 +64,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.407; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
 
     class PlaceSudbury : BasePlace
@@ -68,6 +80,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.404; } }
 
         public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 600_000M;
+        public override decimal DockPrice => 200_000M;
     }
 
     class PlaceThunderBay : BasePlace
@@ -81,6 +96,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.393; } }
 
         public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
     }
 
     class PlaceToronto : BasePlace
@@ -94,6 +112,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.423; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
 
     public class PlaceWinnipeg : BasePlace
@@ -107,6 +128,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.379; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
 
     public class PlaceRegina : BasePlace
@@ -120,6 +144,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.372; } }
 
         public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 600_000M;
+        public override decimal DockPrice => 200_000M;
     }
 
     public class PlaceSaskatoon : BasePlace
@@ -133,6 +160,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.359; } }
 
         public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 600_000M;
+        public override decimal DockPrice => 200_000M;
     }
 
     public class PlaceEdmonton : BasePlace
@@ -146,6 +176,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.347; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
 
     public class PlaceCalgary : BasePlace
@@ -159,6 +192,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.364; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
 
     public class PlaceVancouver : BasePlace
@@ -172,6 +208,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.373; } }
 
         public override PlaceSize Size => PlaceSize.Large;
+
+        public override decimal GaragePrice => 1_000_000M;
+        public override decimal DockPrice => 500_000M;
     }
     /// <summary>
     /// 
@@ -187,6 +226,9 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.378; } }
 
         public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
     }
 
     public class PlaceYorkton : BasePlace
@@ -200,5 +242,8 @@ namespace TruckerX.Locations.Canada
         public override double MapY { get { return 0.370; } }
 
         public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
     }
 }

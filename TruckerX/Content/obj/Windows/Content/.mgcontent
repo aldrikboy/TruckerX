@@ -38,6 +38,7 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/overlay-background.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/overlay-button.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/padlock.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/popup-background.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/portrait.jpg</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/rope.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/search.png</File>
@@ -50,6 +51,7 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
