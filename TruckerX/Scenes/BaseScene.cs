@@ -9,7 +9,7 @@ using TruckerX.Extensions;
 
 namespace TruckerX.Scenes
 {
-    public abstract class BaseScene : IScene
+    public abstract class BaseScene : IScene, IDisposable
     {
         private TimeSpan fadeInDuration = TimeSpan.FromMilliseconds(200);
         protected TimeSpan elapsedTime = TimeSpan.Zero;
@@ -47,7 +47,7 @@ namespace TruckerX.Scenes
 
             if (this.loadingSceneSwapDelay.TotalMilliseconds >= fadeInDuration.TotalMilliseconds)
             {
-                TruckerX.Game.activeScene = loadingScene;
+                TruckerX.Game.SetScene(loadingScene);
                 loadingScene.Update(gameTime);
             }
         }
@@ -72,6 +72,11 @@ namespace TruckerX.Scenes
         protected void SwitchSceneTo(BaseScene scene)
         {
             loadingScene = scene;
+        }
+
+        public virtual void Dispose()
+        {
+            // Nothing to do here.
         }
     }
 }

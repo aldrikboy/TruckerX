@@ -18,7 +18,7 @@ namespace TruckerX.Widgets
 
         public JobOffer Job { get; set; }
 
-        public JobBannerWidget(BaseScene scene, JobOffer job) : base(scene)
+        public JobBannerWidget(BaseScene scene, JobOffer job) : base()
         {
             font = scene.GetRDFont("main_font_15");
             this.scene = scene;

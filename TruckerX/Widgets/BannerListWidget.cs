@@ -61,11 +61,12 @@ namespace TruckerX.Widgets
 
             int spacing = 2;
             float scrollY = (this.scroll.Percentage * (totalScrollArea - (float)this.Size.Y));
+            float y = this.Position.Y - scrollY;
             for (int i = 0; i < Widgets.Count; i++)
             {
                 var item = Widgets[i];
-                item.Size = new Vector2(367, 88) * scene.GetRDMultiplier();
-                item.Position = new Vector2(this.Position.X, this.Position.Y + (i * ((int)item.Size.Y + spacing) - scrollY));
+                item.Position = new Vector2(this.Position.X, y);
+                y += item.Size.Y + spacing;
                 item.Update(scene, gameTime);
             }
             totalScrollArea = 0;

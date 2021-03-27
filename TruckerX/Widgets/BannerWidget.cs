@@ -16,7 +16,7 @@ namespace TruckerX.Widgets
     {
         private Texture2D bg;
 
-        public BannerWidget(BaseScene scene) : base()
+        public BannerWidget() : base()
         {
             bg = ContentLoader.GetTexture("detail-view");
         }

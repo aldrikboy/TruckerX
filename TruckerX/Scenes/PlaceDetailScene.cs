@@ -22,7 +22,6 @@ namespace TruckerX.Scenes
 
     public class PlaceDetailScene : DetailScene
     {
-        private BasePlace place;
         private PlaceState state;
 
         DetailButtonWidget employeeButton;
@@ -36,8 +35,8 @@ namespace TruckerX.Scenes
 
         public PlaceDetailScene(BasePlace place) : base(place.Name)
         {
-            this.place = place;
             this.state = WorldState.GetStateForPlace(place);
+            state.OnEmployeeArrived += State_OnEmployeeArrived; 
 
             employeeButton = new DetailButtonWidget();
             offersButton = new DetailButtonWidget();
@@ -49,6 +48,11 @@ namespace TruckerX.Scenes
 
             createEmployeeBanners();
             createJobBanners();
+        }
+
+        private void State_OnEmployeeArrived(object sender, EventArgs e)
+        {
+            createEmployeeBanners();
         }
 
         private void createJobBanners()
@@ -72,23 +76,30 @@ namespace TruckerX.Scenes
         private void createEmployeeBanners()
         {
             var employeeBannerList = new List<BannerWidget>();
-            foreach(var place in WorldState.OwnedPlaces)
+
+            bool headerAdded = false;
+            foreach (var employee in WorldState.InternalEmployeesFromPlace(state.Place))
             {
-                foreach(var employee in place.Employees)
+                if (!headerAdded)
                 {
-                    if (employee.OriginalLocation == state.Place)
-                    {
-                        employeeBannerList.Add(new EmployeeBannerWidget(this, employee));
-                    }
+                    employeeBannerList.Add(new SplitterBannerWidget("Internal"));
+                    headerAdded = true;
                 }
+
+                if (employee.OriginalLocation == state.Place)
+                    employeeBannerList.Add(new EmployeeBannerWidget(this, employee));
             }
 
-            foreach (var job in Simulation.simulation.ActiveJobs)
+            headerAdded = false;
+            foreach (var employee in WorldState.ExternalEmployeesCurrentlyAt(state.Place))
             {
-                if (job.Employee.OriginalLocation == state.Place)
+                if (!headerAdded)
                 {
-                    employeeBannerList.Add(new EmployeeBannerWidget(this, job.Employee));
+                    employeeBannerList.Add(new SplitterBannerWidget("External"));
+                    headerAdded = true;
                 }
+
+                employeeBannerList.Add(new EmployeeBannerWidget(this, employee));
             }
 
             employeeBanners = new BannerListWidget(this, employeeBannerList);
@@ -165,6 +176,12 @@ namespace TruckerX.Scenes
                 case SelectedDetailView.Employees: employeeBanners.Update(this, gameTime); break;
                 case SelectedDetailView.Jobs: jobBanners.Update(this, gameTime); break;
             }
+        }
+
+        public override void Dispose()
+        {
+            this.state.OnEmployeeArrived -= State_OnEmployeeArrived;
+            base.Dispose();
         }
     }
 }

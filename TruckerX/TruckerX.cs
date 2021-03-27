@@ -20,8 +20,8 @@ namespace TruckerX
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public BaseScene activeScene = null;
-        public SimulationOverlayScene overlayScene = null;
+        private BaseScene activeScene = null;
+        private SimulationOverlayScene overlayScene = null;
         RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
         Simulation simulation;
 
@@ -43,6 +43,12 @@ namespace TruckerX
 
             WorldData.CreateData();
             WorldState.CreateDefault();
+        }
+
+        public void SetScene(BaseScene scene)
+        {
+            if (this.activeScene != null) this.activeScene.Dispose();
+            this.activeScene = scene;
         }
 
         private void Window_ClientSizeChanged(object sender, System.EventArgs e)

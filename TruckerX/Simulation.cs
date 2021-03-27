@@ -74,9 +74,8 @@ namespace TruckerX
                     {
                         // Employee is now in the employee list of the destination place.
                         var finalPlace = WorldState.GetStateForPlace(job.Job.Job.To);
-                        finalPlace.Employees.Add(job.Employee);
+                        finalPlace.AddEmployee(job.Employee);
                         job.Employee.CurrentJob = null;
-                        job.Employee.CurrentLocation = finalPlace.Place;
                     }
                     else
                     {

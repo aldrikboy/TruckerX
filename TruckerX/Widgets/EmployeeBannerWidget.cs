@@ -19,7 +19,7 @@ namespace TruckerX.Widgets
 
         public EmployeeState Employee { get; set; }
 
-        public EmployeeBannerWidget(BaseScene scene, EmployeeState employee) : base(scene)
+        public EmployeeBannerWidget(BaseScene scene, EmployeeState employee) : base()
         {
             font = scene.GetRDFont("main_font_15");
             this.scene = scene;

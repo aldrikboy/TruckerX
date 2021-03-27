@@ -14,6 +14,43 @@ namespace TruckerX.State
         private static int freeEmployeeId = 1;
         public static int FreeId { get { return freeEmployeeId++; } }
 
+        /// <summary>
+        /// Returns all employees that were hired at the given location.
+        /// </summary>
+        /// <param name="place"></param>
+        /// <returns></returns>
+        public static IEnumerable<EmployeeState> InternalEmployeesFromPlace(BasePlace place)
+        {
+            foreach (var ownedPlace in OwnedPlaces)
+            {
+                foreach (var employee in ownedPlace.Employees)
+                {
+                    if (employee.OriginalLocation == place) yield return employee;
+                }
+            }
+
+            foreach (var job in Simulation.simulation.ActiveJobs)
+            {
+                if (job.Employee.OriginalLocation == place) yield return job.Employee;
+            }
+        }
+
+        /// <summary>
+        /// Return all employees that are at the given location but were not hired there.
+        /// </summary>
+        /// <param name="place"></param>
+        /// <returns></returns>
+        public static IEnumerable<EmployeeState> ExternalEmployeesCurrentlyAt(BasePlace place)
+        {
+            foreach (var ownedPlace in OwnedPlaces)
+            {
+                foreach (var employee in ownedPlace.Employees)
+                {
+                    if (employee.CurrentLocation == place && employee.OriginalLocation != place) yield return employee;
+                }
+            }
+        }
+
         public static EmployeeState GetEmployeeById(string id)
         {
             foreach(var place in OwnedPlaces)
@@ -115,6 +152,15 @@ namespace TruckerX.State
         public List<EmployeeState> Employees { get; set; }
         public List<JobOffer> AvailableJobs { get; set; }
         public List<DockState> Docks { get; set; }
+
+        public event EventHandler OnEmployeeArrived;
+
+        public void AddEmployee(EmployeeState employee)
+        {
+            employee.CurrentLocation = Place;
+            this.Employees.Add(employee);
+            OnEmployeeArrived?.Invoke(employee, null);
+        }
 
         public PlaceState(BasePlace place)
         {
