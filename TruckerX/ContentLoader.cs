@@ -60,6 +60,7 @@ namespace TruckerX
             { "error", new AssetDefinition<Texture2D>("Textures/error") },
             { "edit", new AssetDefinition<Texture2D>("Textures/edit") },
             { "popup-background", new AssetDefinition<Texture2D>("Textures/popup-background") },
+            { "checkmark", new AssetDefinition<Texture2D>("Textures/check-mark") },
         };
 
         public static Dictionary<string, AssetDefinition<Song>> Songs { get; internal set; } = new Dictionary<string, AssetDefinition<Song>>()

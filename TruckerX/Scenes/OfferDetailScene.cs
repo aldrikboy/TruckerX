@@ -23,6 +23,7 @@ namespace TruckerX.Scenes
 
         DetailButtonWidget buttonAccept;
         EmployeeFinderWidget employeeFinderWidget;
+        CheckmarkWidget checkmarkWidget;
         bool isRescheduling;
 
         public OfferDetailScene(JobOffer offer, PlaceState state, bool isRescheduling = false) : base(offer.Company)
@@ -48,8 +49,21 @@ namespace TruckerX.Scenes
             employeeFinderWidget = new EmployeeFinderWidget(this);
             employeeFinderWidget.OnEmployeeSelected += EmployeeFinderWidget_OnEmployeeSelected;
 
+            checkmarkWidget = new CheckmarkWidget("Stay At Destination");
+            checkmarkWidget.OnCheckChanged += CheckmarkWidget_OnCheckChanged;
+
             buttonAccept = new DetailButtonWidget(true);
             buttonAccept.OnClick += ButtonAccept_OnClick;
+        }
+
+        private void CheckmarkWidget_OnCheckChanged(object sender, EventArgs e)
+        {
+            // Assign selected option to timeslot.
+            if (!schedules[selectedDockIndex].Disabled)
+            {
+                var stayAtLocation = sender as bool?;
+                schedules[selectedDockIndex].AssignStayAtLocationSettingsToNewTimeslot(stayAtLocation.Value);
+            }
         }
 
         private void NewSchedule_OnNewShipTimeSelected(object sender, NewShipTimeSelectedEvent e)
@@ -61,11 +75,13 @@ namespace TruckerX.Scenes
             for (int i = 0; i < schedules.Count; i++)
             {
                 if (i == selectedDockIndex) continue;
-                var employee = schedules[i].ResetTimeslotForNewScheduledJob(e.Day);
-                if (employee != null) assignment.AssignedEmployee = employee;
+                var values = schedules[i].ResetTimeslotForNewScheduledJob(e.Day);
+                if (values.Item1 != null) assignment.AssignedEmployee = values.Item1;
+                if (values.Item2 != false) assignment.StayAtLocation = values.Item2;
             }
 
             employeeFinderWidget.SetSelectedEmployee(assignment.AssignedEmployee);
+            checkmarkWidget.SetValue(assignment.StayAtLocation);
         }
 
         private void EmployeeFinderWidget_OnEmployeeSelected(object sender, EventArgs e)
@@ -102,9 +118,11 @@ namespace TruckerX.Scenes
         private void Tab_OnClick(object sender, EventArgs e)
         {
             var tab = sender as TabControlItemWidget;
+            employeeFinderWidget.SetSelectedEmployee(null);
 
             for (int i = 0; i < place.Docks.Count; i++)
             {
+                schedules[i].UnselectTimeslot();
                 var item = place.Docks[i];
                 if (item == ((DockState)tab.Data)) selectedDockIndex = i;
             }
@@ -140,6 +158,7 @@ namespace TruckerX.Scenes
             employeeFinderWidget.Draw(batch, gameTime);
 
             buttonAccept.Draw(batch, gameTime);
+            checkmarkWidget.Draw(batch, gameTime);
         }
 
         private bool doneSchedulingJob()
@@ -191,6 +210,13 @@ namespace TruckerX.Scenes
 
             employeeFinderWidget.Position = new Vector2(rec.X + (rec.Width * 0.9f) - employeeFinderWidget.Size.X, schedules[selectedDockIndex].Position.Y);
             employeeFinderWidget.Update(this, gameTime);
+
+            checkmarkWidget.Size = new Vector2(employeeFinderWidget.Size.X, 40 * GetRDMultiplier());
+            checkmarkWidget.Position = employeeFinderWidget.Position - new Vector2(0, checkmarkWidget.Size.Y + 20 * GetRDMultiplier());
+            checkmarkWidget.Update(this, gameTime);
+
+            checkmarkWidget.Disabled = !schedules[selectedDockIndex].IsEditingTimeslot();
+            employeeFinderWidget.Disabled = checkmarkWidget.Disabled;
         }
     }
 }

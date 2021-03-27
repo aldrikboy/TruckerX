@@ -8,11 +8,13 @@ namespace TruckerX.State
     {
         public TimeSpan Time { get; set; }
         public EmployeeState AssignedEmployee { get; set; }
+        public bool StayAtLocation { get; set; }
 
-        public ShipTimeAssignment(TimeSpan time, EmployeeState assignedEmployee)
+        public ShipTimeAssignment(TimeSpan time, EmployeeState assignedEmployee, bool stayAtLocation)
         {
             Time = time;
             AssignedEmployee = assignedEmployee;
+            StayAtLocation = stayAtLocation;
         }
     }
 

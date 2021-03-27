@@ -10,15 +10,17 @@ namespace TruckerX
     public class ActiveJob
     {
         public ScheduledJob Job { get; set; }
+        public ShipTimeAssignment Assignment { get; set; }
         public EmployeeState Employee { get; set; }
         public DateTime ShipDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public ActiveJob(ScheduledJob job, DateTime shipTime, EmployeeState employee)
+        public ActiveJob(ScheduledJob job, ShipTimeAssignment assignment, DateTime shipTime, EmployeeState employee)
         {
             this.Job = job;
             this.Employee = employee;
             this.ShipDate = shipTime;
+            this.Assignment = assignment;
             this.EndDate = ShipDate.AddHours(job.Job.GetTravelTime());
         }
 
@@ -70,7 +72,10 @@ namespace TruckerX
                 {
                     Money += job.Job.Job.OfferedReward;
                     var finalDestination = job.Job.Job.To;
-                    if (WorldState.PlaceOwned(finalDestination))
+
+                    // Stay at location if owned + setting to stay there is enabled, or if it is the original location.
+                    // else return to original location.
+                    if (WorldState.PlaceOwned(finalDestination) && (job.Assignment.StayAtLocation || job.Employee.OriginalLocation == finalDestination))
                     {
                         // Employee is now in the employee list of the destination place.
                         var finalPlace = WorldState.GetStateForPlace(job.Job.Job.To);
@@ -81,7 +86,7 @@ namespace TruckerX
                     {
                         // If the final stop place is not owned, make driver go back to original location.
                         var scheduledJob = new ScheduledJob(job.Job.Job.Reverse(), job.Job.ShipTimes);
-                        ActiveJob returnJob = new ActiveJob(scheduledJob, GetNextLeavingTimeslot(), job.Employee);
+                        ActiveJob returnJob = new ActiveJob(scheduledJob, job.Assignment, GetNextLeavingTimeslot(), job.Employee);
                         job.Employee.CurrentJob = returnJob;
                         ActiveJobs.Add(returnJob);
                     }
@@ -105,7 +110,7 @@ namespace TruckerX
             {
                 employee.CurrentLocation = null;
                 place.Employees.Remove(assignee.AssignedEmployee);
-                var activeJob = new ActiveJob(job, Time - TimeSpan.FromMinutes(Time.Minute % 15), employee);
+                var activeJob = new ActiveJob(job, assignee, Time - TimeSpan.FromMinutes(Time.Minute % 15), employee);
                 employee.CurrentJob = activeJob;
                 ActiveJobs.Add(activeJob);
             }

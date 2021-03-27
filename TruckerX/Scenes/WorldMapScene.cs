@@ -235,7 +235,7 @@ namespace TruckerX.Scenes
             if (TruckerX.Game.IsActive)
             {
                 handleMapZoom();
-                handleMapDragging();
+                if (!popupPurchasePlace.Visible) handleMapDragging();
             }
 
             foreach (WorldLocationWidget item in Locations)

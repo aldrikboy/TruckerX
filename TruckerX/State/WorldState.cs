@@ -105,8 +105,8 @@ namespace TruckerX.State
                 new List<Weekday>() { Weekday.Monday, Weekday.Tuesday });
             winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(existingJob,  
                 new Dictionary<Weekday, ShipTimeAssignment>() { 
-                    { Weekday.Monday, new ShipTimeAssignment(new TimeSpan(7, 15,0), WorldState.GetEmployeeById("#000001")) },
-                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000002")) } }));
+                    { Weekday.Monday, new ShipTimeAssignment(new TimeSpan(7, 15,0), WorldState.GetEmployeeById("#000001"), false) },
+                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000002"), false) } }));
         }
 
         public static bool PlaceOwned(BasePlace place)

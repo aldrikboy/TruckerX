@@ -20,7 +20,7 @@ namespace TruckerX
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private BaseScene activeScene = null;
+        public BaseScene activeScene { get; private set; } = null;
         private SimulationOverlayScene overlayScene = null;
         RasterizerState _rasterizerState = new RasterizerState() { ScissorTestEnable = true };
         Simulation simulation;
@@ -123,6 +123,8 @@ namespace TruckerX
 
         protected override void Draw(GameTime gameTime)
         {
+            TruckerX.Game.GraphicsDevice.ScissorRectangle = TargetRetangle;
+
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend,

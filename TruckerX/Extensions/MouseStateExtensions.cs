@@ -11,6 +11,20 @@ namespace TruckerX.Extensions
         private static bool wasDown = false;
         public static bool MouseUsedThisFrame { get; set; } = false;
 
+        public static bool NotHovering(this MouseState state, IWidget widget)
+        {
+            if (MouseUsedThisFrame) return false;
+            var scissor = TruckerX.Game.GraphicsDevice.ScissorRectangle;
+            var result = (state.X >= widget.Position.X && state.X <= widget.Position.X + widget.Size.X) &&
+                (state.Y >= widget.Position.Y && state.Y <= widget.Position.Y + widget.Size.Y)
+                &&
+                (state.X >= scissor.X && state.X <= scissor.X + scissor.Size.X) &&
+                (state.Y >= scissor.Y && state.Y <= scissor.Y + scissor.Size.Y);
+            if (result) { /* Dont invalidate mouse here*/ widget.State = WidgetState.MouseHover; }
+            else widget.State = WidgetState.Idle;
+            return !result;
+        }
+
         public static bool Hovering(this MouseState state, IWidget widget)
         {
             if (MouseUsedThisFrame) return false;

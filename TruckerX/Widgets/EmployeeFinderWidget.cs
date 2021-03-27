@@ -19,6 +19,7 @@ namespace TruckerX.Widgets
         float textBoxHeight = 50;
         private BaseScene scene;
         private Texture2D searchTexture;
+        private Texture2D padlock;
         private SmallDetailButtonWidget confirmButton;
         public string text { get; set; } = "";
 
@@ -30,6 +31,7 @@ namespace TruckerX.Widgets
         {
             this.scene = scene;
             searchTexture = ContentLoader.GetTexture("search");
+            padlock = ContentLoader.GetTexture("padlock");
             confirmButton = new SmallDetailButtonWidget();
             confirmButton.Text = "Assign";
             confirmButton.OnClick += ConfirmButton_OnClick;
@@ -65,10 +67,11 @@ namespace TruckerX.Widgets
             // Eather draw search icon or selected employee.
             if (selectedEmployee == null)
             {
+                var icon = this.Disabled ? padlock : searchTexture;
                 int iconSize = (int)(this.Size.X / 2.5);
                 int iconPosX = (int)(this.Position.X + (this.Size.X / 2) - (iconSize / 2));
                 int iconPosY = (int)(this.Position.Y + (this.Size.Y / 2) - (iconSize / 2) + textBoxHeight / 2);
-                batch.Draw(searchTexture, new Rectangle(iconPosX, iconPosY, iconSize, iconSize), Color.FromNonPremultiplied(60, 60, 60, 255));
+                batch.Draw(icon, new Rectangle(iconPosX, iconPosY, iconSize, iconSize), Color.FromNonPremultiplied(60, 60, 60, 255));
             }
             else
             {
@@ -139,8 +142,8 @@ namespace TruckerX.Widgets
             confirmButton.Update(scene, gameTime);
 
             var mouseState = Mouse.GetState();
-            if (this.State == WidgetState.MouseDown) selected = true;
-            if (!mouseState.Hovering(this) && mouseState.LeftButton == ButtonState.Pressed) selected = false;
+            if (!Disabled && this.State == WidgetState.MouseDown) selected = true;
+            if (mouseState.NotHovering(this) && mouseState.LeftButton == ButtonState.Pressed) selected = false;
 
             if (selected)
             {

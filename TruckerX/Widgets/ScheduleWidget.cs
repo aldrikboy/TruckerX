@@ -46,7 +46,7 @@ namespace TruckerX.Widgets
         float quarterHour;
 
         bool isRescheduling = false;
-        private Weekday lastModifiedShipDay = Weekday.Monday;
+        private Weekday lastModifiedShipDay = (Weekday)(-1);
         public ScheduledJob newScheduledJob;
 
         public event EventHandler OnScheduledOfferSelected;
@@ -63,7 +63,7 @@ namespace TruckerX.Widgets
             padlock = ContentLoader.GetTexture("padlock");
             error = ContentLoader.GetTexture("error");
             edit = ContentLoader.GetTexture("edit");
-            newScheduledJob = new ScheduledJob(offerToPlan);
+            newScheduledJob = offerToPlan != null ? new ScheduledJob(offerToPlan) : null;
 
             if (isRescheduling)
             {
@@ -73,21 +73,35 @@ namespace TruckerX.Widgets
                     foreach(var time in job.ShipTimes)
                     {
                         lastModifiedShipDay = time.Key;
-                        newScheduledJob.ShipTimes.Add(time.Key, new ShipTimeAssignment(time.Value.Time, time.Value.AssignedEmployee));
+                        newScheduledJob.ShipTimes.Add(time.Key, new ShipTimeAssignment(time.Value.Time, time.Value.AssignedEmployee, time.Value.StayAtLocation));
                     }
                 }
             }
         }
 
-        public EmployeeState ResetTimeslotForNewScheduledJob(Weekday day)
+        public (EmployeeState, bool) ResetTimeslotForNewScheduledJob(Weekday day)
         {
             if (newScheduledJob != null && newScheduledJob.ShipTimes.ContainsKey(day))
             {
                 var employee = newScheduledJob.ShipTimes[day].AssignedEmployee;
+                bool stay = newScheduledJob.ShipTimes[day].StayAtLocation;
                 newScheduledJob.ShipTimes.Remove(day);
-                return employee;
+                return (employee, stay);
             }
-            return null;
+            return (null, false);
+        }
+
+        public bool IsEditingTimeslot()
+        {
+            return newScheduledJob != null && newScheduledJob.ShipTimes.ContainsKey(lastModifiedShipDay);
+        }
+
+        public void AssignStayAtLocationSettingsToNewTimeslot(bool stayAtLocation)
+        {
+            if (newScheduledJob.ShipTimes.ContainsKey(lastModifiedShipDay))
+            {
+                newScheduledJob.ShipTimes[lastModifiedShipDay].StayAtLocation = stayAtLocation;
+            }
         }
 
         public void AssignEmployeeToNewTimeslot(EmployeeState employee)
@@ -125,6 +139,11 @@ namespace TruckerX.Widgets
             float x = this.Position.X + cutoffDaysColumn + (hoveringTile.X * quarterHour);
             float y = this.Position.Y + (hoveringTile.Y + 1) * rowHeight;
             return new Vector2(x, y);
+        }
+
+        public void UnselectTimeslot()
+        {
+            lastModifiedShipDay = (Weekday)(-1);
         }
 
         private Vector2 getQuarterPositionForPlannedShipDate(Weekday day, TimeSpan time)
@@ -211,7 +230,7 @@ namespace TruckerX.Widgets
 
                 var c = Color.White;
                 if (job == selectedScheduledJob) c = Color.FromNonPremultiplied(255, 165, 0, 100);
-                else c = Color.FromNonPremultiplied(134, 232, 85, 100);
+                else c = Color.FromNonPremultiplied(0, 255, 0, 100);
                 foreach (var item in job.ShipTimes)
                 {
                     Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
@@ -219,21 +238,24 @@ namespace TruckerX.Widgets
                 }
             }
 
-            // Current selection for ship times
-            foreach (var item in newScheduledJob.ShipTimes)
+            if (newScheduledJob != null)
             {
-                Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
-
-                Color c = Color.FromNonPremultiplied(255, 0, 0, 100);
-                if (item.Value.AssignedEmployee != null) c = Color.FromNonPremultiplied(0, 255, 0, 100);
-                DrawQuarterBlock(batch, pos.X, pos.Y, c);
-
-                bool isSelected = newScheduledJob.ShipTimes.ContainsKey(lastModifiedShipDay) && newScheduledJob.ShipTimes[lastModifiedShipDay] == item.Value;
-                if (item.Value.AssignedEmployee == null || isSelected)
+                // Current selection for ship times
+                foreach (var item in newScheduledJob.ShipTimes)
                 {
-                    int iconWidth = (int)(columnWidth / 4);
-                    Texture2D icon = !isSelected ? error : edit;
-                    batch.Draw(icon, new Rectangle((int)pos.X + (iconWidth/3), (int)pos.Y - (iconWidth/3), iconWidth, iconWidth), Color.Black);
+                    Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
+
+                    Color c = Color.FromNonPremultiplied(255, 0, 0, 100);
+                    if (item.Value.AssignedEmployee != null) c = Color.FromNonPremultiplied(0, 255, 0, 100);
+                    DrawQuarterBlock(batch, pos.X, pos.Y, c);
+
+                    bool isSelected = newScheduledJob.ShipTimes.ContainsKey(lastModifiedShipDay) && newScheduledJob.ShipTimes[lastModifiedShipDay] == item.Value;
+                    if (item.Value.AssignedEmployee == null || isSelected)
+                    {
+                        int iconWidth = (int)(columnWidth / 4);
+                        Texture2D icon = !isSelected ? error : edit;
+                        batch.Draw(icon, new Rectangle((int)pos.X + (iconWidth / 3), (int)pos.Y - (iconWidth / 3), iconWidth, iconWidth), Color.Black);
+                    }
                 }
             }
 
@@ -257,7 +279,7 @@ namespace TruckerX.Widgets
                 if (newScheduledJob.ShipTimes.ContainsKey(day))
                     newScheduledJob.ShipTimes[day].Time = time;
                 else
-                    newScheduledJob.ShipTimes.Add(day, new ShipTimeAssignment(time, null));
+                    newScheduledJob.ShipTimes.Add(day, new ShipTimeAssignment(time, null, false));
                 lastModifiedShipDay = day;
                 OnNewShipTimeSelected?.Invoke(newScheduledJob.ShipTimes[day], new NewShipTimeSelectedEvent(day, time));
             }
