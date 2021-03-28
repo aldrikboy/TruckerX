@@ -31,6 +31,7 @@ namespace TruckerX.State
 
             foreach (var job in Simulation.simulation.ActiveJobs)
             {
+                if (job.GetCompletionPercentage() >= 1.0f) continue;
                 if (job.Employee.OriginalLocation == place) yield return job.Employee;
             }
         }
