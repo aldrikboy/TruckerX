@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
 using TruckerX.TransportableItems;
+using TruckerX.Trucks;
 
 namespace TruckerX.State
 {
@@ -25,13 +26,13 @@ namespace TruckerX.State
             {
                 foreach (var employee in ownedPlace.Employees)
                 {
+                    if (employee.CurrentJob != null) continue;
                     if (employee.OriginalLocation == place) yield return employee;
                 }
             }
 
             foreach (var job in Simulation.simulation.ActiveJobs)
             {
-                if (job.GetCompletionPercentage() >= 1.0f) continue;
                 if (job.Employee.OriginalLocation == place) yield return job.Employee;
             }
         }
@@ -153,14 +154,20 @@ namespace TruckerX.State
         public List<EmployeeState> Employees { get; set; }
         public List<JobOffer> AvailableJobs { get; set; }
         public List<DockState> Docks { get; set; }
+        public List<Truck> Trucks { get; set; }
 
         public event EventHandler OnEmployeeArrived;
+
+        public void EmployeeStateChanged()
+        {
+            OnEmployeeArrived?.Invoke(null, null);
+        }
 
         public void AddEmployee(EmployeeState employee)
         {
             employee.CurrentLocation = Place;
             this.Employees.Add(employee);
-            OnEmployeeArrived?.Invoke(employee, null);
+            EmployeeStateChanged();
         }
 
         public PlaceState(BasePlace place)

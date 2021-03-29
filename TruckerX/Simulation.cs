@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TruckerX.Messaging;
 using TruckerX.State;
 
 namespace TruckerX
@@ -72,27 +73,34 @@ namespace TruckerX
                 {
                     Money += job.Job.Job.OfferedReward;
                     var finalDestination = job.Job.Job.To;
+                    var finalPlace = WorldState.GetStateForPlace(job.Job.Job.To);
 
                     // Stay at location if owned + setting to stay there is enabled, or if it is the original location.
                     // else return to original location.
                     if (WorldState.PlaceOwned(finalDestination) && (job.Assignment.StayAtLocation || job.Employee.OriginalLocation == finalDestination))
                     {
+                        ActiveJobs.RemoveAt(i);
+                        i--;
+
                         // Employee is now in the employee list of the destination place.
-                        var finalPlace = WorldState.GetStateForPlace(job.Job.Job.To);
                         job.Employee.CurrentJob = null;
                         finalPlace.AddEmployee(job.Employee);
+                        continue;
                     }
                     else
                     {
+                        ActiveJobs.RemoveAt(i);
+                        i--;
+
                         // If the final stop place is not owned, make driver go back to original location.
                         var scheduledJob = new ScheduledJob(job.Job.Job.Reverse(), job.Job.ShipTimes);
                         ActiveJob returnJob = new ActiveJob(scheduledJob, job.Assignment, GetNextLeavingTimeslot(), job.Employee);
                         job.Employee.CurrentJob = returnJob;
                         ActiveJobs.Add(returnJob);
-                    }
 
-                    ActiveJobs.RemoveAt(i);
-                    i--;
+                        finalPlace.EmployeeStateChanged();
+                        continue;
+                    }
                 }
             }
         }
@@ -113,6 +121,8 @@ namespace TruckerX
                 var activeJob = new ActiveJob(job, assignee, Time - TimeSpan.FromMinutes(Time.Minute % 15), employee);
                 employee.CurrentJob = activeJob;
                 ActiveJobs.Add(activeJob);
+
+                MessageLog.AddInfo(string.Format("{0} left {1}, driving to {2}. Lets smoke a big fatty joint", assignee.AssignedEmployee.Name, job.Job.From.Name, job.Job.To.Name));
             }
             else
             {

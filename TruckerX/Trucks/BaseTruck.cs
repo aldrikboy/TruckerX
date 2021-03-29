@@ -5,8 +5,17 @@ using System.Text;
 namespace TruckerX.Trucks
 {
     // https://www.0-60specs.com/5-most-popular-18-wheeler-semi-trucks/
-    public abstract class BaseTruck
+    public class Truck
     {
-        public abstract string Name { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public float LiterPer100Km { get; set; }
+
+        public Truck(string name, decimal price, float literPer100Km)
+        {
+            Name = name;
+            Price = price;
+            LiterPer100Km = literPer100Km;
+        }
     }
 }

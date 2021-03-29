@@ -3,6 +3,7 @@ using TruckerX.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace TruckerX.Extensions
 {
@@ -10,6 +11,19 @@ namespace TruckerX.Extensions
     {
         private static bool wasDown = false;
         public static bool MouseUsedThisFrame { get; set; } = false;
+
+        public static bool HoveringRectangle(this MouseState state, Rectangle rec)
+        {
+            if (MouseUsedThisFrame) return false;
+            var scissor = TruckerX.Game.GraphicsDevice.ScissorRectangle;
+            var result = (state.X >= rec.X && state.X <= rec.X + rec.Width) &&
+                (state.Y >= rec.Y && state.Y <= rec.Y + rec.Height)
+                &&
+                (state.X >= scissor.X && state.X <= scissor.X + scissor.Size.X) &&
+                (state.Y >= scissor.Y && state.Y <= scissor.Y + scissor.Size.Y);
+            if (result) { MouseUsedThisFrame = true; }
+            return result;
+        }
 
         public static bool NotHovering(this MouseState state, IWidget widget)
         {

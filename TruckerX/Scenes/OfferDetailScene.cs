@@ -15,6 +15,7 @@ namespace TruckerX.Scenes
         JobOffer offer;
         double distance = 0;
         double travelHours = 0;
+        bool isOfferDestinationOwned;
 
         PlaceState place;
         int selectedDockIndex = 0;
@@ -31,6 +32,7 @@ namespace TruckerX.Scenes
             this.isRescheduling = isRescheduling;
             this.offer = offer;
             this.place = state;
+            isOfferDestinationOwned = WorldState.PlaceOwned(this.offer.To);
             distance = this.offer.GetDistanceInKm();
             travelHours = this.offer.GetTravelTime();
 
@@ -53,6 +55,7 @@ namespace TruckerX.Scenes
             checkmarkWidget.OnCheckChanged += CheckmarkWidget_OnCheckChanged;
 
             buttonAccept = new DetailButtonWidget(true);
+            buttonAccept.Text = "Accept";
             buttonAccept.OnClick += ButtonAccept_OnClick;
         }
 
@@ -203,7 +206,6 @@ namespace TruckerX.Scenes
             schedules[selectedDockIndex].Update(this, gameTime);
 
             int buttonStartY = (int)(80.0f * GetRDMultiplier());
-            buttonAccept.Text = "Accept";
             buttonAccept.Position = buttonAccept.Position.FromPercentageWithOffset(0.95f, 0.05f) + new Vector2(-buttonAccept.Size.X, buttonStartY);
             buttonAccept.Update(this, gameTime);
             buttonAccept.Disabled = !doneSchedulingJob();
@@ -215,8 +217,8 @@ namespace TruckerX.Scenes
             checkmarkWidget.Position = employeeFinderWidget.Position - new Vector2(0, checkmarkWidget.Size.Y + 20 * GetRDMultiplier());
             checkmarkWidget.Update(this, gameTime);
 
-            checkmarkWidget.Disabled = !schedules[selectedDockIndex].IsEditingTimeslot();
-            employeeFinderWidget.Disabled = checkmarkWidget.Disabled;
+            checkmarkWidget.Disabled = !schedules[selectedDockIndex].IsEditingTimeslot() || !isOfferDestinationOwned;
+            employeeFinderWidget.Disabled = !schedules[selectedDockIndex].IsEditingTimeslot();
         }
     }
 }

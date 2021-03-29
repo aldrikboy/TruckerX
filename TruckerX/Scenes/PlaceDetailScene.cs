@@ -18,6 +18,7 @@ namespace TruckerX.Scenes
     {
         Employees,
         Jobs,
+        Garage,
     }
 
     public class PlaceDetailScene : DetailScene
@@ -27,6 +28,7 @@ namespace TruckerX.Scenes
         DetailButtonWidget employeeButton;
         DetailButtonWidget offersButton;
         DetailButtonWidget schedulesButton;
+        DetailButtonWidget garageButton;
 
         BannerListWidget employeeBanners;
         BannerListWidget jobBanners;
@@ -41,6 +43,12 @@ namespace TruckerX.Scenes
             employeeButton = new DetailButtonWidget();
             offersButton = new DetailButtonWidget();
             schedulesButton = new DetailButtonWidget();
+            garageButton = new DetailButtonWidget();
+
+            employeeButton.Text = "Employees";
+            schedulesButton.Text = "Schedules";
+            offersButton.Text = "Job Offers";
+            garageButton.Text = "Garage";
 
             employeeButton.OnClick += EmployeeButton_OnClick;
             offersButton.OnClick += JobsButton_OnClick;
@@ -103,6 +111,7 @@ namespace TruckerX.Scenes
             }
 
             employeeBanners = new BannerListWidget(this, employeeBannerList);
+            employeeBanners.Update(this, null);
         }
 
         private void SchedulesButton_OnClick(object sender, EventArgs e)
@@ -130,11 +139,13 @@ namespace TruckerX.Scenes
             employeeButton.Draw(batch, gameTime);
             offersButton.Draw(batch, gameTime);
             schedulesButton.Draw(batch, gameTime);
+            garageButton.Draw(batch, gameTime);
 
             switch (currentView)
             {
                 case SelectedDetailView.Employees: employeeBanners.Draw(batch, gameTime); break;
                 case SelectedDetailView.Jobs: jobBanners.Draw(batch, gameTime); break;
+                case SelectedDetailView.Garage: break;
             }
            
 
@@ -151,19 +162,20 @@ namespace TruckerX.Scenes
             int buttonStartY = (int)(120.0f * GetRDMultiplier());
             int buttonPadY = (int)(80.0f * GetRDMultiplier());
 
-            employeeButton.Text = "Employees";
             employeeButton.Position = employeeButton.Position.FromPercentageWithOffset(0.05f, 0.05f) + new Vector2(0,buttonStartY);
             employeeButton.Update(this, gameTime);
             
-            schedulesButton.Text = "Schedules";
             schedulesButton.Size = employeeButton.Size;
             schedulesButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 1);
             schedulesButton.Update(this, gameTime);
 
-            offersButton.Text = "Job Offers";
             offersButton.Size = employeeButton.Size;
             offersButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 2);
             offersButton.Update(this, gameTime);
+
+            garageButton.Size = employeeButton.Size;
+            garageButton.Position = employeeButton.Position + new Vector2(0, buttonPadY * 3);
+            garageButton.Update(this, gameTime);
 
             employeeBanners.Size = new Vector2().FromPercentage(0.32f, 0.8f);
             employeeBanners.Position = new Vector2().FromPercentageWithOffset(0.565f, 0.1f);
@@ -175,6 +187,7 @@ namespace TruckerX.Scenes
             {
                 case SelectedDetailView.Employees: employeeBanners.Update(this, gameTime); break;
                 case SelectedDetailView.Jobs: jobBanners.Update(this, gameTime); break;
+                case SelectedDetailView.Garage: break;
             }
         }
 

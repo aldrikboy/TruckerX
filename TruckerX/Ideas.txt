@@ -1,0 +1,5 @@
+﻿- Tooltip
+- Connect trucks to employees
+- Pay gasoline for trips (price depending on country)
+- Pay truck maintenance costs based on driver experience and truck type
+- income overview per location

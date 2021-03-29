@@ -8,7 +8,7 @@ namespace TruckerX.Animations
     public abstract class Animation
     {
         public TimeSpan Duration { get; }
-        public double Percentage { get { return progress < Duration ? (progress.TotalMilliseconds / Duration.TotalMilliseconds) : 1.0; } }
+        public float Percentage { get { return progress < Duration ? ((float)progress.TotalMilliseconds / (float)Duration.TotalMilliseconds) : 1.0f; } }
 
         protected TimeSpan progress;
 
@@ -17,6 +17,16 @@ namespace TruckerX.Animations
         public Animation(TimeSpan duration)
         {
             Duration = duration;
+            progress = new TimeSpan(0);
+        }
+
+        public void Finish()
+        {
+            progress = Duration;
+        }
+
+        public void Reset()
+        {
             progress = new TimeSpan(0);
         }
 
