@@ -62,6 +62,7 @@ namespace TruckerX
             { "popup-background", new AssetDefinition<Texture2D>("Textures/popup-background") },
             { "checkmark", new AssetDefinition<Texture2D>("Textures/check-mark") },
             { "truck-icon", new AssetDefinition<Texture2D>("Textures/truck") },
+            { "arrow-left", new AssetDefinition<Texture2D>("Textures/arrow-left") },
         };
 
         public static Dictionary<string, AssetDefinition<Song>> Songs { get; internal set; } = new Dictionary<string, AssetDefinition<Song>>()

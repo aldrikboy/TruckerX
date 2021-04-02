@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TruckerX.Extensions;
 using TruckerX.State;
@@ -16,15 +17,33 @@ namespace TruckerX.Scenes
 
         PlaceState place;
         int selectedDockIndex = 0;
+        int selectedTruckIndex = -1;
         List<ScheduleWidget> schedules = new List<ScheduleWidget>();
         TabControlWidget tabcontrol;
 
+        BannerWidget truckBanner;
+        ArrowButtonWidget arrowButtonLeft;
+        ArrowButtonWidget arrowButtonRight;
+
         DetailButtonWidget buttonAccept;
 
-        public EmployeeDetailScene(EmployeeState employee, PlaceState state) : base(employee.Name)
+        public EmployeeDetailScene(EmployeeState employee, PlaceState state) : base(employee.Name + ", " + employee.Age + ", " + employee.Id)
         {
             this.employee = employee;
             this.place = state;
+
+            if (this.employee.AssignedTruck != null)
+            {
+                for (int i = 0; i < place.Trucks.Count; i++)
+                {
+                    var truck = place.Trucks[i];
+                    if (truck == employee.AssignedTruck)
+                    {
+                        selectedTruckIndex = i;
+                        break;
+                    }
+                }
+            }
 
             List<TabControlItemWidget> tabs = new List<TabControlItemWidget>();
             for (int i = 0; i < place.Docks.Count; i++)
@@ -41,6 +60,38 @@ namespace TruckerX.Scenes
             buttonAccept = new DetailButtonWidget(true);
             buttonAccept.Text = "Accept";
             buttonAccept.OnClick += ButtonAccept_OnClick;
+
+            arrowButtonLeft = new ArrowButtonWidget(PointingTo.Left);
+            arrowButtonLeft.OnClick += ArrowButtonLeft_OnClick;
+            arrowButtonRight = new ArrowButtonWidget(PointingTo.Right);
+            arrowButtonRight.OnClick += ArrowButtonRight_OnClick;
+            if (employee.AssignedTruck == null)
+                truckBanner = new BannerWidget();
+            else
+                truckBanner = new TruckBannerWidget(employee.AssignedTruck);
+            truckBanner.Disabled = true;
+        }
+
+        private void ArrowButtonRight_OnClick(object sender, EventArgs e)
+        {
+            selectedTruckIndex++;
+            if (selectedTruckIndex > place.Trucks.Count-1) selectedTruckIndex = 0;
+            truckBanner = new TruckBannerWidget(place.Trucks[selectedTruckIndex]);
+
+            // TODO: maybe just store old position and reset here...
+            CustomUpdate(new GameTime());
+            CustomUpdate(new GameTime());
+        }
+
+        private void ArrowButtonLeft_OnClick(object sender, EventArgs e)
+        {
+            selectedTruckIndex--;
+            if (selectedTruckIndex < 0) selectedTruckIndex = place.Trucks.Count - 1;
+            truckBanner = new TruckBannerWidget(place.Trucks[selectedTruckIndex]);
+
+            // TODO: maybe just store old position and reset here...
+            CustomUpdate(new GameTime());
+            CustomUpdate(new GameTime());
         }
 
         private void ButtonAccept_OnClick(object sender, EventArgs e)
@@ -82,6 +133,10 @@ namespace TruckerX.Scenes
             schedules[selectedDockIndex].Draw(batch, gameTime);
             tabcontrol.Draw(batch, gameTime);
 
+            arrowButtonLeft.Draw(batch, gameTime);
+            truckBanner.Draw(batch, gameTime);
+            arrowButtonRight.Draw(batch, gameTime);
+
             buttonAccept.Draw(batch, gameTime);
         }
 
@@ -109,6 +164,17 @@ namespace TruckerX.Scenes
             int buttonStartY = (int)(80.0f * GetRDMultiplier());
             buttonAccept.Position = buttonAccept.Position.FromPercentageWithOffset(0.95f, 0.05f) + new Vector2(-buttonAccept.Size.X, buttonStartY);
             buttonAccept.Update(this, gameTime);
+
+            float buttonsOffsetY = (30.0f * ContentLoader.GetRDMultiplier());
+            arrowButtonLeft.Position = new Vector2(startLeft, startTop - tabcontrol.Size.Y - truckBanner.Size.Y - buttonsOffsetY);
+            arrowButtonLeft.Update(this, gameTime);
+
+            truckBanner.Position = new Vector2(startLeft + arrowButtonLeft.Size.X + 1, arrowButtonLeft.Position.Y);
+            truckBanner.Update(this, gameTime);
+
+            arrowButtonRight.Position = new Vector2(startLeft + arrowButtonLeft.Size.X + truckBanner.Size.X + 2, arrowButtonLeft.Position.Y);
+            arrowButtonRight.Update(this, gameTime);
+
         }
     }
 }

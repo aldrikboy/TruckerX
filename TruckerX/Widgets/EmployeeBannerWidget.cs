@@ -44,7 +44,7 @@ namespace TruckerX.Widgets
             }
 
             font = scene.GetRDFont("main_font_18");
-            int nameHeight = 0;
+            int nameHeight;
             {
                 // Name
                 var str = Employee.Name + ", " + Employee.Age;

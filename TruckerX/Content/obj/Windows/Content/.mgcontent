@@ -24,6 +24,7 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/pop1.wav</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/pop2.wav</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Sounds/rope-pull.wav</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/arrow-left.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/black.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/check-mark.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/detailbutton.png</File>
@@ -53,6 +54,7 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
