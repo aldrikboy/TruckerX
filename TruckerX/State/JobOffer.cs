@@ -19,7 +19,10 @@ namespace TruckerX.State
         Saturday = 5,
         Sunday = 6,
     }
-
+    
+    /// <summary>
+    /// A job offer, unique to a place, should only be scheduled once at any given time.
+    /// </summary>
     public class JobOffer
     {
         public int Id { get; set; }
@@ -30,10 +33,21 @@ namespace TruckerX.State
         public TransportableItem Item { get; set; }
         public decimal OfferedReward { get; set; }
         public List<Weekday> ShipDays { get; set; }
+        public float TrustFactor { get; private set; } = 1.0f;
 
         public bool IsReturnDrive { get { return Id == -1; } }
 
         private double distance = -1; // We store this so we only have to calculate this once.
+
+        public void JobWasCompletedUnsuccesfully()
+        {
+            TrustFactor -= 0.5f;
+        }
+
+        public void JobWasCompletedSuccesfully()
+        {
+            TrustFactor += (0.1f / TrustFactor);
+        }
 
         private bool GetConnection(ref List<BasePlace> places, BasePlace parent, BasePlace from)
         {

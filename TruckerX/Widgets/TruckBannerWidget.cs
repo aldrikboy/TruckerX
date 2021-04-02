@@ -7,24 +7,22 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
 using TruckerX.State;
+using TruckerX.Trucks;
 
 namespace TruckerX.Widgets
 {
-    public class JobBannerWidget : BannerWidget
+    public class TruckBannerWidget : BannerWidget
     {
-        private Texture2D portrait;
+        private Texture2D truckicon;
         private SpriteFont font;
-        private BaseScene scene;
 
-        public JobOffer Job { get; set; }
+        public BaseTruck truck { get; set; }
 
-        public JobBannerWidget(BaseScene scene, JobOffer job) : base()
+        public TruckBannerWidget(BaseTruck truck) : base()
         {
-            font = scene.GetRDFont("main_font_15");
-            this.scene = scene;
-            Job = job;
-
-            portrait = ContentLoader.GetTexture("logo-placeholder");
+            font = ContentLoader.GetRDFont("main_font_15");
+            this.truck = truck;
+            truckicon = ContentLoader.GetTexture("truck-icon");
         }
 
         public override void Draw(SpriteBatch batch, GameTime gameTime)
@@ -39,14 +37,14 @@ namespace TruckerX.Widgets
                     new Rectangle((int)this.Position.X + padding, (int)this.Position.Y + padding, portraitSize, portraitSize),
                     Color.FromNonPremultiplied(60, 60, 60, 255));
 
-                batch.Draw(portrait, new Rectangle((int)this.Position.X + padding+2, (int)this.Position.Y + padding+2, portraitSize-4, portraitSize-4), Color.White);
+                batch.Draw(truckicon, new Rectangle((int)this.Position.X + padding+8, (int)this.Position.Y + padding+8, portraitSize-16, portraitSize-16), Color.White);
             }
 
-            font = scene.GetRDFont("main_font_18");
-            int nameHeight;
+            font = ContentLoader.GetRDFont("main_font_18");
+            int nameHeight = 0;
             {
                 // Name
-                var str = Job.Company;
+                var str = truck.Name;
                 var strSize = font.MeasureString(str);
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding;
@@ -54,10 +52,10 @@ namespace TruckerX.Widgets
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(60, 60, 60, 255));
             }
 
-            font = scene.GetRDFont("main_font_12");
+            font = ContentLoader.GetRDFont("main_font_12");
             {
-                // Transport item name
-                var str = Job.Item.Name;
+                // id
+                var str = "Id: " + truck.Id;
                 var strSize = font.MeasureString(str);
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding + nameHeight;
@@ -66,12 +64,10 @@ namespace TruckerX.Widgets
             }
 
             {
-                // Reward
-                var str = "Reward: " + Job.From.Country.Currency.Sign + Job.OfferedReward.ToString() + "/Trip";
-                var strSize = font.MeasureString(str);
+                // Driving to
+                string str = truck.Assignee == null ? "" : "Assigned to " + truck.Assignee.Id;
                 int offsetx = (int)this.Position.X + padding + portraitSize + padding;
                 int offsety = (int)this.Position.Y + padding + nameHeight;
-                nameHeight += (int)strSize.Y;
                 batch.DrawString(font, str, new Vector2(offsetx, offsety), Color.FromNonPremultiplied(80, 80, 80, 255));
             }
         }

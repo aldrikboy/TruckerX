@@ -14,6 +14,7 @@ namespace TruckerX.Locations
         public override float DetourMultiplier => 1.3f;
 
         public override Currency Currency => Currency.CAD;
+        public override float GasPricePerLiter => 1.219f;
 
         public CountryCanada() : base(typeof(PlaceCalgary).Namespace)
         {

@@ -48,10 +48,12 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/star.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/tab-background.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/trees.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/truck.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/white.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

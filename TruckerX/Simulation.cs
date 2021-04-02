@@ -48,7 +48,7 @@ namespace TruckerX
 
         public decimal Money = 0.0M; // In USD
         public DateTime Time { get; set; }
-        private const float minutesPerSecond = 250;
+        private const float minutesPerSecond = 450;
         private bool quarterHalfReached = false;
         private bool salariesPaidOutThisMonth = false;
 
@@ -74,6 +74,8 @@ namespace TruckerX
                     Money += job.Job.Job.OfferedReward;
                     var finalDestination = job.Job.Job.To;
                     var finalPlace = WorldState.GetStateForPlace(job.Job.Job.To);
+
+                    job.Job.Job.JobWasCompletedSuccesfully();
 
                     // Stay at location if owned + setting to stay there is enabled, or if it is the original location.
                     // else return to original location.
@@ -105,12 +107,42 @@ namespace TruckerX
             }
         }
 
+        private void applyJobFactors(PlaceState place, JobOffer offer)
+        {
+            if (offer.TrustFactor < 1.0f)
+            {
+                foreach(var dock in place.Docks)
+                {
+                    var schedule = dock.Schedule;
+                    for (int i = 0; i < schedule.Jobs.Count; i++)
+                    {
+                        var item = schedule.Jobs[i];
+                        if (item.Job.Id == offer.Id)
+                        {
+                            MessageLog.AddError(string.Format("{0} has cancelled your contract to ship {1} from {2} to {3}",
+                               item.Job.Company,
+                               item.Job.Item.Name,
+                               item.Job.From.Name,
+                               item.Job.To.Name));
+
+                            schedule.Jobs.RemoveAt(i);
+                            i--;
+                        }
+                    }
+                }
+            }
+        }
+
         private void StartJob(PlaceState place, ShipTimeAssignment assignee, ScheduledJob job)
         {
             if (!place.Employees.Contains(assignee.AssignedEmployee))
             {
-                // TODO: give error to player, employee is not at the correct location!
-                //throw new Exception("Employee is not at correct location.");
+                job.Job.JobWasCompletedUnsuccesfully();
+
+                MessageLog.AddError(string.Format("{0} {1} missed their trip to {2} from {3} at {4}",
+                    assignee.AssignedEmployee.Name,
+                    assignee.AssignedEmployee.Id,
+                    job.Job.To.Name, job.Job.From.Name, assignee.Time.ToString("h':'m''")));
                 return;
             }
             var employee = assignee.AssignedEmployee;
@@ -119,14 +151,13 @@ namespace TruckerX
                 employee.CurrentLocation = null;
                 place.Employees.Remove(assignee.AssignedEmployee);
                 var activeJob = new ActiveJob(job, assignee, Time - TimeSpan.FromMinutes(Time.Minute % 15), employee);
+                var totalGasPrice = (activeJob.Job.Job.GetDistanceInKm() / 100.0f) * employee.AssignedTruck.LiterPer100Km * activeJob.Job.Job.From.Country.GasPricePerLiter;
+                Money -= (decimal)totalGasPrice;
+
                 employee.CurrentJob = activeJob;
                 ActiveJobs.Add(activeJob);
 
-                MessageLog.AddInfo(string.Format("{0} left {1}, driving to {2}. Lets smoke a big fatty joint", assignee.AssignedEmployee.Name, job.Job.From.Name, job.Job.To.Name));
-            }
-            else
-            {
-                // TODO: give error to player, employee is not available at the planned time!
+                MessageLog.AddInfo(string.Format("{0} left {1}, driving to {2}", assignee.AssignedEmployee.Name, job.Job.From.Name, job.Job.To.Name));
             }
         }
 
@@ -149,6 +180,9 @@ namespace TruckerX
                             }
                         }
                     }
+
+                    for (int i = 0; i < dock.Schedule.Jobs.Count; i++)
+                        applyJobFactors(place, dock.Schedule.Jobs[i].Job);
                 }
             }
         }

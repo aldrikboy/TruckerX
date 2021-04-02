@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
+using TruckerX.Trucks;
 
 namespace TruckerX.State
 {
@@ -34,6 +35,13 @@ namespace TruckerX.State
         public ActiveJob CurrentJob { get; set; } = null;
         public BasePlace OriginalLocation { get; set; }
         public BasePlace CurrentLocation { get; set; } = null;
+        public BaseTruck AssignedTruck { get; set; } = null;
+
+        public void AssignTruck(BaseTruck truck)
+        {
+            AssignedTruck = truck;
+            truck.Assignee = this;
+        }
 
         public static EmployeeState GenerateNew(PlaceState place)
         {

@@ -63,12 +63,14 @@ namespace TruckerX.Scenes
                 foreach(var word in item.Words)
                 {
                     var size = font.MeasureString(word);
-                    lineWidth += size.X + spaceSize.X;
-                    if (lineWidth > tabRec.Width)
+                    float newLineWidth = lineWidth + size.X + spaceSize.X;
+                    if (newLineWidth > tabRec.Width - tabBorderWidth - pad)
                     {
                         lineCount++;
+                        newLineWidth = size.X + spaceSize.X;
                         lineWidth = 0;
                     }
+                    lineWidth = newLineWidth;
                 }
                 lineWidth = 0;
                 y -= (spaceSize.Y*lineCount) + (padHalf);

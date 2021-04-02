@@ -4,6 +4,7 @@ using System.Text;
 using TruckerX.Locations;
 using TruckerX.TransportableItems;
 using TruckerX.Trucks;
+using TruckerX.Trucks.Manufacturers;
 
 namespace TruckerX.State
 {
@@ -62,6 +63,7 @@ namespace TruckerX.State
                     if (employee.Id == id) return employee;
                 }
             }
+            if (Simulation.simulation == null) return null;
             foreach(var job in Simulation.simulation.ActiveJobs)
             {
                 if (job.Employee.Id == id) return job.Employee;
@@ -87,7 +89,15 @@ namespace TruckerX.State
 
             var winnipeg = GetStateForPlace(WorldData.GetPlaceByName("Winnipeg"));
             var employees = winnipeg.Employees;
-            for (int i = 0; i < 2; i++) employees.Add(EmployeeState.GenerateNew(winnipeg));
+            for (int i = 0; i < 2; i++)
+            {
+                var truck = new Truck_TGX_D38();
+                winnipeg.Trucks.Add(truck);
+
+                var employee = EmployeeState.GenerateNew(winnipeg);
+                employee.AssignTruck(truck);
+                employees.Add(employee);
+            }
 
             var jobs = winnipeg.AvailableJobs;
             jobs.Add(new JobOffer(1, 
@@ -95,7 +105,7 @@ namespace TruckerX.State
                 winnipeg.Place, 
                 WorldData.GetPlaceByName("Ottawa"), 
                 TransportableItem.Bananas, 
-                400, 
+                1100, 
                 new List<Weekday>() { Weekday.Friday, Weekday.Saturday, Weekday.Sunday }));
 
             var existingJob = new JobOffer(2,
@@ -103,12 +113,12 @@ namespace TruckerX.State
                 winnipeg.Place,
                 WorldData.GetPlaceByName("Quebec"),
                 TransportableItem.Peanuts,
-                350,
+                1350,
                 new List<Weekday>() { Weekday.Monday, Weekday.Tuesday });
             winnipeg.Docks[0].Schedule.Jobs.Add(new ScheduledJob(existingJob,  
                 new Dictionary<Weekday, ShipTimeAssignment>() { 
-                    { Weekday.Monday, new ShipTimeAssignment(new TimeSpan(7, 15,0), WorldState.GetEmployeeById("#000001"), false) },
-                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000002"), false) } }));
+                    { Weekday.Monday, new ShipTimeAssignment(new TimeSpan(7, 15,0), WorldState.GetEmployeeById("#000002"), false) },
+                    { Weekday.Tuesday, new ShipTimeAssignment(new TimeSpan(12, 30, 0), WorldState.GetEmployeeById("#000004"), false) } }));
         }
 
         public static bool PlaceOwned(BasePlace place)
@@ -154,7 +164,7 @@ namespace TruckerX.State
         public List<EmployeeState> Employees { get; set; }
         public List<JobOffer> AvailableJobs { get; set; }
         public List<DockState> Docks { get; set; }
-        public List<Truck> Trucks { get; set; }
+        public List<BaseTruck> Trucks { get; set; }
 
         public event EventHandler OnEmployeeArrived;
 
@@ -172,6 +182,7 @@ namespace TruckerX.State
 
         public PlaceState(BasePlace place)
         {
+            Trucks = new List<BaseTruck>();
             Employees = new List<EmployeeState>();
             AvailableJobs = new List<JobOffer>();          
             Docks = new List<DockState>();

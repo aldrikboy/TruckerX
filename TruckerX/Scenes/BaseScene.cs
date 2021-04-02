@@ -30,7 +30,7 @@ namespace TruckerX.Scenes
             var black = ContentLoader.GetTexture("black");
             float opacity = 1 - (float)elapsedTime.TotalMilliseconds / (float)fadeInDuration.TotalMilliseconds;
 
-            if (this.loadingScene != null && elapsedTime >= fadeInDuration) 
+            if (this.loadingScene != null && elapsedTime >= fadeInDuration)
                 opacity = ((float)loadingSceneSwapDelay.TotalMilliseconds / (float)fadeInDuration.TotalMilliseconds);
 
             batch.Draw(black, new Rectangle(0, 0, TruckerX.WindowWidth,

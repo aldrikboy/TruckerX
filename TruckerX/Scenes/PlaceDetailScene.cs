@@ -32,6 +32,7 @@ namespace TruckerX.Scenes
 
         BannerListWidget employeeBanners;
         BannerListWidget jobBanners;
+        BannerListWidget truckBanners;
 
         SelectedDetailView currentView = SelectedDetailView.Employees;
 
@@ -53,14 +54,33 @@ namespace TruckerX.Scenes
             employeeButton.OnClick += EmployeeButton_OnClick;
             offersButton.OnClick += JobsButton_OnClick;
             schedulesButton.OnClick += SchedulesButton_OnClick;
+            garageButton.OnClick += GarageButton_OnClick;
 
             createEmployeeBanners();
             createJobBanners();
+            createTruckBanners();
+        }
+
+        private void GarageButton_OnClick(object sender, EventArgs e)
+        {
+            currentView = SelectedDetailView.Garage;
         }
 
         private void State_OnEmployeeArrived(object sender, EventArgs e)
         {
             createEmployeeBanners();
+        }
+
+        private void createTruckBanners()
+        {
+            var truckBannerList = new List<BannerWidget>();
+            foreach (var item in state.Trucks)
+            {
+                var banner = new TruckBannerWidget(item);
+                //banner.OnClick += Banner_OnClick;
+                truckBannerList.Add(banner);
+            }
+            truckBanners = new BannerListWidget(this, truckBannerList);
         }
 
         private void createJobBanners()
@@ -95,7 +115,11 @@ namespace TruckerX.Scenes
                 }
 
                 if (employee.OriginalLocation == state.Place)
-                    employeeBannerList.Add(new EmployeeBannerWidget(this, employee));
+                {
+                    var employeeBanner = new EmployeeBannerWidget(this, employee);
+                    employeeBannerList.Add(employeeBanner);
+                    employeeBanner.OnClick += EmployeeBanner_OnClick; 
+                }
             }
 
             headerAdded = false;
@@ -107,11 +131,19 @@ namespace TruckerX.Scenes
                     headerAdded = true;
                 }
 
-                employeeBannerList.Add(new EmployeeBannerWidget(this, employee));
+                var employeeBanner = new EmployeeBannerWidget(this, employee);
+                employeeBannerList.Add(employeeBanner);
+                employeeBanner.OnClick += EmployeeBanner_OnClick;
             }
 
             employeeBanners = new BannerListWidget(this, employeeBannerList);
             employeeBanners.Update(this, null);
+        }
+
+        private void EmployeeBanner_OnClick(object sender, EventArgs e)
+        {
+            var banner = sender as EmployeeBannerWidget;
+            this.SwitchSceneTo(new EmployeeDetailScene(banner.Employee, state));
         }
 
         private void SchedulesButton_OnClick(object sender, EventArgs e)
@@ -145,9 +177,8 @@ namespace TruckerX.Scenes
             {
                 case SelectedDetailView.Employees: employeeBanners.Draw(batch, gameTime); break;
                 case SelectedDetailView.Jobs: jobBanners.Draw(batch, gameTime); break;
-                case SelectedDetailView.Garage: break;
-            }
-           
+                case SelectedDetailView.Garage: truckBanners.Draw(batch, gameTime); break;
+            }      
 
             DrawSeparator(batch);
         }
@@ -183,11 +214,14 @@ namespace TruckerX.Scenes
             jobBanners.Size = employeeBanners.Size;
             jobBanners.Position = employeeBanners.Position;
 
-            switch(currentView)
+            truckBanners.Size = employeeBanners.Size;
+            truckBanners.Position = employeeBanners.Position;
+
+            switch (currentView)
             {
                 case SelectedDetailView.Employees: employeeBanners.Update(this, gameTime); break;
                 case SelectedDetailView.Jobs: jobBanners.Update(this, gameTime); break;
-                case SelectedDetailView.Garage: break;
+                case SelectedDetailView.Garage: truckBanners.Update(this, gameTime); break;
             }
         }
 

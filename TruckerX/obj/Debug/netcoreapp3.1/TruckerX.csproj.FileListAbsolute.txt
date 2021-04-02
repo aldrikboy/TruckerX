@@ -88,3 +88,4 @@ C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\overlay-b
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\list.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\popup-background.xnb
 C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\check-mark.xnb
+C:\TruckerX\TruckerX\TruckerX\bin\Debug\netcoreapp3.1\Content\Textures\truck.xnb

@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TruckerX.State;
 
 namespace TruckerX.Trucks
 {
     // https://www.0-60specs.com/5-most-popular-18-wheeler-semi-trucks/
-    public class Truck
+    public abstract class BaseTruck
     {
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public float LiterPer100Km { get; set; }
+        public string Id { get; }
+        public abstract string Name { get; }
+        public abstract decimal Price { get; }
+        public abstract float LiterPer100Km { get; }
+        public EmployeeState Assignee { get; set; }
 
-        public Truck(string name, decimal price, float literPer100Km)
+        public BaseTruck()
         {
-            Name = name;
-            Price = price;
-            LiterPer100Km = literPer100Km;
+            Id = "#" + String.Format("{0:000000}", WorldState.FreeId);
         }
     }
 }

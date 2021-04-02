@@ -9,6 +9,7 @@ using TruckerX.State;
 using MonoGame;
 using Microsoft.Xna.Framework.Input;
 using TruckerX.Extensions;
+using System.Linq;
 
 namespace TruckerX.Widgets
 {
@@ -44,6 +45,7 @@ namespace TruckerX.Widgets
         Texture2D error;
         Texture2D edit;
         float quarterHour;
+        EmployeeState employeeToHighlight;
 
         bool isRescheduling = false;
         private Weekday lastModifiedShipDay = (Weekday)(-1);
@@ -52,8 +54,9 @@ namespace TruckerX.Widgets
         public event EventHandler OnScheduledOfferSelected;
         public event EventHandler<NewShipTimeSelectedEvent> OnNewShipTimeSelected;
 
-        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true, bool isRescheduling = false) : base()
+        public ScheduleWidget(BaseScene scene, PlaceSchedule schedule, JobOffer offerToPlan, bool enabled = true, bool isRescheduling = false, EmployeeState employeeToHighlight = null) : base()
         {
+            this.employeeToHighlight = employeeToHighlight;
             this.isRescheduling = isRescheduling;
             this.scene = scene;
             this.schedule = schedule;
@@ -234,7 +237,8 @@ namespace TruckerX.Widgets
                 foreach (var item in job.ShipTimes)
                 {
                     Vector2 pos = getQuarterPositionForPlannedShipDate(item.Key, item.Value.Time);
-                    DrawQuarterBlock(batch, pos.X, pos.Y, c);
+                    if (item.Value.AssignedEmployee != employeeToHighlight) DrawQuarterBlock(batch, pos.X, pos.Y, c);
+                    else DrawQuarterBlock(batch, pos.X, pos.Y, Color.FromNonPremultiplied(255, 165, 0, 100));
                 }
             }
 
@@ -340,8 +344,11 @@ namespace TruckerX.Widgets
                 var pp = getQuarterPositionForHoveredTile();
                 if (pos.Clicked(pp.X, pp.Y, quarterHour, rowHeight))
                 {
-                    if (offerToPlan != null) placeOfferShipTimeAtHoveredTile();
-                    else selectHoveredTile();
+                    if (employeeToHighlight == null)
+                    {
+                        if (offerToPlan != null) placeOfferShipTimeAtHoveredTile();
+                        else selectHoveredTile();
+                    }
                 }
             }
 
