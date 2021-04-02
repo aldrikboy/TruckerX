@@ -74,6 +74,9 @@ namespace TruckerX.Scenes
         private void createTruckBanners()
         {
             var truckBannerList = new List<BannerWidget>();
+            var newTruckButton = new BannerWidget("Purchase Truck");
+            newTruckButton.OnClick += NewTruckButton_OnClick;
+            truckBannerList.Add(newTruckButton);
             foreach (var item in state.Trucks)
             {
                 var banner = new TruckBannerWidget(item);
@@ -81,6 +84,11 @@ namespace TruckerX.Scenes
                 truckBannerList.Add(banner);
             }
             truckBanners = new BannerListWidget(this, truckBannerList);
+        }
+
+        private void NewTruckButton_OnClick(object sender, EventArgs e)
+        {
+            this.SwitchSceneTo(new TruckManufacturerSelectionScene(this.state.Place));
         }
 
         private void createJobBanners()

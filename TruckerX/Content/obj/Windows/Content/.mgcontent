@@ -36,6 +36,8 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/loading-background.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/loading-bg.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/logo-placeholder.jpg</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/manufacturer-man-logo.png</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/manufacturer-mercedes-logo.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/menu-button.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/overlay-background.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/overlay-button.png</File>
@@ -54,6 +56,8 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

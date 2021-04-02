@@ -14,17 +14,17 @@ namespace TruckerX.Extensions
             {
                 if (texture.Width <= texture.Height)
                 {
-                    return ScaleToHeight(texture, percentage);
+                    return ScaleToWindowHeight(texture, percentage);
                 }
                 else
                 {
-                    return ScaleToWidth(texture, percentage);
+                    return ScaleToWindowWidth(texture, percentage);
                 }
             }
             throw new Exception("Texture is null");
         }
 
-        public static Vector2 ScaleToHeight(this Texture2D texture, float percentage)
+        public static Vector2 ScaleToWindowHeight(this Texture2D texture, float percentage)
         {
             if (texture != null)
             {
@@ -37,13 +37,39 @@ namespace TruckerX.Extensions
             throw new Exception("Texture is null");
         }
 
-        public static Vector2 ScaleToWidth(this Texture2D texture, float percentage)
+        public static Vector2 ScaleToWindowWidth(this Texture2D texture, float percentage)
         {
             if (texture != null)
             {
                 float newWidth = TruckerX.WindowWidth * percentage;
                 float ratio = texture.Height / newWidth;
                 float newHeight = texture.Height / ratio;
+
+                return new Vector2(newWidth, newHeight);
+            }
+            throw new Exception("Texture is null");
+        }
+
+        public static Vector2 ScaleToWidth(this Texture2D texture, float width, float percentage)
+        {
+            if (texture != null)
+            {
+                float newWidth = width * percentage;
+                float ratio = texture.Height / newWidth;
+                float newHeight = texture.Height / ratio;
+
+                return new Vector2(newWidth, newHeight);
+            }
+            throw new Exception("Texture is null");
+        }
+
+        public static Vector2 ScaleToHeight(this Texture2D texture, float height, float percentage)
+        {
+            if (texture != null)
+            {
+                float newHeight = height * percentage;
+                float ratio = texture.Height / newHeight;
+                float newWidth = texture.Width / ratio;
 
                 return new Vector2(newWidth, newHeight);
             }
