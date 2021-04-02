@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using TruckerX.Extensions;
 using TruckerX.State;
+using TruckerX.Trucks;
 using TruckerX.Widgets;
 
 namespace TruckerX.Scenes
@@ -26,17 +27,19 @@ namespace TruckerX.Scenes
         ArrowButtonWidget arrowButtonRight;
 
         DetailButtonWidget buttonAccept;
+        List<BaseTruck> assignableTrucks;
 
         public EmployeeDetailScene(EmployeeState employee, PlaceState state) : base(employee.Name + ", " + employee.Age + ", " + employee.Id)
         {
             this.employee = employee;
             this.place = state;
+            assignableTrucks = state.Trucks.Where(e => e.Assignee == null || e == employee.AssignedTruck).ToList();
 
             if (this.employee.AssignedTruck != null)
             {
-                for (int i = 0; i < place.Trucks.Count; i++)
+                for (int i = 0; i < assignableTrucks.Count; i++)
                 {
-                    var truck = place.Trucks[i];
+                    var truck = assignableTrucks[i];
                     if (truck == employee.AssignedTruck)
                     {
                         selectedTruckIndex = i;
@@ -66,7 +69,7 @@ namespace TruckerX.Scenes
             arrowButtonRight = new ArrowButtonWidget(PointingTo.Right);
             arrowButtonRight.OnClick += ArrowButtonRight_OnClick;
             if (employee.AssignedTruck == null)
-                truckBanner = new BannerWidget();
+                truckBanner = new BannerWidget("No Assigned Truck");
             else
                 truckBanner = new TruckBannerWidget(employee.AssignedTruck);
             truckBanner.Disabled = true;
@@ -75,10 +78,14 @@ namespace TruckerX.Scenes
         private void ArrowButtonRight_OnClick(object sender, EventArgs e)
         {
             selectedTruckIndex++;
-            if (selectedTruckIndex > place.Trucks.Count-1) selectedTruckIndex = 0;
-            truckBanner = new TruckBannerWidget(place.Trucks[selectedTruckIndex]);
+            if (selectedTruckIndex > assignableTrucks.Count-1) selectedTruckIndex = -1;
+            if (selectedTruckIndex == -1)
+                truckBanner = new BannerWidget("No Assigned Truck");
+            else
+                truckBanner = new TruckBannerWidget(assignableTrucks[selectedTruckIndex]);
 
-            // TODO: maybe just store old position and reset here...
+
+            // TODO: maybe just store old position and re-set here...
             CustomUpdate(new GameTime());
             CustomUpdate(new GameTime());
         }
@@ -86,16 +93,24 @@ namespace TruckerX.Scenes
         private void ArrowButtonLeft_OnClick(object sender, EventArgs e)
         {
             selectedTruckIndex--;
-            if (selectedTruckIndex < 0) selectedTruckIndex = place.Trucks.Count - 1;
-            truckBanner = new TruckBannerWidget(place.Trucks[selectedTruckIndex]);
+            if (selectedTruckIndex < -1) selectedTruckIndex = assignableTrucks.Count - 1;
+            if (selectedTruckIndex == -1)
+                truckBanner = new BannerWidget("No Assigned Truck");
+            else
+                truckBanner = new TruckBannerWidget(assignableTrucks[selectedTruckIndex]);
 
-            // TODO: maybe just store old position and reset here...
+            // TODO: maybe just store old position and re-set here...
             CustomUpdate(new GameTime());
             CustomUpdate(new GameTime());
         }
 
         private void ButtonAccept_OnClick(object sender, EventArgs e)
         {
+            if (selectedTruckIndex == -1)
+                employee.AssignTruck(null);
+            else
+                employee.AssignTruck(assignableTrucks[selectedTruckIndex]);        
+
             this.SwitchSceneTo(new PlaceDetailScene(place.Place));
         }
 

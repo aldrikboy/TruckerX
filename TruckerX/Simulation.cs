@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using TruckerX.Messaging;
 using TruckerX.State;
+using TruckerX.Trucks;
 
 namespace TruckerX
 {
@@ -12,12 +13,14 @@ namespace TruckerX
     {
         public ScheduledJob Job { get; set; }
         public ShipTimeAssignment Assignment { get; set; }
+        public BaseTruck UsedTruck { get; set; }
         public EmployeeState Employee { get; set; }
         public DateTime ShipDate { get; set; }
         public DateTime EndDate { get; set; }
 
         public ActiveJob(ScheduledJob job, ShipTimeAssignment assignment, DateTime shipTime, EmployeeState employee)
         {
+            this.UsedTruck = assignment.AssignedEmployee.AssignedTruck;
             this.Job = job;
             this.Employee = employee;
             this.ShipDate = shipTime;
@@ -37,6 +40,11 @@ namespace TruckerX
             long elapsedTicks = Simulation.simulation.Time.Ticks - ShipDate.Ticks;
             float currentPercentage = (elapsedTicks / (float)totalTickCount);
             return currentPercentage;
+        }
+
+        public decimal GasPrice()
+        {
+            return (decimal)((Job.Job.GetDistanceInKm() / 100.0f) * UsedTruck.LiterPer100Km * Job.Job.From.Country.GasPricePerLiter);
         }
     }
 
@@ -145,14 +153,23 @@ namespace TruckerX
                     job.Job.To.Name, job.Job.From.Name, assignee.Time.ToString("h':'m''")));
                 return;
             }
+
             var employee = assignee.AssignedEmployee;
+            if (employee.AssignedTruck == null)
+            {
+                MessageLog.AddError(string.Format("{0} {1} does not have a truck to drive to {2} from {3} at {4}",
+                    assignee.AssignedEmployee.Name,
+                    assignee.AssignedEmployee.Id,
+                    job.Job.To.Name, job.Job.From.Name, assignee.Time.ToString("h':'m''")));
+                return;
+            }
+            
             if (employee.CurrentJob == null)
             {
                 employee.CurrentLocation = null;
                 place.Employees.Remove(assignee.AssignedEmployee);
                 var activeJob = new ActiveJob(job, assignee, Time - TimeSpan.FromMinutes(Time.Minute % 15), employee);
-                var totalGasPrice = (activeJob.Job.Job.GetDistanceInKm() / 100.0f) * employee.AssignedTruck.LiterPer100Km * activeJob.Job.Job.From.Country.GasPricePerLiter;
-                Money -= (decimal)totalGasPrice;
+                Money -= activeJob.GasPrice();
 
                 employee.CurrentJob = activeJob;
                 ActiveJobs.Add(activeJob);

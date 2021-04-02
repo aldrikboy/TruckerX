@@ -39,8 +39,9 @@ namespace TruckerX.State
 
         public void AssignTruck(BaseTruck truck)
         {
+            if (AssignedTruck != null) AssignedTruck.Assignee = null;
             AssignedTruck = truck;
-            truck.Assignee = this;
+            if (truck != null) truck.Assignee = this;
         }
 
         public static EmployeeState GenerateNew(PlaceState place)
