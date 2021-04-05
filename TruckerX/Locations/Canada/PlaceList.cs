@@ -246,4 +246,164 @@ namespace TruckerX.Locations.Canada
         public override decimal GaragePrice => 300_000M;
         public override decimal DockPrice => 100_000M;
     }
+
+    public class PlaceDawsonCreek : BasePlace
+    {
+        public override string Name { get { return "Dawson Creek"; } }
+
+        public override double Lattitude { get { return 55.7595916; } }
+        public override double Longtitude { get { return -120.2532268; } }
+
+        public override double MapX { get { return 0.163; } }
+        public override double MapY { get { return 0.328; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlacePrinceGeorge : BasePlace
+    {
+        public override string Name { get { return "Prince George"; } }
+
+        public override double Lattitude { get { return 53.926817; } }
+        public override double Longtitude { get { return -122.8924989; } }
+
+        public override double MapX { get { return 0.159; } }
+        public override double MapY { get { return 0.339; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceKamloops : BasePlace
+    {
+        public override string Name { get { return "Kamloops"; } }
+
+        public override double Lattitude { get { return 50.741671; } }
+        public override double Longtitude { get { return -120.4388103; } }
+
+        public override double MapX { get { return 0.158; } }
+        public override double MapY { get { return 0.362; } }
+
+        public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceFortMcMurray : BasePlace
+    {
+        public override string Name { get { return "Fort McMurray"; } }
+
+        public override double Lattitude { get { return 56.6970068; } }
+        public override double Longtitude { get { return -111.4878523; } }
+
+        public override double MapX { get { return 0.192; } }
+        public override double MapY { get { return 0.324; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceSagvenay : BasePlace
+    {
+        public override string Name { get { return "Sagvenay"; } }
+
+        public override double Lattitude { get { return 48.378383; } }
+        public override double Longtitude { get { return -71.2736968; } }
+
+        public override double MapX { get { return 0.290; } }
+        public override double MapY { get { return 0.396; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceSaintJohns : BasePlace
+    {
+        public override string Name { get { return "Sait John's"; } }
+
+        public override double Lattitude { get { return 47.4818262; } }
+        public override double Longtitude { get { return -52.9677826; } }
+
+        public override double MapX { get { return 0.339; } }
+        public override double MapY { get { return 0.403; } }
+
+        public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceGander : BasePlace
+    {
+        public override string Name { get { return "Gander"; } }
+
+        public override double Lattitude { get { return 48.9439597; } }
+        public override double Longtitude { get { return -54.6795712; } }
+
+        public override double MapX { get { return 0.334; } }
+        public override double MapY { get { return 0.398; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceSallysCove : BasePlace
+    {
+        public override string Name { get { return "Sally's Cove"; } }
+
+        public override double Lattitude { get { return 49.7304707; } }
+        public override double Longtitude { get { return -57.95413; } }
+
+        public override double MapX { get { return 0.327; } }
+        public override double MapY { get { return 0.392; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceStAnthony : BasePlace
+    {
+        public override string Name { get { return "St. Anthony"; } }
+
+        public override double Lattitude { get { return 51.376658; } }
+        public override double Longtitude { get { return -55.6414953; } }
+
+        public override double MapX { get { return 0.334; } }
+        public override double MapY { get { return 0.382; } }
+
+        public override PlaceSize Size => PlaceSize.Medium;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
+
+    public class PlaceStAndrews : BasePlace
+    {
+        public override string Name { get { return "St. Andrews"; } }
+
+        public override double Lattitude { get { return 47.7776121; } }
+        public override double Longtitude { get { return -59.2820118; } }
+
+        public override double MapX { get { return 0.323; } }
+        public override double MapY { get { return 0.403; } }
+
+        public override PlaceSize Size => PlaceSize.Small;
+
+        public override decimal GaragePrice => 300_000M;
+        public override decimal DockPrice => 100_000M;
+    }
 }

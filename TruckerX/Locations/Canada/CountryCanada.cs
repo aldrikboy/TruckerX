@@ -23,7 +23,7 @@ namespace TruckerX.Locations
 
         public override void MakeConnections()
         {
-            Connect("Calgary", "Vancouver");
+            Connect("Calgary", "Kamloops");
             Connect("Edmonton", "Saskatoon");
             Connect("Calgary", "Edmonton");
             Connect("Regina", "Calgary");
@@ -41,6 +41,19 @@ namespace TruckerX.Locations
             Connect("Ottawa", "Montreal");
             Connect("Ottawa", "Toronto");
             Connect("Montreal", "Quebec");
+            Connect("St. Andrews", "Sally's Cove");
+            Connect("St. Anthony", "Sally's Cove");
+            Connect("Gander", "Sally's Cove");
+            Connect("Gander", "Sait John's");
+            Connect("Montreal", "Sagvenay"); 
+            Connect("Fort McMurray", "Edmonton");
+            Connect("Fort McMurray", "Saskatoon");
+            Connect("Dawson Creek", "Fort McMurray");
+            Connect("Dawson Creek", "Edmonton");
+            Connect("Dawson Creek", "Prince George");
+            Connect("Prince George", "Edmonton");
+            Connect("Kamloops", "Prince George");
+            Connect("Kamloops", "Vancouver");
         }
     }
 }
