@@ -11,6 +11,14 @@ namespace TruckerX.Scenes
 {
     public abstract class BaseScene : IScene, IDisposable
     {
+        public float SceneHeightHalfRD { get { return 360.0f * GetRDMultiplier(); } }
+        public float SceneWidthHalfRD { get { return 640.0f * GetRDMultiplier(); } }
+
+        public float SceneHeightHalf { get { return 360.0f; } }
+        public float SceneWidthHalf { get { return 640.0f; } }
+        public float SceneHeight { get { return 720.0f; } }
+        public float SceneWidth { get { return 1280.0f; } }
+
         private TimeSpan fadeInDuration = TimeSpan.FromMilliseconds(200);
         protected TimeSpan elapsedTime = TimeSpan.Zero;
         private BaseScene loadingScene = null;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using TruckerX.Trucks.Manufacturers;
 
 namespace TruckerX.Trucks
 {
@@ -8,6 +9,8 @@ namespace TruckerX.Trucks
     {
         public abstract string Name { get; }
         public List<BaseTruck> Trucks { get; }
+
+        public static ManManufacturer ManManufacturer = new ManManufacturer();
 
         public BaseTruckManufacturer()
         {

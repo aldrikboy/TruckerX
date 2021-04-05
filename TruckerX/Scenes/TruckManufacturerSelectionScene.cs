@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TruckerX.Locations;
+using TruckerX.Trucks;
 using TruckerX.Trucks.Manufacturers;
 using TruckerX.Widgets;
 
@@ -18,8 +19,19 @@ namespace TruckerX.Scenes
         public TruckManufacturerSelectionScene(BasePlace place) : base("Dealers")
         {
             this.place = place;
-            manufacturers.Add(new ManufacturerWidget(new ManManufacturer(), "manufacturer-man-logo"));
-            manufacturers.Add(new ManufacturerWidget(new ManManufacturer(), "manufacturer-mercedes-logo"));
+            manufacturers.Add(new ManufacturerWidget(BaseTruckManufacturer.ManManufacturer, "manufacturer-man-logo"));
+            manufacturers.Add(new ManufacturerWidget(BaseTruckManufacturer.ManManufacturer, "manufacturer-mercedes-logo"));
+
+            foreach(var item in manufacturers)
+            {
+                item.OnClick += Item_OnClick;
+            }
+        }
+
+        private void Item_OnClick(object sender, EventArgs e)
+        {
+            var manufacturer = sender as ManufacturerWidget;
+            this.SwitchSceneTo(new TruckBrowseScene(place, manufacturer.Manufacturer));
         }
 
         public override void CustomDraw(SpriteBatch batch, GameTime gameTime)
