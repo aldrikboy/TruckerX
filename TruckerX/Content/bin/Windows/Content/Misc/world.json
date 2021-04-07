@@ -1,5 +1,91 @@
 [
   {
+    "Name": "USA",
+    "TrafficMultiplier": 1.0,
+    "DetourMultiplier": 1.3,
+    "GasPricePerLiter": 1.219,
+    "Places": [
+      {
+        "Name": "Burlington",
+        "Lattitude": 44.492585,
+        "Longtitude": -73.2616677,
+        "Size": 3,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "Montreal",
+          "Boston"
+        ]
+      },
+      {
+        "Name": "Boston",
+        "Lattitude": 42.3143286,
+        "Longtitude": -71.0403234,
+        "Size": 1,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "Burlington"
+        ]
+      },
+      {
+        "Name": "New York",
+        "Lattitude": 40.7127837,
+        "Longtitude": -74.0059413,
+        "Size": 1,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "Boston"
+        ]
+      },
+      {
+        "Name": "Los Angeles",
+        "Lattitude": 34.0522342,
+        "Longtitude": -118.2436849,
+        "Size": 1,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "San Francisco"
+        ]
+      },
+      {
+        "Name": "San Francisco",
+        "Lattitude": 37.7749295,
+        "Longtitude": -122.4194155,
+        "Size": 1,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "Los Angeles"
+        ]
+      },
+      {
+        "Name": "San Diego",
+        "Lattitude": 32.715738,
+        "Longtitude": -117.1610838,
+        "Size": 2,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "Los Angeles"
+        ]
+      },
+      {
+        "Name": "Las Vegas",
+        "Lattitude": 36.1699412,
+        "Longtitude": -115.1398296,
+        "Size": 1,
+        "GaragePrice": 1000000.0,
+        "DockPrice": 500000.0,
+        "ConnectedTo": [
+          "Los Angeles"
+        ]
+      }
+    ]
+  },
+  {
     "Name": "Canada",
     "TrafficMultiplier": 1.0,
     "DetourMultiplier": 1.3,
