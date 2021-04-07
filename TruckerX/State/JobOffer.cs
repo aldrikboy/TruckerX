@@ -54,11 +54,11 @@ namespace TruckerX.State
             places.Add(from);
             int countBefore = places.Count;
 
-            var destVec = new Vector2((float)To.MapX, (float)To.MapY);
+            var destVec = new Vector2((float)To.Longtitude, (float)To.Lattitude);
             var orderedConnections = new List<Tuple<float,BasePlace>>();
             foreach(var connection in from.Connections)
             {
-                float distance = Vector2.Distance(new Vector2((float)connection.MapX, (float)connection.MapY), destVec);
+                float distance = Vector2.Distance(new Vector2((float)connection.Longtitude, (float)connection.Lattitude), destVec);
                 orderedConnections.Add(new Tuple<float, BasePlace>(distance, connection));
             }
             orderedConnections = orderedConnections.OrderBy(e => e.Item1).ToList();
@@ -114,7 +114,7 @@ namespace TruckerX.State
             return reversePath;
         }
 
-        public Vector2 ProgressPercentageToWorldLocation(float percentage)
+        public Vector2 ProgressPercentageToWorldLocation(float percentage, float zoom)
         {
             var allLocations = new List<BasePlace>();
             allLocations.AddRange(Connections);
@@ -141,8 +141,19 @@ namespace TruckerX.State
                 if (currentKm > looingForKm) // Truck is between sCoord and coord.
                 {
                     percentageCompletedOfBetween2Connections = (float)((looingForKm - prevKm)/(currentKm - prevKm));
-                    return new Vector2((float)(prevPlace.MapX + ((place.MapX- prevPlace.MapX)*percentageCompletedOfBetween2Connections)), 
-                        (float)(prevPlace.MapY + ((place.MapY - prevPlace.MapY)*percentageCompletedOfBetween2Connections)));
+
+                    /*
+                    var rec = TruckerX.TargetRetangle;
+                    Vector2 start = new Vector2(
+                       rec.X + (float)(rec.Width / zoom * (180 + prevPlace.Longtitude) / 360),
+                       rec.Y + (float)(rec.Height / zoom * (90 - prevPlace.Lattitude) / 180));
+
+                    Vector2 end = new Vector2(
+                        rec.X + (float)(rec.Width / zoom * (180 + place.Longtitude) / 360),
+                        rec.Y + (float)(rec.Height / zoom * (90 - place.Lattitude) / 180));*/
+
+                    return new Vector2((float)(prevPlace.Longtitude + ((place.Longtitude - prevPlace.Longtitude) *percentageCompletedOfBetween2Connections)), 
+                        (float)(prevPlace.Lattitude + ((place.Lattitude - prevPlace.Lattitude) *percentageCompletedOfBetween2Connections)));
                 }
 
                 prevPlace = place;

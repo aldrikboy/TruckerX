@@ -81,7 +81,7 @@ namespace TruckerX.Scenes
         public override void Draw(SpriteBatch batch, GameTime gameTime)
         {
             {
-                var bg = ContentLoader.GetTexture("world");
+                var bg = ContentLoader.GetTexture("world-map");
                 var targetRec = TruckerX.TargetRetangle;
                 targetRec.X += OffsetX;
                 targetRec.Y += OffsetY;
@@ -91,6 +91,7 @@ namespace TruckerX.Scenes
             }
 
             var rec = TruckerX.TargetRetangle;
+            Vector2 extra = new Vector2(2.5f * GetRDMultiplier() / zoom, -7 * GetRDMultiplier() / zoom);
             foreach (var item in Locations)
             {
                 foreach (var connection in item.Place.Connections)
@@ -98,21 +99,27 @@ namespace TruckerX.Scenes
                     int dotCenterOrig = placeDotSize / (int)item.Place.Size / 2;
                     int dotCenterDest = placeDotSize / (int)connection.Size / 2;
 
-                    Vector2 start = new Vector2(OffsetX + rec.X + (int)(item.Place.MapX * rec.Width / zoom),
-                        OffsetY + rec.Y + (int)(item.Place.MapY * rec.Height / zoom));
-                    Vector2 end = new Vector2(OffsetX + rec.X + (int)(connection.MapX * rec.Width / zoom),
-                        OffsetY + rec.Y + (int)(connection.MapY * rec.Height / zoom));
-                    Primitives2D.DrawLine(batch, start, end, Color.FromNonPremultiplied(100,100,100,255));
+                    Vector2 start = new Vector2(
+                        OffsetX + rec.X + (float)(rec.Width / zoom * (180 + item.Place.Longtitude) / 360),
+                        OffsetY + rec.Y + (float)(rec.Height / zoom * (90 - item.Place.Lattitude) / 180)) + extra;
+
+                    Vector2 end = new Vector2(
+                        OffsetX + rec.X + (float)(rec.Width / zoom * (180 + connection.Longtitude) / 360),
+                        OffsetY + rec.Y + (float)(rec.Height / zoom * (90 - connection.Lattitude) / 180)) + extra;
+                    Primitives2D.DrawLine(batch, start, end, Color.FromNonPremultiplied(50, 50, 200,255));
                 }
             }
 
             foreach(var activeJob in Simulation.simulation.ActiveJobs)
             {
                 Vector2 size = new Vector2(placeDotSize / (int)PlaceSize.Small, placeDotSize / (int)PlaceSize.Small);
-                var pos = activeJob.GetCurrentWorldLocation();
-                Vector2 location = new Vector2(OffsetX + rec.X + (int)(pos.X * rec.Width / zoom),
-                        OffsetY + rec.Y + (int)(pos.Y * rec.Height / zoom));
-                Primitives2D.DrawCircle(batch, location.X, location.Y, size.X/2.0f, 32, Color.Orange, size.X/2);
+                var pos = activeJob.GetCurrentWorldLocation(zoom);
+
+                pos = new Vector2(
+                       OffsetX + rec.X + (float)(rec.Width / zoom * (180 + pos.X) / 360),
+                       OffsetY + rec.Y + (float)(rec.Height / zoom * (90 - pos.Y) / 180)) + extra;
+
+                Primitives2D.DrawCircle(batch, pos.X, pos.Y, size.X/2.0f, 32, Color.Orange, size.X/2);
             }
 
             foreach (var item in Locations)
@@ -241,9 +248,20 @@ namespace TruckerX.Scenes
             foreach (WorldLocationWidget item in Locations)
             {
                 int dotSize = placeDotSize / (int)item.Place.Size;
+
+#if false
                 item.Position = new Vector2(
                     OffsetX + rec.X + (int)(item.Place.MapX * rec.Width / zoom) - (dotSize / 2),
                     OffsetY + rec.Y + (int)(item.Place.MapY * rec.Height / zoom) - (dotSize / 2));
+#else
+
+                Vector2 extra = new Vector2(2.5f * GetRDMultiplier() / zoom, -7*GetRDMultiplier() / zoom);
+                item.Position = new Vector2(
+                    OffsetX + rec.X + (float)(rec.Width / zoom * (180 + item.Place.Longtitude) / 360) - (dotSize / 2),
+                    OffsetY + rec.Y + (float)(rec.Height / zoom * (90 - item.Place.Lattitude) / 180) - (dotSize / 2)) + extra;
+
+#endif
+
                 item.Size = new Vector2(dotSize, dotSize);
                 item.Update(this, gameTime);
             }

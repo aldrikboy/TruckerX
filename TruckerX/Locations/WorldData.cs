@@ -90,9 +90,6 @@ namespace TruckerX.Locations
         public decimal GaragePrice { get; set; }
         public decimal DockPrice { get; set; }
 
-        public double MapX { get; set; }
-        public double MapY { get; set; }
-
         public List<string> ConnectedTo { get; set; }
 
         [JsonIgnore]

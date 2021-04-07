@@ -28,10 +28,10 @@ namespace TruckerX
             this.EndDate = ShipDate.AddHours(job.Job.GetTravelTime());
         }
 
-        public Vector2 GetCurrentWorldLocation()
+        public Vector2 GetCurrentWorldLocation(float zoom)
         {
             float currentPercentage = GetCompletionPercentage();
-            return Job.Job.ProgressPercentageToWorldLocation(currentPercentage);
+            return Job.Job.ProgressPercentageToWorldLocation(currentPercentage, zoom);
         }
 
         public float GetCompletionPercentage()
