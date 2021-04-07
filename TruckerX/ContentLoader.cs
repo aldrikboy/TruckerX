@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Microsoft.Xna.Framework.Audio;
+using Newtonsoft.Json;
+using TruckerX.Locations;
+using System.IO;
+using TruckerX.State;
+using System.Diagnostics;
 
 namespace TruckerX
 {
@@ -46,6 +51,7 @@ namespace TruckerX
             { "rope", new AssetDefinition<Texture2D>("Textures/rope") },
             { "white", new AssetDefinition<Texture2D>("Textures/white") },
             { "world", new AssetDefinition<Texture2D>("Textures/world") },
+            { "world-map", new AssetDefinition<Texture2D>("Textures/world-map") },
             { "sign", new AssetDefinition<Texture2D>("Textures/sign") },
             { "list", new AssetDefinition<Texture2D>("Textures/list") },
             { "overlay-background", new AssetDefinition<Texture2D>("Textures/overlay-background") },
@@ -107,6 +113,19 @@ namespace TruckerX
         {
             Thread thread = new Thread(() =>
             {
+                Stopwatch timer = new Stopwatch();
+                timer.Start();
+                
+                var countries = JsonConvert.DeserializeObject<List<BaseCountry>>(File.ReadAllText("Content/Misc/world.json"));
+                WorldData.Countries = countries;
+                WorldData.MakeConnections();
+                WorldState.CreateDefault();
+                timer.Stop();
+
+                Debug.WriteLine("Loaded world data in " + timer.ElapsedMilliseconds + "ms");
+                timer.Reset();
+                timer.Start();
+
                 foreach (var item in ContentDefinition.Textures)
                 {
                     item.Value.Load(content);
@@ -123,6 +142,10 @@ namespace TruckerX
                 {
                     item.Value.Load(content);
                 }
+
+                timer.Stop();
+                Debug.WriteLine("Loaded assets in " + timer.ElapsedMilliseconds + "ms");
+
                 Done = true;
             });
             thread.Start();

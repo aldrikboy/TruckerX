@@ -128,6 +128,12 @@
 #begin Fonts/ShadowsIntoLight-Regular.ttf
 /copy:Fonts/ShadowsIntoLight-Regular.ttf
 
+#begin Misc/GlobalAirportDatabase.txt
+/copy:Misc/GlobalAirportDatabase.txt
+
+#begin Misc/world.json
+/copy:Misc/world.json
+
 #begin Sounds/background-ambience.wav
 /importer:WavImporter
 /processor:SongProcessor
@@ -511,4 +517,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/world.jpg
+
+#begin Textures/world-map.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/world-map.jpg
 

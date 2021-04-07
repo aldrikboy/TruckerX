@@ -1,0 +1,8 @@
+[
+  {
+    "name": "Canada",
+    "trafficMultiplier": 1.0,
+    "detourMultiplier": 1.3,
+    "gasPricePerLiter": 1.219
+  }
+]

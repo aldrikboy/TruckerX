@@ -6,6 +6,7 @@ using TruckerX.Locations.Canada;
 
 namespace TruckerX.Locations
 {
+#if false
     public class CountryCanada : BaseCountry
     {
         public override string Name => "Canada";
@@ -45,7 +46,7 @@ namespace TruckerX.Locations
             Connect("St. Anthony", "Sally's Cove");
             Connect("Gander", "Sally's Cove");
             Connect("Gander", "Sait John's");
-            Connect("Montreal", "Sagvenay"); 
+            Connect("Quebec", "Sagvenay"); 
             Connect("Fort McMurray", "Edmonton");
             Connect("Fort McMurray", "Saskatoon");
             Connect("Dawson Creek", "Fort McMurray");
@@ -56,4 +57,5 @@ namespace TruckerX.Locations
             Connect("Kamloops", "Vancouver");
         }
     }
+#endif
 }

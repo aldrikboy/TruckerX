@@ -125,7 +125,7 @@ namespace TruckerX.State
         {
             foreach(var item in OwnedPlaces)
             {
-                if (item.Place.GetType() == place.GetType())
+                if (item.Place.Name == place.Name)
                 {
                     return true;
                 }
@@ -137,7 +137,7 @@ namespace TruckerX.State
         {
             foreach (var item in OwnedPlaces)
             {
-                if (item.Place.GetType() == place.GetType())
+                if (item.Place.Name == place.Name)
                 {
                     return item;
                 }

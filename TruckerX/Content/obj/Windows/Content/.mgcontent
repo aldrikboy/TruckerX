@@ -54,8 +54,10 @@
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/truck.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/white.png</File>
     <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world.jpg</File>
+    <File>C:/TruckerX/TruckerX/TruckerX/Content/Textures/world-map.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

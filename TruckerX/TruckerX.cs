@@ -41,9 +41,7 @@ namespace TruckerX
             Window.AllowUserResizing = true;
             Window.ClientSizeChanged += Window_ClientSizeChanged;
             
-
-            WorldData.CreateData();
-            WorldState.CreateDefault();
+            WorldData.MakeConnections();
         }
 
         public void SetScene(BaseScene scene)
@@ -116,7 +114,7 @@ namespace TruckerX
             KeyboardExtensions.Update();
 
             overlayScene.Update(gameTime);
-            simulation.Update(gameTime);
+            if (activeScene.GetType() != typeof(LoadingScene)) simulation.Update(gameTime);
             activeScene.Update(gameTime);
 
             base.Update(gameTime);

@@ -9,6 +9,10 @@ using TruckerX.Particles;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TruckerX.State;
+using TruckerX.Locations;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace TruckerX.Scenes
 {
@@ -129,8 +133,14 @@ namespace TruckerX.Scenes
             leafParticleEffectTree2?.Update(gameTime);
             loadingBgMoveIn.Update(gameTime);
 
-            if (nextScene == null && ContentLoader.Done) nextScene = new WorldMapScene();
-            if (nextScene != null && elapsedTime >= minimumDisplayDuration) this.SwitchSceneTo(nextScene);
+            if (nextScene == null && ContentLoader.Done)
+            {
+                nextScene = new WorldMapScene();
+            }
+            if (nextScene != null && elapsedTime >= minimumDisplayDuration)
+            {
+                this.SwitchSceneTo(nextScene);
+            }
 
             base.Update(gameTime);
         }

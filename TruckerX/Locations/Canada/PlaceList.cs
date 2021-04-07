@@ -5,6 +5,7 @@ using TruckerX.TransportableItems;
 
 namespace TruckerX.Locations.Canada
 {
+#if false
     class PlaceMontreal : BasePlace
     {
         public override string Name { get { return "Montreal"; } }
@@ -406,4 +407,5 @@ namespace TruckerX.Locations.Canada
         public override decimal GaragePrice => 300_000M;
         public override decimal DockPrice => 100_000M;
     }
+#endif
 }

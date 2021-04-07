@@ -1,0 +1,26 @@
+[
+  {
+    "size": "Large",
+    "name": "Winnipeg",
+    "countryName": "Canada",
+    "longtitude": -97.2923062,
+    "lattitude": 49.8537377,
+    "garagePrice": 1000000.0,
+    "dockPrice": 500000.0,
+    "mapX": 0.221,
+    "mapY": 0.379,
+    "connectionNames": []
+  },
+  {
+    "size": "Large",
+    "name": "Quebec",
+    "countryName": "Canada",
+    "longtitude": -71.4817738,
+    "lattitude": 46.856283,
+    "garagePrice": 1000000.0,
+    "dockPrice": 500000.0,
+    "mapX": 0.288,
+    "mapY": 0.407,
+    "connectionNames": []
+  }
+]
