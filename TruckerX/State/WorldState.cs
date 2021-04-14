@@ -197,5 +197,37 @@ namespace TruckerX.State
             dock.Schedule.Jobs.Add(job);
             AvailableJobs.Remove(job.Job);
         }
+
+        internal double GetWeeklyHours(EmployeeState employee)
+        {
+            double result = 0.0;
+            foreach(var dock in Docks)
+            {
+                foreach(var job in dock.Schedule.Jobs)
+                {
+                    foreach(var assignment in job.ShipTimes)
+                    {
+                        if (assignment.Value.AssignedEmployee == employee)
+                        {
+                            result += job.Job.GetTravelTime();
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        internal decimal GetWeeklyRevenue()
+        {
+            decimal result = 0.0M;
+            foreach (var dock in Docks)
+            {
+                foreach (var job in dock.Schedule.Jobs)
+                {
+                    result += job.ShipTimes.Count * job.Job.OfferedReward;
+                }
+            }
+            return result;
+        }
     }
 }

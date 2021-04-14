@@ -18,11 +18,15 @@ namespace TruckerX.State
 
         // Add new jobs here
 
+        HR, // Responsible for maintaining happyness
         Mechanic,
     }
 
     public class EmployeeState
     {
+        public const decimal BasePay = 1600;
+        public const decimal MaxPay = 3200;
+
         public string Id { get; set; }
         public string Name { get; set; }
         public DateTime HireDate { get; set; }
@@ -36,6 +40,8 @@ namespace TruckerX.State
         public BasePlace OriginalLocation { get; set; }
         public BasePlace CurrentLocation { get; set; } = null;
         public BaseTruck AssignedTruck { get; set; } = null;
+
+        public float Happyness { get; set; } = 1.0f;
 
         public void AssignTruck(BaseTruck truck)
         {
@@ -56,7 +62,7 @@ namespace TruckerX.State
                 Gender = (Gender)rand.Next(0, 2), 
                 HasDiploma = true, 
                 HireDate = DateTime.Now, 
-                Salary = rand.Next(1600, 2500), 
+                Salary = EmployeeState.BasePay, 
                 OnPaidLeave = false,
                 OriginalLocation = place.Place,
                 CurrentLocation = place.Place,

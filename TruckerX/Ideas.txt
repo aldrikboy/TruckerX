@@ -1,5 +1,3 @@
-﻿- Tooltip
-- Connect trucks to employees
-- Pay gasoline for trips (price depending on country)
-- Pay truck maintenance costs based on driver experience and truck type
+﻿- drivers can quit based on happiness ( < 0.25? maybe depending on age?)
+- pay truck maintenance costs based on driver experience and truck type
 - income overview per location

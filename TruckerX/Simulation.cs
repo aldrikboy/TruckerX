@@ -208,6 +208,7 @@ namespace TruckerX
         public void Update(GameTime gameTime)
         {
             PayoutSalaries();
+            UpdateHappyness();
             Time += TimeSpan.FromMinutes((gameTime.ElapsedGameTime.TotalMilliseconds/1000.0f) * minutesPerSecond);
 
             if (Time.Minute % 15 == 0 || (prevMinutes % 15) > (Time.Minute % 15))
@@ -224,6 +225,39 @@ namespace TruckerX
             }
             StopCompletedJobs();
             prevMinutes = Time.Minute;
+        }
+
+        private void UpdateHappyness()
+        {
+            foreach(var place in WorldState.OwnedPlaces)
+            {
+                foreach(var employee in place.Employees)
+                {
+                    var placeRevenue = place.GetWeeklyRevenue() * 4;
+                    var hoursPerWeek = place.GetWeeklyHours(employee);
+                    employee.Happyness = 1.0f;
+
+                    double hoursOverworked = hoursPerWeek - 70;
+                    if (hoursOverworked > 0) employee.Happyness -= (float)hoursOverworked / 25.0f;
+
+                    const int minPlaceRevenue = 50_000;
+                    float percentageSalary = 1.0f;
+                    if (placeRevenue > minPlaceRevenue)
+                    {
+                        float revStart = (float)placeRevenue - minPlaceRevenue;
+                        int totalDiff = 500_000 - minPlaceRevenue;
+                        percentageSalary = revStart / totalDiff;
+                        if (percentageSalary > 1.0f) percentageSalary = 1.0f;
+
+                        decimal expectedSalary = (decimal)((float)EmployeeState.BasePay + (((float)EmployeeState.MaxPay - (float)EmployeeState.BasePay) * percentageSalary));
+                        if (employee.Salary < expectedSalary)
+                        {
+                            float underpayPercentage = (float)(expectedSalary - employee.Salary) / (float)(EmployeeState.MaxPay - EmployeeState.BasePay);
+                            employee.Happyness -= underpayPercentage*2.0f;
+                        }
+                    }
+                }
+            }
         }
 
         private void PayoutSalaries()
